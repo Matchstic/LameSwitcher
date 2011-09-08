@@ -23,14 +23,7 @@
 
 
 /// SpringBoard headers
-#import <SpringBoard4.0/SBAppSwitcherController.h>
-#import <SpringBoard4.0/SBApplicationIcon.h>
-#import <SpringBoard4.0/SBUIController.h>
-#import <SpringBoard4.0/SBDisplayStack.h>
-#import <SpringBoard4.0/SBApplication.h>
-#import <SpringBoard4.0/SBIconBadge.h>
-#import <SpringBoard4.0/SBIconModel.h>
-#import <SpringBoard4.0/SBIcon.h>
+#import <SpringBoard/SpringBoard.h>
 #import "CSApplicationController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CSApplication.h"
@@ -38,8 +31,27 @@
 #import <UIKit/UIKit.h>
 #import <substrate.h>
 
+@interface SBIconModel ()
+- (SBApplicationIcon *)applicationIconForDisplayIdentifier:(NSString *)displayIdentifier;
+@end
+
+@interface SBApplicationIcon ()
+- (BOOL)hasBadge;
+@end
+
+@interface SBIconBadge ()
++(id)iconBadgeWithBadgeString:(NSString *)badgeString;
+@end
+
+@interface SBUIController ()
+- (void)activateApplicationFromSwitcher:(SBApplication *)application;
+@end
+
 @interface SBApplication ()
 -(int)suspensionType;
+-(int)_suspensionType;
+-(void)setSuspendType:(int)suspendType;
+-(id)process;
 @end
 
 @interface SBProccess : NSObject {}

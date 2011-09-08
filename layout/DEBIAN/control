@@ -1,10 +1,11 @@
-Package: com.iky1e.cardswitcher
-Name: CardSwitcher
+Package: com.collab.lameswitcher
+Name: LameSwitcher
 Depends: mobilesubstrate, preferenceloader (>= 2.0.2), libactivator (>= 1.5), firmware (>= 4.0)
+Conflicts: com.iky1e.cardswitcher
+Replaces: com.iky1e.cardswitcher
 Version: 0.9.9.1
 Architecture: iphoneos-arm
-Description: iOS 4.x compatible rewrite of ProSwitcher!
-Maintainer: Kyle Howells <freerunnering@gmail.com>
-Author: Kyle Howells <freerunnering@gmail.com>
+Description: iOS 4.x compatible partial rewrite of ProSwitcher!
+Maintainer: Ryan Petrich <rpetrich+lameswitcher@gmail.com>
+Author: Kyle Howells
 Section: Tweaks
-dev: iky1e

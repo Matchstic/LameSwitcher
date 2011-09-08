@@ -7,7 +7,7 @@
 //
 
 //#import <SpringBoard4.0/SpringBoard.h>
-#import <SpringBoard4.0/SBApplication.h>
+#import <SpringBoard/SBApplication.h>
 #import <libactivator/libactivator.h>
 #import <QuartzCore/QuartzCore.h>
 #import <Foundation/Foundation.h>

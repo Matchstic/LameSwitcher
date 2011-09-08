@@ -6,9 +6,7 @@
 //  Copyright 2011 Howells Apps. All rights reserved.
 //
 
-#import <SpringBoard4.0/SBUIController.h>
-#import <SpringBoard4.0/SBDisplayStack.h>
-#import <SpringBoard4.0/SBApplication.h>
+#import <SpringBoard/SpringBoard.h>
 #import "CSApplicationController.h"
 #import "CSApplication.h"
 #import "CSResources.h"
@@ -17,12 +15,12 @@
 CGImageRef UIGetScreenImage(void);
 
 
-@interface SBAwayController : NSObject {}
+@interface SBAwayController ()
 +(id)sharedAwayController;
 -(BOOL)isLocked;
 @end
 
-@interface SBWallpaperView : UIImageView {}
+@interface SBWallpaperView ()
 -(UIImage*)uncomposedImage;
 @end
 

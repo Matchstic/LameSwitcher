@@ -1,7 +1,7 @@
-#import <SpringBoard4.0/SBApplicationIcon.h>
+#import <SpringBoard/SBApplicationIcon.h>
 #import <GraphicsServices/GSCapability.h>
-#import <SpringBoard4.0/SBApplication.h>
-#import <SpringBoard4.0/SBIconBadge.h>
+#import <SpringBoard/SBApplication.h>
+#import <SpringBoard/SBIconBadge.h>
 #import <libactivator/libactivator.h>
 #import "CSApplicationController.h"
 #import <QuartzCore/QuartzCore.h>
@@ -16,6 +16,9 @@
 
 static NSString * const CARDSWITCHER_ID = @"com.iky1e.cardswitcher";
 
+@interface SBIcon ()
+- (id)badgeNumberOrString;
+@end
 
 %hook SBAppSwitcherController
 

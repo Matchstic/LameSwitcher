@@ -6,7 +6,7 @@
 //  Copyright 2011 Howells Apps. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface CSScrollView : UIScrollView
 -(BOOL)viewIsVisible:(UIView*)view;

@@ -12,10 +12,6 @@ ARGS=$*
 #done
 
 
-# Rename the files
-cp ./Tweak.mm ./Tweak.xm
-echo "Copied Tweak"
-
 # Build
 echo ""
 echo "||---- Building..."
@@ -24,11 +20,5 @@ make $ARGS
 echo ""
 echo "||---- Built!"
 echo ""
-
-
-# Rename the files
-rm ./Tweak.xm
-echo "Deleted Tweak.xm"
-
 
 exit 0

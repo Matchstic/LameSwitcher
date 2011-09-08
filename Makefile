@@ -6,4 +6,6 @@ CardSwitcher_FRAMEWORKS = Foundation UIKit QuartzCore CoreGraphics
 CardSwitcher_PRIVATE_FRAMEWORKS = GraphicsServices
 CardSwitcher_LDFLAGS = -lactivator
 
+TARGET_IPHONEOS_DEPLOYMENT_VERSION = 4.0
+
 include $(THEOS_MAKE_PATH)/tweak.mk

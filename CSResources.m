@@ -6,9 +6,7 @@
 //  Copyright 2011 Howells Apps. All rights reserved.
 //
 
-#import <SpringBoard4.0/SBUIController.h>
-#import <SpringBoard4.0/SBDisplayStack.h>
-#import <SpringBoard4.0/SBApplication.h>
+#import <SpringBoard/SpringBoard.h>
 #import "CSApplicationController.h"
 #import "CSResources.h"
 
@@ -17,6 +15,11 @@ CGImageRef UIGetScreenImage(void);
 static NSMutableDictionary *cache = nil;
 static NSDictionary *settings = nil;
 static UIImage *currentImage = nil;
+
+@interface SBApplication ()
+- (BOOL)defaultStatusBarHidden;
+- (int)statusBarStyle;
+@end
 
 @implementation CSResources
 

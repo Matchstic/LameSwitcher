@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>title</key>
-	<string>CardSwitcher</string>
+	<string>LameSwitcher</string>
 	<key>entry</key>
 	<dict>
 		<key>cell</key>
 		<string>PSLinkCell</string>
 		<key>label</key>
-		<string>CardSwitcher</string>
+		<string>LameSwitcher</string>
 		<key>icon</key>
 		<string>CardSwitcher-small.png</string>
 	</dict>
@@ -37,7 +37,7 @@
             <key>label</key>
 			<string>Interface</string>
             <key>footerText</key>
-            <string>CardSwitcher is © 2011 Kyle Howells</string>
+            <string>LameSwitcher is © 2011 Kyle Howells and based on ProSwitcher written by Grant Paul and Ryan Petrich</string>
 		</dict>
 		<dict>
 			<key>cell</key>
