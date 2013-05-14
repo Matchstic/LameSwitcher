@@ -1,7 +1,6 @@
 .theos/*
-_
 obj
 theos
-_/*
 .DS_Store
-*.deb
+*.zip
+.git.bak

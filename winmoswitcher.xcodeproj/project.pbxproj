@@ -1,0 +1,514 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C9ABB5751741591E004CB921 /* SpringBoardServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABB5741741591E004CB921 /* SpringBoardServices.framework */; };
+		C9FB09441740355100DD72A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FB09431740355100DD72A5 /* Foundation.framework */; };
+		C9FB094F1740355100DD72A5 /* winmoswitcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9FB094E1740355100DD72A5 /* winmoswitcher.mm */; };
+		C9FB095A1740356800DD72A5 /* libsubstrate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FB09591740356800DD72A5 /* libsubstrate.dylib */; };
+		C9FB09631740359600DD72A5 /* CSApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = C9FB095B1740359600DD72A5 /* CSApplication.h */; };
+		C9FB09641740359600DD72A5 /* CSApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FB095C1740359600DD72A5 /* CSApplication.m */; };
+		C9FB09651740359600DD72A5 /* CSApplicationController.h in Headers */ = {isa = PBXBuildFile; fileRef = C9FB095D1740359600DD72A5 /* CSApplicationController.h */; };
+		C9FB09661740359600DD72A5 /* CSApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FB095E1740359600DD72A5 /* CSApplicationController.m */; };
+		C9FB09671740359600DD72A5 /* CSResources.h in Headers */ = {isa = PBXBuildFile; fileRef = C9FB095F1740359600DD72A5 /* CSResources.h */; };
+		C9FB09681740359600DD72A5 /* CSResources.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FB09601740359600DD72A5 /* CSResources.m */; };
+		C9FB09691740359600DD72A5 /* CSScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = C9FB09611740359600DD72A5 /* CSScrollView.h */; };
+		C9FB096A1740359600DD72A5 /* CSScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FB09621740359600DD72A5 /* CSScrollView.m */; };
+		C9FB096C174035BF00DD72A5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FB096B174035BF00DD72A5 /* UIKit.framework */; };
+		C9FB096E174035C700DD72A5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FB096D174035C700DD72A5 /* QuartzCore.framework */; };
+		C9FB0970174035CE00DD72A5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FB096F174035CE00DD72A5 /* CoreGraphics.framework */; };
+		C9FB0972174035D400DD72A5 /* GraphicsServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FB0971174035D400DD72A5 /* GraphicsServices.framework */; };
+		C9FB097417404B6F00DD72A5 /* libactivator.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FB097317404B6F00DD72A5 /* libactivator.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C9ABB5741741591E004CB921 /* SpringBoardServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpringBoardServices.framework; path = System/Library/PrivateFrameworks/SpringBoardServices.framework; sourceTree = SDKROOT; };
+		C9ABB57717415BA0004CB921 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
+		C9FB09401740355100DD72A5 /* winmoswitcher.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = winmoswitcher.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9FB09431740355100DD72A5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C9FB09491740355100DD72A5 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; name = control; path = Package/DEBIAN/control; sourceTree = "<group>"; };
+		C9FB094B1740355100DD72A5 /* PackageVersion.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PackageVersion.plist; sourceTree = "<group>"; };
+		C9FB094C1740355100DD72A5 /* winmoswitcher-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "winmoswitcher-Prefix.pch"; sourceTree = "<group>"; };
+		C9FB094D1740355100DD72A5 /* winmoswitcher.xm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = winmoswitcher.xm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		C9FB094E1740355100DD72A5 /* winmoswitcher.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = winmoswitcher.mm; sourceTree = "<group>"; };
+		C9FB09531740355100DD72A5 /* winmoswitcher.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = winmoswitcher.plist; path = Package/Library/MobileSubstrate/DynamicLibraries/winmoswitcher.plist; sourceTree = "<group>"; };
+		C9FB09591740356800DD72A5 /* libsubstrate.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsubstrate.dylib; path = ../../../../../opt/iOSOpenDev/lib/libsubstrate.dylib; sourceTree = "<group>"; };
+		C9FB095B1740359600DD72A5 /* CSApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSApplication.h; sourceTree = "<group>"; };
+		C9FB095C1740359600DD72A5 /* CSApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSApplication.m; sourceTree = "<group>"; };
+		C9FB095D1740359600DD72A5 /* CSApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSApplicationController.h; sourceTree = "<group>"; };
+		C9FB095E1740359600DD72A5 /* CSApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSApplicationController.m; sourceTree = "<group>"; };
+		C9FB095F1740359600DD72A5 /* CSResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSResources.h; sourceTree = "<group>"; };
+		C9FB09601740359600DD72A5 /* CSResources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSResources.m; sourceTree = "<group>"; };
+		C9FB09611740359600DD72A5 /* CSScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSScrollView.h; sourceTree = "<group>"; };
+		C9FB09621740359600DD72A5 /* CSScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSScrollView.m; sourceTree = "<group>"; };
+		C9FB096B174035BF00DD72A5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C9FB096D174035C700DD72A5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C9FB096F174035CE00DD72A5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C9FB0971174035D400DD72A5 /* GraphicsServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GraphicsServices.framework; path = System/Library/PrivateFrameworks/GraphicsServices.framework; sourceTree = SDKROOT; };
+		C9FB097317404B6F00DD72A5 /* libactivator.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libactivator.dylib; path = ../../../../../opt/iOSOpenDev/lib/libactivator.dylib; sourceTree = "<group>"; };
+		C9FB097817404C2000DD72A5 /* CardSwitcher-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CardSwitcher-small.png"; sourceTree = "<group>"; };
+		C9FB097917404C2000DD72A5 /* CardSwitcher-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CardSwitcher-small@2x.png"; sourceTree = "<group>"; };
+		C9FB097A17404C2000DD72A5 /* CardSwitcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CardSwitcher.png; sourceTree = "<group>"; };
+		C9FB097B17404C2000DD72A5 /* CardSwitcher@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CardSwitcher@2x.png"; sourceTree = "<group>"; };
+		C9FB097C17404C2000DD72A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C9FB097F17404C2000DD72A5 /* closebox.png.bak */ = {isa = PBXFileReference; lastKnownFileType = file; path = closebox.png.bak; sourceTree = "<group>"; };
+		C9FB098017404C2000DD72A5 /* closebox@2x.png.bak */ = {isa = PBXFileReference; lastKnownFileType = file; path = "closebox@2x.png.bak"; sourceTree = "<group>"; };
+		C9FB098117404C2000DD72A5 /* UIStatusBarStyleBlackOpaque.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIStatusBarStyleBlackOpaque.png; sourceTree = "<group>"; };
+		C9FB098217404C2000DD72A5 /* UIStatusBarStyleDefault.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIStatusBarStyleDefault.png; sourceTree = "<group>"; };
+		C9FB098617404C2000DD72A5 /* CardSwitcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CardSwitcher.png; sourceTree = "<group>"; };
+		C9FB098717404C2000DD72A5 /* CardSwitcher@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CardSwitcher@2x.png"; sourceTree = "<group>"; };
+		C9FB098817404C2000DD72A5 /* WinMoSwitcher-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WinMoSwitcher-small.png"; sourceTree = "<group>"; };
+		C9FB098917404C2000DD72A5 /* WinMoSwitcher-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WinMoSwitcher-small@2x.png"; sourceTree = "<group>"; };
+		C9FB098A17404C2000DD72A5 /* WinMoSwitcher.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = WinMoSwitcher.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C9FB093C1740355100DD72A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9ABB5751741591E004CB921 /* SpringBoardServices.framework in Frameworks */,
+				C9FB097417404B6F00DD72A5 /* libactivator.dylib in Frameworks */,
+				C9FB0972174035D400DD72A5 /* GraphicsServices.framework in Frameworks */,
+				C9FB0970174035CE00DD72A5 /* CoreGraphics.framework in Frameworks */,
+				C9FB096E174035C700DD72A5 /* QuartzCore.framework in Frameworks */,
+				C9FB096C174035BF00DD72A5 /* UIKit.framework in Frameworks */,
+				C9FB095A1740356800DD72A5 /* libsubstrate.dylib in Frameworks */,
+				C9FB09441740355100DD72A5 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C9FB09351740355100DD72A5 = {
+			isa = PBXGroup;
+			children = (
+				C9ABB57717415BA0004CB921 /* Entitlements.plist */,
+				C9ABB5741741591E004CB921 /* SpringBoardServices.framework */,
+				C9FB097317404B6F00DD72A5 /* libactivator.dylib */,
+				C9FB0971174035D400DD72A5 /* GraphicsServices.framework */,
+				C9FB096F174035CE00DD72A5 /* CoreGraphics.framework */,
+				C9FB096D174035C700DD72A5 /* QuartzCore.framework */,
+				C9FB096B174035BF00DD72A5 /* UIKit.framework */,
+				C9FB09591740356800DD72A5 /* libsubstrate.dylib */,
+				C9FB09451740355100DD72A5 /* winmoswitcher */,
+				C9FB09421740355100DD72A5 /* Frameworks */,
+				C9FB09411740355100DD72A5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C9FB09411740355100DD72A5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB09401740355100DD72A5 /* winmoswitcher.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C9FB09421740355100DD72A5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB09431740355100DD72A5 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C9FB09451740355100DD72A5 /* winmoswitcher */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB095B1740359600DD72A5 /* CSApplication.h */,
+				C9FB095C1740359600DD72A5 /* CSApplication.m */,
+				C9FB095D1740359600DD72A5 /* CSApplicationController.h */,
+				C9FB095E1740359600DD72A5 /* CSApplicationController.m */,
+				C9FB095F1740359600DD72A5 /* CSResources.h */,
+				C9FB09601740359600DD72A5 /* CSResources.m */,
+				C9FB09611740359600DD72A5 /* CSScrollView.h */,
+				C9FB09621740359600DD72A5 /* CSScrollView.m */,
+				C9FB094D1740355100DD72A5 /* winmoswitcher.xm */,
+				C9FB094E1740355100DD72A5 /* winmoswitcher.mm */,
+				C9FB09461740355100DD72A5 /* Package */,
+				C9FB094A1740355100DD72A5 /* Supporting Files */,
+			);
+			path = winmoswitcher;
+			sourceTree = "<group>";
+		};
+		C9FB09461740355100DD72A5 /* Package */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB09471740355100DD72A5 /* DEBIAN */,
+				C9FB09501740355100DD72A5 /* Library */,
+			);
+			name = Package;
+			sourceTree = "<group>";
+		};
+		C9FB09471740355100DD72A5 /* DEBIAN */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB09491740355100DD72A5 /* control */,
+			);
+			name = DEBIAN;
+			sourceTree = "<group>";
+		};
+		C9FB094A1740355100DD72A5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB094B1740355100DD72A5 /* PackageVersion.plist */,
+				C9FB094C1740355100DD72A5 /* winmoswitcher-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C9FB09501740355100DD72A5 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB097517404C2000DD72A5 /* Activator */,
+				C9FB097D17404C2000DD72A5 /* Application Support */,
+				C9FB098317404C2000DD72A5 /* PreferenceLoader */,
+				C9FB09511740355100DD72A5 /* MobileSubstrate */,
+			);
+			name = Library;
+			sourceTree = "<group>";
+		};
+		C9FB09511740355100DD72A5 /* MobileSubstrate */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB09521740355100DD72A5 /* DynamicLibraries */,
+			);
+			name = MobileSubstrate;
+			sourceTree = "<group>";
+		};
+		C9FB09521740355100DD72A5 /* DynamicLibraries */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB09531740355100DD72A5 /* winmoswitcher.plist */,
+			);
+			name = DynamicLibraries;
+			sourceTree = "<group>";
+		};
+		C9FB097517404C2000DD72A5 /* Activator */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB097617404C2000DD72A5 /* Listeners */,
+			);
+			name = Activator;
+			path = Package/Library/Activator;
+			sourceTree = "<group>";
+		};
+		C9FB097617404C2000DD72A5 /* Listeners */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB097717404C2000DD72A5 /* com.matchstic.winmoswitcher */,
+			);
+			path = Listeners;
+			sourceTree = "<group>";
+		};
+		C9FB097717404C2000DD72A5 /* com.matchstic.winmoswitcher */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB097817404C2000DD72A5 /* CardSwitcher-small.png */,
+				C9FB097917404C2000DD72A5 /* CardSwitcher-small@2x.png */,
+				C9FB097A17404C2000DD72A5 /* CardSwitcher.png */,
+				C9FB097B17404C2000DD72A5 /* CardSwitcher@2x.png */,
+				C9FB097C17404C2000DD72A5 /* Info.plist */,
+			);
+			path = com.matchstic.winmoswitcher;
+			sourceTree = "<group>";
+		};
+		C9FB097D17404C2000DD72A5 /* Application Support */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB097E17404C2000DD72A5 /* WinMoSwitcher */,
+			);
+			name = "Application Support";
+			path = "Package/Library/Application Support";
+			sourceTree = "<group>";
+		};
+		C9FB097E17404C2000DD72A5 /* WinMoSwitcher */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB097F17404C2000DD72A5 /* closebox.png.bak */,
+				C9FB098017404C2000DD72A5 /* closebox@2x.png.bak */,
+				C9FB098117404C2000DD72A5 /* UIStatusBarStyleBlackOpaque.png */,
+				C9FB098217404C2000DD72A5 /* UIStatusBarStyleDefault.png */,
+			);
+			path = WinMoSwitcher;
+			sourceTree = "<group>";
+		};
+		C9FB098317404C2000DD72A5 /* PreferenceLoader */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB098417404C2000DD72A5 /* Preferences */,
+			);
+			name = PreferenceLoader;
+			path = Package/Library/PreferenceLoader;
+			sourceTree = "<group>";
+		};
+		C9FB098417404C2000DD72A5 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB098517404C2000DD72A5 /* WinMoSwitcher */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
+		C9FB098517404C2000DD72A5 /* WinMoSwitcher */ = {
+			isa = PBXGroup;
+			children = (
+				C9FB098617404C2000DD72A5 /* CardSwitcher.png */,
+				C9FB098717404C2000DD72A5 /* CardSwitcher@2x.png */,
+				C9FB098817404C2000DD72A5 /* WinMoSwitcher-small.png */,
+				C9FB098917404C2000DD72A5 /* WinMoSwitcher-small@2x.png */,
+				C9FB098A17404C2000DD72A5 /* WinMoSwitcher.plist */,
+			);
+			path = WinMoSwitcher;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		C9FB093D1740355100DD72A5 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9FB09631740359600DD72A5 /* CSApplication.h in Headers */,
+				C9FB09651740359600DD72A5 /* CSApplicationController.h in Headers */,
+				C9FB09671740359600DD72A5 /* CSResources.h in Headers */,
+				C9FB09691740359600DD72A5 /* CSScrollView.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		C9FB093F1740355100DD72A5 /* winmoswitcher */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C9FB09561740355100DD72A5 /* Build configuration list for PBXNativeTarget "winmoswitcher" */;
+			buildPhases = (
+				C9FB093A1740355100DD72A5 /* ShellScript */,
+				C9FB093B1740355100DD72A5 /* Sources */,
+				C9FB093C1740355100DD72A5 /* Frameworks */,
+				C9FB093D1740355100DD72A5 /* Headers */,
+				C9FB093E1740355100DD72A5 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = winmoswitcher;
+			productName = winmoswitcher;
+			productReference = C9FB09401740355100DD72A5 /* winmoswitcher.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C9FB09361740355100DD72A5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+			};
+			buildConfigurationList = C9FB09391740355100DD72A5 /* Build configuration list for PBXProject "winmoswitcher" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C9FB09351740355100DD72A5;
+			productRefGroup = C9FB09411740355100DD72A5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C9FB093F1740355100DD72A5 /* winmoswitcher */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C9FB093A1740355100DD72A5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/iOSOpenDev/bin/iosod --xcbp-logos";
+		};
+		C9FB093E1740355100DD72A5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/iOSOpenDev/bin/iosod --xcbp";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C9FB093B1740355100DD72A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9FB094F1740355100DD72A5 /* winmoswitcher.mm in Sources */,
+				C9FB09641740359600DD72A5 /* CSApplication.m in Sources */,
+				C9FB09661740359600DD72A5 /* CSApplicationController.m in Sources */,
+				C9FB09681740359600DD72A5 /* CSResources.m in Sources */,
+				C9FB096A1740359600DD72A5 /* CSScrollView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C9FB09541740355100DD72A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(iOSOpenDevPath)/frameworks/**",
+					"$(SDKROOT)/System/Library/PrivateFrameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = NO;
+				iOSOpenDevPath = /opt/iOSOpenDev;
+			};
+			name = Debug;
+		};
+		C9FB09551740355100DD72A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(iOSOpenDevPath)/frameworks/**",
+					"$(SDKROOT)/System/Library/PrivateFrameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				iOSOpenDevPath = /opt/iOSOpenDev;
+			};
+			name = Release;
+		};
+		C9FB09571740355100DD72A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
+				CODE_SIGN_IDENTITY = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "winmoswitcher/winmoswitcher-Prefix.pch";
+				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = "";
+				iOSOpenDevInstallOnAnyBuild = NO;
+				iOSOpenDevInstallOnProfiling = YES;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Debug;
+		};
+		C9FB09581740355100DD72A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
+				CODE_SIGN_IDENTITY = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "winmoswitcher/winmoswitcher-Prefix.pch";
+				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = "";
+				iOSOpenDevInstallOnAnyBuild = NO;
+				iOSOpenDevInstallOnProfiling = YES;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C9FB09391740355100DD72A5 /* Build configuration list for PBXProject "winmoswitcher" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C9FB09541740355100DD72A5 /* Debug */,
+				C9FB09551740355100DD72A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C9FB09561740355100DD72A5 /* Build configuration list for PBXNativeTarget "winmoswitcher" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C9FB09571740355100DD72A5 /* Debug */,
+				C9FB09581740355100DD72A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C9FB09361740355100DD72A5 /* Project object */;
+}
