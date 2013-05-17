@@ -26,6 +26,7 @@
 +(BOOL)swipeCloses;
 +(BOOL)showsCloseBox;
 +(BOOL)showsAppTitle;
++(BOOL)showsAppIcon;
 +(BOOL)showsPageControl;
 +(BOOL)autoBackgroundApps;
 +(int)cornerRadius;

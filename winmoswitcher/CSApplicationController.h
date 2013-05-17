@@ -16,7 +16,6 @@
 #import "CSResources.h"
 #include <dlfcn.h>
 
-
 @class SpringBoard, CSApplicationController, CSApplication;
 
 #pragma mark Defines
@@ -35,12 +34,16 @@
 
 
 @interface CSApplicationController : UIWindow <LAListener, UIScrollViewDelegate> {
+    int result;
     UILabel *noAppsLabel;
+    UILabel *timeLabel;
     UIPageControl *pageControl;
 
-    UIImageView *backgroundView;
+    //UIImageView *backgroundView;
 
     UIInterfaceOrientation currentOrientation;
+    
+    NSTimer *timer;
 }
 
 @property (nonatomic, readwrite) BOOL isActive;
@@ -57,6 +60,7 @@
 
 @property (nonatomic, assign) SpringBoard *springBoard;
 @property (nonatomic, retain) UIImage *springBoardImage;
+@property (nonatomic,retain) UIImageView* backgroundView;
 
 @property (nonatomic, retain) UIImage *closeBox;
 @property (nonatomic, retain) UIImage *statusBarDefault;

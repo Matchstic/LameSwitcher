@@ -67,6 +67,7 @@
 
 #define APP self.application
 
+static CSApplication *_instance;
 
 @implementation CSApplication
 @synthesize label = _label;
@@ -77,6 +78,13 @@
 @synthesize snapshot = _snapshot;
 @synthesize application = _application;
 
++(CSApplication*)sharedController{
+    if (!_instance) {
+        _instance = [[CSApplication alloc] init];
+    }
+    
+    return _instance;
+}
 
 -(id)init{
     NSLog(@"CSApplication; init");
@@ -95,7 +103,7 @@
         self.snapshot.userInteractionEnabled = YES;
         self.snapshot.layer.masksToBounds = YES;
         self.snapshot.layer.cornerRadius = [CSResources cornerRadius];
-        self.snapshot.layer.borderWidth = 1;
+        self.snapshot.layer.borderWidth = 0;
         self.snapshot.layer.borderColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1].CGColor;
         [self addSubview:self.snapshot];
 
@@ -175,7 +183,7 @@
         self.snapshot.userInteractionEnabled = YES;
         self.snapshot.layer.masksToBounds = YES;
         self.snapshot.layer.cornerRadius = [CSResources cornerRadius];
-        self.snapshot.layer.borderWidth = 1;
+        self.snapshot.layer.borderWidth = 0;
         self.snapshot.layer.borderColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1].CGColor;
         [self addSubview:self.snapshot];
 
@@ -208,7 +216,17 @@
             self.badge.center = CGPointMake((self.snapshot.frame.size.width - (self.badge.frame.size.width*0.2)), self.snapshot.frame.origin.y + (self.badge.frame.size.height*0.2));
             [self addSubview:self.badge];
         }*/
-
+        BOOL showsAppIcon = [CSResources showsAppIcon];
+        // Get app icon
+        if (showsAppIcon) {
+            SBApplicationIcon *appIcon = [[objc_getClass("SBApplicationIcon") alloc] initWithApplication:APP];
+            UIImage *icon = [appIcon generateIconImage:3];
+            self.icon = [[[UIImageView alloc] initWithImage:icon] autorelease];
+            self.icon.frame = CGRectMake(17, self.snapshot.frame.size.height + self.snapshot.frame.origin.y + 14, self.icon.frame.size.width, self.icon.frame.size.height);
+            [self addSubview:self.icon];
+            [appIcon release];
+        }
+        
         // Close box
         self.closeBox = [UIButton buttonWithType:UIButtonTypeCustom];
         self.closeBox.frame = CGRectMake(0, 0, 45, 45);
@@ -220,17 +238,38 @@
         
         // Application label
         CGRect labelRect;
-        labelRect.origin.x = (self.icon.frame.origin.x + self.icon.frame.size.width + 12);
-        labelRect.origin.y = self.icon.frame.origin.y;
-        labelRect.size.width = (self.snapshot.frame.origin.x + self.snapshot.frame.size.width)-(self.icon.frame.size.width + self.icon.frame.origin.x + 10);
-        labelRect.size.height = self.icon.frame.size.height;
+        if (showsAppIcon) {
+            labelRect.origin.x = (self.icon.frame.origin.x + self.icon.frame.size.width + 12);
+            labelRect.origin.y = self.icon.frame.origin.y;
+            labelRect.size.width = (self.snapshot.frame.origin.x + self.snapshot.frame.size.width)-(self.icon.frame.size.width + self.icon.frame.origin.x + 10);
+            labelRect.size.height = self.icon.frame.size.height;
+        } else {
+            labelRect.origin.x = (self.snapshot.frame.origin.x + 4);
+            labelRect.origin.y = (self.snapshot.frame.size.height + self.snapshot.frame.origin.y + 5);
+            //labelRect.size.width = (self.snapshot.frame.origin.x + self.snapshot.frame.size.width)-(self.icon.frame.size.width + self.icon.frame.origin.x + 10);
+            labelRect.size.width = self.snapshot.frame.size.width;
+            labelRect.size.height = 20;
+        }
 
         self.label = [[[UILabel alloc] initWithFrame:labelRect] autorelease];
-        self.label.font = [UIFont boldSystemFontOfSize:17];
+        if (showsAppIcon) {
+            self.label.font = [UIFont boldSystemFontOfSize:17];
+        } else {
+            self.label.font = [UIFont systemFontOfSize:14];
+        }
+        
         self.label.backgroundColor = [UIColor clearColor];
-        self.label.textColor = [UIColor whiteColor];
+        if ([CSResources backgroundStyle] == 3) {
+            self.label.textColor = [UIColor blackColor];
+        } else {
+            self.label.textColor = [UIColor whiteColor];
+        }
         self.label.numberOfLines = 0;
+        //if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
+        //    self.label.text = @"Home";
+        //} else {
         self.label.text = [APP displayName];
+        //}
         [self addSubview:self.label];
         self.label.hidden = ![CSResources showsAppTitle];
 
@@ -251,14 +290,16 @@
         return;
     }
 
+    BOOL showsAppIcon = [CSResources showsAppIcon];
+    if (showsAppIcon) {
+        int totalWidth = [self.label.text sizeWithFont:self.label.font forWidth:self.label.frame.size.width lineBreakMode:NSLineBreakByClipping].width;
+        totalWidth += (self.icon.frame.size.width + 12);
+        int iconX = ((self.frame.size.width-totalWidth)*0.5)-10;
+        int labelX = iconX + self.icon.frame.size.width + 8;
 
-    int totalWidth = [self.label.text sizeWithFont:self.label.font forWidth:self.label.frame.size.width lineBreakMode:NSLineBreakByClipping].width;
-    totalWidth += (self.icon.frame.size.width + 12);
-    int iconX = ((self.frame.size.width-totalWidth)*0.5)-10;
-    int labelX = iconX + self.icon.frame.size.width + 8;
-
-    self.icon.frame = CGRectMake(iconX, self.icon.frame.origin.y, self.icon.frame.size.width, self.icon.frame.size.height);
-    self.label.frame = CGRectMake(labelX, self.label.frame.origin.y, self.label.frame.size.width, self.label.frame.size.height);
+        self.icon.frame = CGRectMake(iconX, self.icon.frame.origin.y, self.icon.frame.size.width, self.icon.frame.size.height);
+        self.label.frame = CGRectMake(labelX, self.label.frame.origin.y, self.label.frame.size.width, self.label.frame.size.height);
+    }
 }
 
 
@@ -281,6 +322,21 @@
     screenRect.origin.y = -[CSApplicationController sharedController].scrollView.frame.origin.y;
 
     SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+    
+    // Ensure that SpringBoard is not relaunched, and closes running app instead
+    /*if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
+        // Close current app
+        [runningApp notifyResignActive];
+        // Animate out
+        [UIView animateWithDuration:0.55 animations:^{
+            self.snapshot.frame = screenRect;
+            self.snapshot.layer.cornerRadius = 0;
+        } completion:^(BOOL finished){
+            [[CSApplicationController sharedController] setActive:NO animated:NO];
+            [self sendSubviewToBack:self.snapshot];
+        }];
+        return;
+    }*/
     
     if (runningApp != nil) {
         // An app is already open, so use the switcher animation, but first check if this is the same app.
@@ -320,7 +376,9 @@
     // but does not exit an app with active background tasks
     
     // Damn. Root apps aren't terminated.
-    [APP _setActivationState:0];
+    //[APP _setActivationState:0];
+    // Allow application to suspend, so killing will be graceful
+    [APP notifyResignActiveForReason:1];
     [APP deactivate];
 
     [self performSelector:@selector(killItWithFire) withObject:nil afterDelay:2];
@@ -368,6 +426,19 @@
     if (gesture.state != UIGestureRecognizerStateEnded || ![CSResources swipeCloses])
         return;
     
+    // Ensure that SpringBoard cannot be closed
+    /*if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.snapshot.alpha = 0;
+            self.snapshot.frame = CGRectMake(0, self.snapshot.frame.size.height+20, self.snapshot.frame.size.width, self.snapshot.frame.size.height);
+        } completion:^(BOOL finished){}];
+        [UIView animateWithDuration:0.1 animations:^{
+            self.snapshot.alpha = 0;
+            self.snapshot.frame = CGRectMake(0, self.snapshot.frame.size.height, self.snapshot.frame.size.width, self.snapshot.frame.size.height);
+        } completion:^(BOOL finished){}];
+        return;
+    }*/
+    
     [UIView animateWithDuration:0.2 animations:^{
         self.icon.alpha = 0;
         self.label.alpha = 0;
@@ -387,7 +458,19 @@
     NSLog(@"CSApplication; closeGesture");
     if (gesture.state != UIGestureRecognizerStateEnded || ![CSResources swipeCloses])
         return;
-
+    // Ensure that SpringBoard cannot be closed
+    /*if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.snapshot.alpha = 0;
+            self.snapshot.frame = CGRectMake(0, self.snapshot.frame.size.height-20, self.snapshot.frame.size.width, self.snapshot.frame.size.height);
+        } completion:^(BOOL finished){}];
+        [UIView animateWithDuration:0.1 animations:^{
+            self.snapshot.alpha = 0;
+            self.snapshot.frame = CGRectMake(0, self.snapshot.frame.size.height, self.snapshot.frame.size.width, self.snapshot.frame.size.height);
+        } completion:^(BOOL finished){}];
+        return;
+    }*/
+    
     [UIView animateWithDuration:0.2 animations:^{
         self.icon.alpha = 0;
         self.label.alpha = 0;

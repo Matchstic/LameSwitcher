@@ -20,6 +20,8 @@
 @property (nonatomic, retain) SBApplication *application;
 @property (nonatomic, retain) UIImage *appImage;
 
++(CSApplication*)sharedController;
+
 -(id)init;
 -(void)loadImages;
 -(void)reset;

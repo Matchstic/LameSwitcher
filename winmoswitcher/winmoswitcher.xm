@@ -4,9 +4,13 @@
 //#import <SpringBoard/SBIconBadge.h>
 #import <libactivator/libactivator.h>
 #import "CSApplicationController.h"
+#import "CSResources.h"
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
+#import <Strife/SLockWindow.h>
+#import <Strife/SRootScrollView.h>
 
+//UIKIT_EXTERN CGImageRef UIGetScreenImage();
 
 #define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
 #define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
@@ -158,6 +162,8 @@ static NSString * const CARDSWITCHER_ID = @"com.matchstic.winmoswitcher";
 - (void)applicationDidFinishLaunching:(UIApplication *)application{
     %orig;
 
+    //[[CSApplicationController sharedController].runningApps addObject:@"com.apple.springboard"];
+    
     [CSApplicationController sharedController].springBoard = self;
 
     if (![[LAActivator sharedInstance] hasSeenListenerWithName:CARDSWITCHER_ID])
@@ -221,6 +227,49 @@ static NSString * const CARDSWITCHER_ID = @"com.matchstic.winmoswitcher";
     [CSApplicationController sharedController].shouldAnimate = NO;
 
     %orig;
+}
+%end*/
+
+// Strife hooks
+
+/*%hook SLockWindow
+
+// Get screenshot after unlock
+-(void)playLockAndKeypadSeperatingAnimation {
+    %orig;
+    
+    [self performSelector:@selector(getScreenshot) withObject:nil afterDelay:2];
+}
+
+%new
+-(void)getScreenshot {
+    SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+    
+    if (runningApp == nil) {
+        CGImageRef screen = UIGetScreenImage();
+        [CSResources cachScreenShot:[UIImage imageWithCGImage:screen] forApp:[[objc_getClass("SBApplicationController") sharedInstance] applicationWithDisplayIdentifier:@"com.apple.springboard"]];
+        CGImageRelease(screen);
+    }
+}
+%end
+
+%hook SRootScrollView
+
+// Get screenshot after displaying scroll view
+-(id)initWithFrame:(struct CGRect)arg1 {
+    %orig;
+    
+    [self performSelector:@selector(getScreenshot) withObject:nil afterDelay:2];
+}
+%new
+-(void)getScreenshot {
+    SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+    
+    if (runningApp == nil) {
+        CGImageRef screen = UIGetScreenImage();
+        [CSResources cachScreenShot:[UIImage imageWithCGImage:screen] forApp:[[objc_getClass("SBApplicationController") sharedInstance] applicationWithDisplayIdentifier:@"com.apple.springboard"]];
+        CGImageRelease(screen);
+    }
 }
 %end*/
 

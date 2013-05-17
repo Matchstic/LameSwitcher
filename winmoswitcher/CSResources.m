@@ -115,13 +115,13 @@ static UIImage *currentImage = nil;
     // Else to avoid weirdness we need to render a fake status bar above the snapshot
     UIGraphicsBeginImageContext([UIScreen mainScreen].bounds.size);
 
-    if ([app statusBarStyle] == UIStatusBarStyleBlackOpaque) {
-        [[UIColor blackColor] set];
-        UIRectFill([UIScreen mainScreen].bounds);
-    }
-    else {
+    //if ([app statusBarStyle] == UIStatusBarStyleBlackOpaque) {
+    [[UIColor blackColor] set];
+    UIRectFill([UIScreen mainScreen].bounds);
+    //}
+    /*else {
         [[CSApplicationController sharedController].statusBarDefault drawInRect:CGRectMake(0, 0, SCREEN_WIDTH, 20)];
-    }
+    }*/
 
     [[app defaultImage:NULL preferredScale:scale originalOrientation:&originalOrientation currentOrientation:&currentOrientation] drawInRect:CGRectMake(0, 20, SCREEN_WIDTH, SCREEN_HEIGHT-20)];
 
@@ -152,6 +152,11 @@ static UIImage *currentImage = nil;
     NSLog(@"CSResources showsAppTitle");
     id temp = [settings objectForKey:@"ShowAppTitle"];
 	return (temp ? [temp boolValue] : YES);
+}
++(BOOL)showsAppIcon {
+    NSLog(@"CSResources showsAppIcon");
+    id temp = [settings objectForKey:@"showsAppIcon"];
+    return (temp ? [temp boolValue] : NO);
 }
 +(BOOL)showsPageControl{
     NSLog(@"CSResources showsPageControl");

@@ -32,6 +32,7 @@ CGImageRef UIGetScreenImage(void);
 
 
 static CSApplicationController *_instance;
+static SBApplication *openedOverApp;
 
 @implementation CSApplicationController
 @synthesize springBoardImage = _springBoardImage;
@@ -47,6 +48,8 @@ static CSApplicationController *_instance;
 @synthesize scrollView = _scrollView;
 @synthesize closeBox = _closeBox;
 @synthesize isActive = _isActive;
+
+@synthesize backgroundView;
 
 +(CSApplicationController*)sharedController{
     if (!_instance) {
@@ -75,8 +78,8 @@ static CSApplicationController *_instance;
         self.ignoredApps = [[[NSMutableArray alloc] init] autorelease];
         self.ignoredIDs = nil;
         //[NSMutableArray arrayWithObjects:@"com.apple.mobileipod-MediaPlayer", @"com.apple.mobilephone", @"com.apple.mobilemail", @"com.apple.mobilesafari", nil];
-
-        pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0.0f, self.frame.size.height - 28.0f, self.frame.size.width, 20.0f)];
+        // ******************************************************* originx        originy                   width        height
+        pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height-20, self.frame.size.width, 20)];
         pageControl.userInteractionEnabled = NO;
         pageControl.numberOfPages = 1;
         pageControl.currentPage = 1;
@@ -97,8 +100,8 @@ static CSApplicationController *_instance;
         self.scrollView.delegate = self;
         [self addSubview:self.scrollView];
 
-        noAppsLabel = nil;
-        backgroundView = nil;
+        //noAppsLabel = nil;
+        //backgroundView = nil;
         [CSResources reloadSettings];
 
         //UIPinchGestureRecognizer *pinch = [[[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoomOut:)] autorelease];
@@ -144,6 +147,7 @@ static CSApplicationController *_instance;
     self.backgroundColor = [UIColor blackColor];
     
     // Change background as appropriate
+    //backgroundView = nil;
     [backgroundView removeFromSuperview];
     backgroundView = nil;
     if ([CSResources backgroundStyle] == 1) {
@@ -161,25 +165,66 @@ static CSApplicationController *_instance;
             
         UIImage *tile = UIGraphicsGetImageFromCurrentImageContext();
         backgroundView.image = tile;
-        [tile release];
-        [dict release];
+        backgroundView.tag = 5;
         UIGraphicsEndImageContext();
+
+        [self insertSubview:backgroundView atIndex:0];
+        
+        [dict release];
+    } else if ([CSResources backgroundStyle] == 2) {
+        // Dark background
+        backgroundView = [[[UIImageView alloc] initWithFrame:self.frame] autorelease];
+        backgroundView.backgroundColor = [UIColor blackColor];
+        [self insertSubview:backgroundView atIndex:0];
+    } else if ([CSResources backgroundStyle] == 3) {
+        // Light background - remember to adjust text colour accordingly
+        backgroundView = [[[UIImageView alloc] initWithFrame:self.frame] autorelease];
+        backgroundView.backgroundColor = [UIColor whiteColor];
         [self insertSubview:backgroundView atIndex:0];
     }
-
+    
+    //noAppsLabel = nil;
     [noAppsLabel removeFromSuperview];
     noAppsLabel = nil;
 
     if ([self.runningApps count] == 0) {
         noAppsLabel = [[[UILabel alloc] initWithFrame:self.frame] autorelease];
-        noAppsLabel.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.3];
+        noAppsLabel.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0];
         noAppsLabel.font = [UIFont boldSystemFontOfSize:17];
         noAppsLabel.textAlignment = NSTextAlignmentCenter;
-        noAppsLabel.textColor = [UIColor whiteColor];
+        if ([CSResources backgroundStyle] == 3) {
+            noAppsLabel.textColor = [UIColor blackColor];
+        } else {
+            noAppsLabel.textColor = [UIColor whiteColor];
+        }
         noAppsLabel.text = @"No Apps Running";
         [self addSubview:noAppsLabel];
-        self.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8];
+        self.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0];
     }
+    
+    // Time view code
+    [timeLabel removeFromSuperview];
+    timeLabel = nil;
+
+    timeLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, (SCREEN_WIDTH - 5), 24)] autorelease];
+    timeLabel.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0];
+    timeLabel.font = [UIFont systemFontOfSize:13];
+    timeLabel.textAlignment = NSTextAlignmentRight;
+    if ([CSResources backgroundStyle] == 3) {
+        timeLabel.textColor = [UIColor blackColor];
+    } else {
+        timeLabel.textColor = [UIColor whiteColor];
+    }
+    
+    NSDate *today = [NSDate date];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"hh:mm"];
+    NSString *dateString = [dateFormat stringFromDate:today];
+    timeLabel.text = dateString;
+    [dateFormat release];
+    
+    [self addSubview:timeLabel];
+    [self runTimer];
 
 
     CGSize screenSize = self.scrollView.frame.size;
@@ -288,6 +333,18 @@ static CSApplicationController *_instance;
     [self setActive:NO];
 }
 
+-(void)runTimer {
+    timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updateTime) userInfo:nil repeats:YES];
+}
+
+-(void)updateTime {
+    NSDate *today = [NSDate date];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"hh:mm"];
+    NSString *dateString = [dateFormat stringFromDate:today];
+    [timeLabel setText:dateString];
+    [dateFormat release];
+}
 
 #pragma mark Active & deactive
 
@@ -340,6 +397,8 @@ static CSApplicationController *_instance;
     NSLog(@"CSApplicationController deactivateAnimated");
     
     SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+    NSString *appId = [runningApp displayName];
+    NSLog(@"Currently running app is %@", appId);
     
     if (animate && !(runningApp == nil)) {
 
@@ -349,14 +408,26 @@ static CSApplicationController *_instance;
             NSLog(@"CSApplicationController deactivateAnimated: SPRINGBOARD setBackgroundingEnabled:forDisplayIdentifier");
         }
 
-        [runningApp setDeactivationSetting:0x2 flag:NO];
+        //[runningApp setDeactivationSetting:0x2 flag:NO];
+        //[runningApp notifyResumeActiveForReason:1];
         //[SBWActiveDisplayStack popDisplay:runningApp];
-        [self openApp:[runningApp displayIdentifier]];
+        //[self openApp:[runningApp displayIdentifier]];
+        //[runningApp notifyResumeActiveForReason:1];
         //[SBWSuspendingDisplayStack pushDisplay:runningApp];
-        runningApp = nil;
+        //runningApp = nil;
+        NSLog(@"runningApp ain't nil!");
+        [CSApplicationController sharedController].shouldAnimate = YES;
+        [(SBUIController*)[objc_getClass("SBUIController") sharedInstance] activateApplicationFromSwitcher:runningApp];
         NSLog(@"About to exit (animate && !(runningApp == nil))");
     }
 
+    // Custom animation when closing on an app.
+    CGRect screenRect = self.frame;
+    screenRect.size.width = SCREEN_WIDTH;
+    screenRect.size.height = SCREEN_HEIGHT;
+    screenRect.origin.x = -[CSApplicationController sharedController].scrollView.frame.origin.x - (([CSApplicationController sharedController].scrollView.frame.size.width-self.frame.size.width)*0.5);
+    screenRect.origin.y = -[CSApplicationController sharedController].scrollView.frame.origin.y;
+    
     self.isActive = NO;
     self.userInteractionEnabled = NO;
     self.scrollView.userInteractionEnabled = NO;
@@ -366,36 +437,62 @@ static CSApplicationController *_instance;
     [self setRotation:[[UIDevice currentDevice] orientation]];
 
     NSLog(@"Set the orientation");
-    [UIView animateWithDuration:(animate ? 0.4 : 0.0) animations:^{
-        self.isAnimating = YES;
-        self.layer.transform = CATransform3DMakeScale(2.5f, 2.5f, 1.0f);
-        self.alpha = 0.0f;
-    } completion:^(BOOL finished){
-        self.hidden = YES;
-        self.isAnimating = NO;
 
-        [CSResources reset];
-        
-        NSLog(@"ABout to remove vies from superview");
-        for (UIView *view in self.scrollView.subviews) {
-            [view removeFromSuperview];
-        }
+    if(timer)
+    {
+        [timer invalidate];
+        timer = nil;
+    }
+    
+    // Correct animation for closing UI on a running app. Fades for now, need to integrate with finished animation.
+    if (runningApp != nil) {
+        [UIView animateWithDuration:0.35 animations:^{
+            self.isAnimating = YES;
+            self.alpha = 0.0f;
+        } completion:^(BOOL finished){
+            self.hidden = YES;
+            self.isAnimating = NO;
+            
+            [CSResources reset];
+            
+            for (UIView *view in self.scrollView.subviews) {
+                [view removeFromSuperview];
+            }
+            
+            [noAppsLabel removeFromSuperview];
+            noAppsLabel = nil;
+            
+            [timeLabel removeFromSuperview];
+            timeLabel = nil;
+            
+            [backgroundView removeFromSuperview];
+            backgroundView = nil;
+        }];
+    } else {
+        [UIView animateWithDuration:(animate ? 0.4 : 0.0) animations:^{
+            self.isAnimating = YES;
+            self.layer.transform = CATransform3DMakeScale(2.5f, 2.5f, 1.0f);
+            self.alpha = 0.0f;
+        } completion:^(BOOL finished){
+            self.hidden = YES;
+            self.isAnimating = NO;
 
-        NSLog(@"Removed views from superview");
-        /*[backgroundView removeFromSuperview];
-        NSLog(@"backgroundView removed from superview");
-        backgroundView = nil;
-        NSLog(@"backgroundView = nil");
-        [noAppsLabel removeFromSuperview];
-        NSLog(@"noAppsLabel removed from superview");
-        noAppsLabel = nil;
-        NSLog(@"noAppsLabel = nil");*/
+            [CSResources reset];
         
-        // ******************* A hack to prevent crashes for now, FIXME!!!!!!! **************
+            for (UIView *view in self.scrollView.subviews) {
+                [view removeFromSuperview];
+            }
+
+            [noAppsLabel removeFromSuperview];
+            noAppsLabel = nil;
         
-        backgroundView = nil;
-        noAppsLabel = nil;
-    }];
+            [timeLabel removeFromSuperview];
+            timeLabel = nil;
+
+            [backgroundView removeFromSuperview];
+            backgroundView = nil;
+        }];
+    }
 }
 
 -(void)openApp:(NSString*)bundleId {
@@ -404,7 +501,7 @@ static CSApplicationController *_instance;
     //  so we open it dynamically and find SBSLaunchApplicationWithIdentifier()
     void* sbServices = dlopen(SBSERVPATH, RTLD_LAZY);
     int (*SBSLaunchApplicationWithIdentifier)(CFStringRef identifier, Boolean suspended) = dlsym(sbServices, "SBSLaunchApplicationWithIdentifier");
-    int result = SBSLaunchApplicationWithIdentifier((CFStringRef)bundleId, false);
+    result = SBSLaunchApplicationWithIdentifier((CFStringRef)bundleId, false);
     dlclose(sbServices);
 }
 
@@ -458,6 +555,7 @@ static CSApplicationController *_instance;
 
     if (newActive && [[runningApp displayIdentifier] length]) {
         NSLog(@"newActive && [[runningApp displayIdentifier] length]");
+        openedOverApp = runningApp;
         [self setActive:YES animated:NO];
 
         SBApplication *application = runningApp;
