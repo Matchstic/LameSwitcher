@@ -5,4 +5,4 @@ This is a Windows Phone based switcher for iOS 6+, and is forked from LameSwitch
 
 Swipe up or down to remove applications from the switcher. It will automatically close once no apps are running. 
 
-Not all code has been ported to iOS 6 yet, so expect many bugs.
+Only the UIPageControl isn't fully working now.
