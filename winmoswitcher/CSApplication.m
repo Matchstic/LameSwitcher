@@ -375,7 +375,7 @@ static CSApplication *_instance;
     snapshotAnim.frame = snapshotNewRect;
     
     // 1. Launch animation
-    [UIView animateWithDuration:0.55 animations:^{
+    [UIView animateWithDuration:0.6 animations:^{
         snapshotAnim.frame = screenRect;
         snapshotAnim.layer.cornerRadius = 0;
     } completion:^(BOOL finished){
@@ -399,7 +399,7 @@ static CSApplication *_instance;
         CGRect scrollRect = [CSApplicationController sharedController].scrollView.frame;
         CGRect oldScrollRect = [CSApplicationController sharedController].scrollView.frame;
         scrollRect.origin.x = 0-[CSApplicationController sharedController].scrollView.frame.size.width*lengthToMove;
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.6 animations:^{
             [CSApplicationController sharedController].scrollView.frame = scrollRect;
         } completion:^(BOOL finished){
             // Put it back into original position
@@ -429,7 +429,13 @@ static CSApplication *_instance;
     // Allow application to suspend, so killing will be graceful
     [APP notifyResignActiveForReason:1];
     [APP deactivate];
-
+    
+    SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+    // Make sure that the top application is closed gracefully, and we're taken back to SpringBoard
+    if ([[APP displayIdentifier] isEqual:[runningApp displayIdentifier]]) {
+        [(SpringBoard *)[UIApplication sharedApplication] quitTopApplication:nil];
+    }
+    
     [self performSelector:@selector(killItWithFire) withObject:nil afterDelay:2];
 
     //******************* Proper app quiting code thanks to 'jmeosbn' - end **************//

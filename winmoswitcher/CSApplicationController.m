@@ -388,7 +388,7 @@ static SBApplication *openedOverApp;
     self.scrollView.userInteractionEnabled = YES;
     self.layer.transform = CATransform3DMakeScale(3.5f, 3.5f, 1.0f);
 
-    [UIView animateWithDuration:(animate ? 0.25 : 0.0) animations:^{
+    [UIView animateWithDuration:(animate ? 0.4 : 0.0) animations:^{
         self.alpha = 1;
         self.layer.transform = CATransform3DIdentity;
     } completion:^(BOOL finished){
@@ -474,7 +474,7 @@ static SBApplication *openedOverApp;
             backgroundView = nil;
         }];
     } else {*/
-        [UIView animateWithDuration:(animate ? 0.25 : 0.0) animations:^{
+        [UIView animateWithDuration:(animate ? 0.4 : 0.0) animations:^{
             self.isAnimating = YES;
             self.layer.transform = CATransform3DMakeScale(2.5f, 2.5f, 1.0f);
             self.alpha = 0.0f;
@@ -551,18 +551,15 @@ static SBApplication *openedOverApp;
         [self scrollViewDidScroll:self.scrollView];
         return;
     }
-    NSLog(@"About to get screen image");
     CGImageRef screen = UIGetScreenImage();
-    NSLog(@"Got it");
+
     [CSResources setCurrentAppImage:[UIImage imageWithCGImage:screen]];
-    NSLog(@"Set as currentImage");
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [CSResources cachScreenShot:[UIImage imageWithCGImage:screen] forApp:runningApp];
     });
-    NSLog(@"Setup dispatch queue");
+    
     CGImageRelease(screen);
-    NSLog(@"Released screen");
 
     if (newActive && [[runningApp displayIdentifier] length]) {
         NSLog(@"newActive && [[runningApp displayIdentifier] length]");
