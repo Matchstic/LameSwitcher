@@ -30,6 +30,7 @@
 #import "CSScrollView.h"
 #import <UIKit/UIKit.h>
 #import <substrate.h>
+#import <dispatch/dispatch.h>
 
 /*@interface SBIconModel ()
 - (SBApplicationIcon *)applicationIconForDisplayIdentifier:(NSString *)displayIdentifier;
@@ -99,7 +100,7 @@ static CSApplication *_instance;
 
         self.snapshot = [[[UIImageView alloc] init] autorelease];
         self.snapshot.backgroundColor = [UIColor clearColor];
-        self.snapshot.frame = CGRectMake(0, (50*Y_SCALE), (SCREEN_WIDTH*0.625), (SCREEN_HEIGHT*0.625));
+        self.snapshot.frame = CGRectMake(0, (SCREEN_HEIGHT*0.16), (SCREEN_WIDTH*0.625), (SCREEN_HEIGHT*0.625));
         self.snapshot.userInteractionEnabled = YES;
         self.snapshot.layer.masksToBounds = YES;
         self.snapshot.layer.cornerRadius = [CSResources cornerRadius];
@@ -154,7 +155,6 @@ static CSApplication *_instance;
 }
 
 -(void)loadImages{
-    NSLog(@"CSApplication; loadImages");
     if (self.appImage != nil)
         return;
 
@@ -178,7 +178,7 @@ static CSApplication *_instance;
         self.application = application;
         self.appImage = nil;
 
-        self.snapshot = [[[UIImageView alloc] initWithFrame:CGRectMake(0, (50*Y_SCALE), (SCREEN_WIDTH*0.625), (SCREEN_HEIGHT*0.625))] autorelease];
+        self.snapshot = [[[UIImageView alloc] initWithFrame:CGRectMake(0, (SCREEN_HEIGHT*0.16), (SCREEN_WIDTH*0.625), (SCREEN_HEIGHT*0.625))] autorelease];
         self.snapshot.backgroundColor = [UIColor clearColor];
         self.snapshot.userInteractionEnabled = YES;
         self.snapshot.layer.masksToBounds = YES;
@@ -203,29 +203,39 @@ static CSApplication *_instance;
 
         //*************************** FIXME!!!!!!!!!!!!!!! ******************************
         
-        // App icons
-        /*SBApplicationIcon *appIcon = [[objc_getClass("SBIconModel") sharedInstance] applicationIconForDisplayIdentifier:[APP displayIdentifier]];
-        UIImage *icon = [appIcon getIconImage:3];
-        self.icon = [[[UIImageView alloc] initWithImage:icon] autorelease];
-        self.icon.frame = CGRectMake(17, self.snapshot.frame.size.height + self.snapshot.frame.origin.y + 14, self.icon.frame.size.width, self.icon.frame.size.height);
-        [self addSubview:self.icon];
-        
          // Application badges
-        if ([appIcon hasBadge]) {
+        /*if ([appIcon hasBadge]) {
             self.badge = [objc_getClass("SBIconBadge") iconBadgeWithBadgeString:[appIcon _PSBadgeText]]; //[[appIcon badgeView] _PSBadgeText]];
             self.badge.center = CGPointMake((self.snapshot.frame.size.width - (self.badge.frame.size.width*0.2)), self.snapshot.frame.origin.y + (self.badge.frame.size.height*0.2));
             [self addSubview:self.badge];
         }*/
-        BOOL showsAppIcon = [CSResources showsAppIcon];
+        
         // Get app icon
+        BOOL showsAppIcon = [CSResources showsAppIcon];
         if (showsAppIcon) {
             SBApplicationIcon *appIcon = [[objc_getClass("SBApplicationIcon") alloc] initWithApplication:APP];
             UIImage *icon = [appIcon generateIconImage:3];
             self.icon = [[[UIImageView alloc] initWithImage:icon] autorelease];
             self.icon.frame = CGRectMake(17, self.snapshot.frame.size.height + self.snapshot.frame.origin.y + 14, self.icon.frame.size.width, self.icon.frame.size.height);
             [self addSubview:self.icon];
+            
             [appIcon release];
         }
+        
+        // Badges
+        /*SBApplicationIcon *appIcon = [[objc_getClass("SBApplicationIcon") alloc] initWithApplication:APP];
+        if ([appIcon hasBadge]) {
+            NSString *badgeValue = [appIcon badgeValue];
+            
+            // Add to image
+            UIImage *badgeBG = [UIImage imageWithContentsOfFile:@"/Library/Application Support/WinMoSwitcher/Badgebg.png"];
+            UIImage *badge = [self drawText:badgeValue inImage:badgeBG atPoint:CGPointMake((badgeBG.size.width - (badgeBG.size.width/2)), (badgeBG.size.height - (badgeBG.size.height/2)))];
+            self.badge.image = badge;
+            
+            self.badge.center = CGPointMake((self.snapshot.frame.size.width - (self.badge.frame.size.width*0.2)), self.snapshot.frame.origin.y + (self.badge.frame.size.height*0.2));
+            [self addSubview:self.badge];
+        }
+        [appIcon release];*/
         
         // Close box
         self.closeBox = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -301,7 +311,17 @@ static CSApplication *_instance;
         self.label.frame = CGRectMake(labelX, self.label.frame.origin.y, self.label.frame.size.width, self.label.frame.size.height);
     }
 }
-
+-(UIImage*)drawText:(NSString*)text inImage:(UIImage*)image atPoint:(CGPoint)point {
+    UIFont *font = [UIFont systemFontOfSize:12];
+    UIGraphicsBeginImageContext(image.size);
+    [image drawInRect:CGRectMake(0,0,image.size.width,image.size.height)];
+    CGRect rect = CGRectMake(point.x, point.y, image.size.width, image.size.height);
+    [[UIColor whiteColor] set];
+    [text drawInRect:CGRectIntegral(rect) withFont:font];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
 
 -(void)launch{
     NSLog(@"CSApplication; launch");
@@ -318,7 +338,7 @@ static CSApplication *_instance;
     CGRect screenRect = self.frame;
     screenRect.size.width = SCREEN_WIDTH;
     screenRect.size.height = SCREEN_HEIGHT;
-    screenRect.origin.x = -[CSApplicationController sharedController].scrollView.frame.origin.x - (([CSApplicationController sharedController].scrollView.frame.size.width-self.frame.size.width)*0.5);
+    screenRect.origin.x = -[CSApplicationController sharedController].scrollView.frame.origin.x - (([CSApplicationController sharedController].scrollView.frame.size.width-self.frame.size.width)*0.5)+60;
     screenRect.origin.y = -[CSApplicationController sharedController].scrollView.frame.origin.y;
 
     SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
@@ -338,6 +358,7 @@ static CSApplication *_instance;
         return;
     }*/
     
+    // If we can open the app without the usual iOS animation, then we won't have weird effects at the end of ours. Could use [CSApplicationController openApp:[APP displayIdentifier]];
     if (runningApp != nil) {
         // An app is already open, so use the switcher animation, but first check if this is the same app.
         if (![[runningApp bundleIdentifier] isEqualToString:[APP bundleIdentifier]]) {
@@ -349,14 +370,66 @@ static CSApplication *_instance;
         // Else we are on SpringBoard
         [(SBUIController*)[objc_getClass("SBUIController") sharedInstance] activateApplicationAnimated:APP];
     }
-
+    
+    /*static SBWorkspace *workspace$ = nil;
+    static id scheduledTransaction$ = nil;
+    
+    SBAlertManager *alertManager = workspace$.alertManager;
+    SBAppToAppWorkspaceTransaction *transaction = [[objc_getClass("SBAppToAppWorkspaceTransaction") alloc]
+                                                   initWithWorkspace:workspace$.bksWorkspace alertManager:alertManager from:fromApp to:toApp];
+    if ([workspace$ currentTransaction] == nil) {
+        [workspace$ setCurrentTransaction:transaction];
+    } else if (scheduledTransaction$ == nil) {
+        // NOTE: Don't schedule more than one transaction.
+        scheduledTransaction$ = [transaction retain];
+    }
+    [transaction release];*/
+    
+    // All these animations must happen at the same time for a Windows Phone effect
+    
+    UIView *snapshotAnim = self.snapshot;
+    [[CSApplicationController sharedController] addSubview:snapshotAnim];
+    
+    CGRect snapshotNewRect = self.snapshot.frame;
+    
+    // Compensate for some UI weirdness ;P
+    int extra = ((SCREEN_WIDTH/2)-(self.snapshot.frame.size.width/2));
+    snapshotNewRect.origin.x = self.snapshot.frame.origin.x+extra;
+    
+    snapshotAnim.frame = snapshotNewRect;
+    
+    // 1. Launch animation
     [UIView animateWithDuration:0.55 animations:^{
-        self.snapshot.frame = screenRect;
-        self.snapshot.layer.cornerRadius = 0;
+        snapshotAnim.frame = screenRect;
+        snapshotAnim.layer.cornerRadius = 0;
     } completion:^(BOOL finished){
         [[CSApplicationController sharedController] setActive:NO animated:NO];
-        [self sendSubviewToBack:self.snapshot];
+        [[CSApplicationController sharedController] sendSubviewToBack:snapshotAnim];
+        [snapshotAnim removeFromSuperview];
     }];
+
+    int appIndex = [[CSApplicationController sharedController].runningApps indexOfObject:APP];
+    int numToRight = [[CSApplicationController sharedController].runningApps count]-appIndex;
+    int lengthToMove = numToRight+1;
+    
+    // 2. Animate the scrollview moving to the left
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.05 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [self animateScrollView:lengthToMove];
+    });
+}
+
+-(void)animateScrollView:(int)lengthToMove {
+    if ([CSApplicationController sharedController].runningApps.count > 1) {
+        CGRect scrollRect = [CSApplicationController sharedController].scrollView.frame;
+        CGRect oldScrollRect = [CSApplicationController sharedController].scrollView.frame;
+        scrollRect.origin.x = 0-[CSApplicationController sharedController].scrollView.frame.size.width*lengthToMove;
+        [UIView animateWithDuration:0.5 animations:^{
+            [CSApplicationController sharedController].scrollView.frame = scrollRect;
+        } completion:^(BOOL finished){
+            // Put it back into original position
+            [CSApplicationController sharedController].scrollView.frame = oldScrollRect;
+        }];
+    }
 }
 
 -(void)exit{
@@ -487,12 +560,10 @@ static CSApplication *_instance;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    NSLog(@"CSApplication; observeValueForKeyPath:ofObject:change:context");
     [self performSelector:(SEL)context withObject:change];
 }
 
 - (void)updateAlpha:(NSDictionary *)change {
-    NSLog(@"CSApplication; updateAlpha");
     /*CGFloat offset = [CSApplicationController sharedController].scrollView.contentOffset.x;
     CGFloat origin = self.frame.origin.x;
     CGFloat delta = fabs(origin - offset);
@@ -515,6 +586,7 @@ static CSApplication *_instance;
 -(void)dealloc{
     NSLog(@"CSApplication; dealloc");
     [[CSApplicationController sharedController].scrollView removeObserver:self forKeyPath:@"contentOffset"];
+    [self removeObserver:self forKeyPath:@"frame"];
 
     for (UIView *view in self.subviews) {
         [view removeFromSuperview];

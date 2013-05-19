@@ -20,6 +20,7 @@
 +(BOOL)cachScreenShot:(UIImage*)screenshot forApp:(SBApplication*)app;
 +(UIImage*)cachedScreenShot:(SBApplication*)app;
 +(UIImage*)appScreenShot:(SBApplication*)app;
++(void)removeScreenshotForApp:(SBApplication *)app;
 +(void)didReceiveMemoryWarning;
 
 // Settings

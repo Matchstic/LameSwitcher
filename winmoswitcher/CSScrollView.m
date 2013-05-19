@@ -11,7 +11,6 @@
 @implementation CSScrollView
 
 -(BOOL)viewIsVisible:(UIView*)view{
-    NSLog(@"CSScrollView viewIsVisible");
     CGRect visibleRect;
     visibleRect.origin = self.contentOffset;
     visibleRect.size = self.bounds.size;
@@ -22,7 +21,6 @@
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-    NSLog(@"CSScrollView pointInside:withEvent");
     CGPoint parentLocation = [self convertPoint:point toView:self.superview];
     /*CGRect responseRect = self.frame;
     responseRect.origin.x -= responseInsets.left;

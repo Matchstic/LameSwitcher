@@ -14,6 +14,7 @@
 #import "CSScrollView.h"
 #import <UIKit/UIKit.h>
 #import "CSResources.h"
+#include <dispatch/dispatch.h>
 #include <dlfcn.h>
 
 @class SpringBoard, CSApplicationController, CSApplication;
@@ -72,6 +73,7 @@
 
 -(CSApplication*)csAppforApplication:(SBApplication*)app;
 
+-(void)openApp:(NSString*)bundleId;
 -(void)appLaunched:(SBApplication*)app;
 -(void)appQuit:(SBApplication*)app;
 

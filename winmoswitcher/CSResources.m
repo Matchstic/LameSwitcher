@@ -60,11 +60,13 @@ static UIImage *currentImage = nil;
 
     [screenshot retain];
 
+    // Save snapshot to disk
     [[NSFileManager defaultManager] createDirectoryAtPath:@"/User/Library/Caches/WinMoSwitcher" withIntermediateDirectories:YES attributes:nil error:nil];
-    //NSString *pngPath = [NSString stringWithFormat:@"/User/Library/Caches/CardSwitcher/%@", [app displayIdentifier]];
-    //BOOL success = [UIImagePNGRepresentation(screenshot) writeToFile:pngPath atomically:YES];
+    NSString *pngPath = [NSString stringWithFormat:@"/User/Library/Caches/WinMoSwitcher/%@", [app displayIdentifier]];
+    BOOL success = [UIImagePNGRepresentation(screenshot) writeToFile:pngPath atomically:YES];
 
-    //if (success)
+    // Add into cache
+    if (success)
         [cache setObject:screenshot forKey:[app displayIdentifier]];
         [cache writeToFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist" atomically:YES];
 
@@ -77,9 +79,28 @@ static UIImage *currentImage = nil;
     NSLog(@"CSResources cachedScreenShot");
     SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
     if (currentImage && [[runningApp displayIdentifier] isEqualToString:[app displayIdentifier]]) {
+        // Add the current image as the most up-to-date snapshot
+        if (!cache)
+            cache = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist"];
+        if (!cache)
+            cache = [[NSMutableDictionary alloc] init];
+        if (cache) {
+            [[NSFileManager defaultManager] createDirectoryAtPath:@"/User/Library/Caches/WinMoSwitcher" withIntermediateDirectories:YES attributes:nil error:nil];
+            NSString *pngPath = [NSString stringWithFormat:@"/User/Library/Caches/WinMoSwitcher/%@", [app displayIdentifier]];
+            BOOL success = [UIImagePNGRepresentation(currentImage) writeToFile:pngPath atomically:YES];
+            if (success)
+                [cache setObject:currentImage forKey:[app displayIdentifier]];
+                [cache writeToFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist" atomically:YES];
+        }
         return currentImage;
     }
 
+    // Load from saved snapshot
+    NSString *pngPath = [NSString stringWithFormat:@"/User/Library/Caches/WinMoSwitcher/%@", [app displayIdentifier]];
+    UIImage *img = [UIImage imageWithContentsOfFile:pngPath];
+    if (img) return img;
+    
+    // Load from cache?
     if (!cache)
         cache = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist"];
     if (!cache)
@@ -88,11 +109,8 @@ static UIImage *currentImage = nil;
         if ([cache objectForKey:[app displayIdentifier]])
             return [cache objectForKey:[app displayIdentifier]];
     }
-
-    /*NSString *pngPath = [NSString stringWithFormat:@"/User/Library/Caches/CardSwitcher/%@", [app displayIdentifier]];
-    UIImage *img = [UIImage imageWithContentsOfFile:pngPath];
-    if (img) return img;*/
-
+    
+    // Backup in the event there isn't a saved snapshot - get image from currently running app; will be useful for getting it for SpringBoard
     return [self appScreenShot:app];
 }
 
@@ -132,7 +150,18 @@ static UIImage *currentImage = nil;
     return img;
 }
 
-
++(void)removeScreenshotForApp:(SBApplication *)app {
+    if (cache) {
+        NSError *error;
+        
+        NSString *pngPath = [NSString stringWithFormat:@"/User/Library/Caches/WinMoSwitcher/%@", [app displayIdentifier]];
+        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:pngPath error:&error];
+        
+        if (success)
+            [cache removeObjectForKey:[app displayIdentifier]];
+            [cache writeToFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist" atomically:YES];
+    }
+}
 
 #pragma mark Settings
 

@@ -54,9 +54,7 @@ static void _logos_method$_ungrouped$SBAppSwitcherController$applicationDied$(SB
 
 static void _logos_method$_ungrouped$SBApplicationIcon$launch(SBApplicationIcon* self, SEL _cmd){
     _logos_orig$_ungrouped$SBApplicationIcon$launch(self, _cmd);
-    NSLog(@"SBApplicationIcon: launch");
     [[CSApplicationController sharedController] appLaunched:[self application]];
-    NSLog(@"SBApplicationIcon: launch -> completed");
 }
 
 
@@ -68,9 +66,7 @@ static void (*_logos_orig$OldDevices$SBApplication$launch)(SBApplication*, SEL);
 static void _logos_method$OldDevices$SBApplication$launch(SBApplication* self, SEL _cmd){
     _logos_orig$OldDevices$SBApplication$launch(self, _cmd);
     
-    NSLog(@"SBApplicationIcon: launch");
     [[CSApplicationController sharedController] appLaunched:self];
-    NSLog(@"SBApplicationIcon: launch -> completed");
 }
 
 
@@ -79,22 +75,18 @@ static void _logos_method$OldDevices$SBApplication$launch(SBApplication* self, S
 
 
 static void _logos_method$_ungrouped$SBApplication$exitedCommon(SBApplication* self, SEL _cmd){
-    NSLog(@"SBApplication: exitedCommon");
     [[CSApplicationController sharedController] appQuit:self];
     
     _logos_orig$_ungrouped$SBApplication$exitedCommon(self, _cmd);
-    NSLog(@"SBApplicationIcon: exitedCommon -> completed");
 }
 
 static void _logos_method$_ungrouped$SBApplication$_relaunchAfterExitIfNecessary(SBApplication* self, SEL _cmd){
-    NSLog(@"SBApplicationIcon: _relaunchAfterExitIfNecessary");
     if ([self.displayIdentifier isEqualToString:[CSApplicationController sharedController].ignoreRelaunchID]) {
         [[CSApplicationController sharedController].ignoreRelaunchID release], [CSApplicationController sharedController].ignoreRelaunchID = nil;
         return;
     }
     
     _logos_orig$_ungrouped$SBApplication$_relaunchAfterExitIfNecessary(self, _cmd);
-    NSLog(@"SBApplicationIcon: _relaunchAfterExitIfNecessary -> completed");
 }
 
 
@@ -285,7 +277,7 @@ static void CSSettingsChanged(CFNotificationCenterRef center, void *observer, CF
 	[CSResources reloadSettings];
 }
 
-static __attribute__((constructor)) void _logosLocalCtor_92c8c96e()
+static __attribute__((constructor)) void _logosLocalCtor_7a614fd0()
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	{Class _logos_class$_ungrouped$SBAppSwitcherController = objc_getClass("SBAppSwitcherController"); MSHookMessageEx(_logos_class$_ungrouped$SBAppSwitcherController, @selector(applicationLaunched:), (IMP)&_logos_method$_ungrouped$SBAppSwitcherController$applicationLaunched$, (IMP*)&_logos_orig$_ungrouped$SBAppSwitcherController$applicationLaunched$);MSHookMessageEx(_logos_class$_ungrouped$SBAppSwitcherController, @selector(applicationDied:), (IMP)&_logos_method$_ungrouped$SBAppSwitcherController$applicationDied$, (IMP*)&_logos_orig$_ungrouped$SBAppSwitcherController$applicationDied$);Class _logos_class$_ungrouped$SBApplicationIcon = objc_getClass("SBApplicationIcon"); MSHookMessageEx(_logos_class$_ungrouped$SBApplicationIcon, @selector(launch), (IMP)&_logos_method$_ungrouped$SBApplicationIcon$launch, (IMP*)&_logos_orig$_ungrouped$SBApplicationIcon$launch);Class _logos_class$_ungrouped$SBApplication = objc_getClass("SBApplication"); MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(exitedCommon), (IMP)&_logos_method$_ungrouped$SBApplication$exitedCommon, (IMP*)&_logos_orig$_ungrouped$SBApplication$exitedCommon);MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(_relaunchAfterExitIfNecessary), (IMP)&_logos_method$_ungrouped$SBApplication$_relaunchAfterExitIfNecessary, (IMP*)&_logos_orig$_ungrouped$SBApplication$_relaunchAfterExitIfNecessary);Class _logos_class$_ungrouped$SBDisplayStack = objc_getClass("SBDisplayStack"); MSHookMessageEx(_logos_class$_ungrouped$SBDisplayStack, @selector(init), (IMP)&_logos_method$_ungrouped$SBDisplayStack$init, (IMP*)&_logos_orig$_ungrouped$SBDisplayStack$init);MSHookMessageEx(_logos_class$_ungrouped$SBDisplayStack, @selector(dealloc), (IMP)&_logos_method$_ungrouped$SBDisplayStack$dealloc, (IMP*)&_logos_orig$_ungrouped$SBDisplayStack$dealloc);Class _logos_class$_ungrouped$SBAwayController = objc_getClass("SBAwayController"); MSHookMessageEx(_logos_class$_ungrouped$SBAwayController, @selector(lock), (IMP)&_logos_method$_ungrouped$SBAwayController$lock, (IMP*)&_logos_orig$_ungrouped$SBAwayController$lock);Class _logos_class$_ungrouped$SpringBoard = objc_getClass("SpringBoard"); MSHookMessageEx(_logos_class$_ungrouped$SpringBoard, @selector(applicationDidFinishLaunching:), (IMP)&_logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$, (IMP*)&_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$);}

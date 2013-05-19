@@ -15,7 +15,7 @@
 @property (nonatomic, retain) UILabel *label;
 @property (nonatomic, retain) UIImageView *icon;
 @property (nonatomic, retain) UIButton *closeBox;
-@property (nonatomic, retain) SBIconBadge *badge;
+@property (nonatomic, retain) UIImageView *badge;
 @property (nonatomic, retain) UIImageView *snapshot;
 @property (nonatomic, retain) SBApplication *application;
 @property (nonatomic, retain) UIImage *appImage;

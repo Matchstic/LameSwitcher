@@ -47,9 +47,7 @@ static NSString * const CARDSWITCHER_ID = @"com.matchstic.winmoswitcher";
 
 -(void)launch{
     %orig;
-    NSLog(@"SBApplicationIcon: launch");
     [[CSApplicationController sharedController] appLaunched:[self application]];
-    NSLog(@"SBApplicationIcon: launch -> completed");
 }
 
 %end
@@ -61,9 +59,7 @@ static NSString * const CARDSWITCHER_ID = @"com.matchstic.winmoswitcher";
 -(void)launch{
     %orig;
     
-    NSLog(@"SBApplicationIcon: launch");
     [[CSApplicationController sharedController] appLaunched:self];
-    NSLog(@"SBApplicationIcon: launch -> completed");
 }
 
 %end
@@ -72,22 +68,18 @@ static NSString * const CARDSWITCHER_ID = @"com.matchstic.winmoswitcher";
 %hook SBApplication
 
 -(void)exitedCommon{
-    NSLog(@"SBApplication: exitedCommon");
     [[CSApplicationController sharedController] appQuit:self];
     
     %orig;
-    NSLog(@"SBApplicationIcon: exitedCommon -> completed");
 }
 
 -(void)_relaunchAfterExitIfNecessary{
-    NSLog(@"SBApplicationIcon: _relaunchAfterExitIfNecessary");
     if ([self.displayIdentifier isEqualToString:[CSApplicationController sharedController].ignoreRelaunchID]) {
         [[CSApplicationController sharedController].ignoreRelaunchID release], [CSApplicationController sharedController].ignoreRelaunchID = nil;
         return;
     }
     
     %orig;
-    NSLog(@"SBApplicationIcon: _relaunchAfterExitIfNecessary -> completed");
 }
 
 %end

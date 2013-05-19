@@ -290,6 +290,9 @@ static SBApplication *openedOverApp;
 
         // And remove it from the array
         [self.runningApps removeObject:app];
+        
+        // Remove its cached screenshot from disk
+        [CSResources removeScreenshotForApp:app];
 
         // Animate the ScrollView smaller
         [UIView animateWithDuration:0.2 animations:^{
@@ -383,13 +386,20 @@ static SBApplication *openedOverApp;
     self.scrollView.userInteractionEnabled = YES;
     self.layer.transform = CATransform3DMakeScale(3.5f, 3.5f, 1.0f);
 
-    [UIView animateWithDuration:(animate ? 0.4 : 0.0) animations:^{
+    [UIView animateWithDuration:(animate ? 0.25 : 0.0) animations:^{
         self.alpha = 1;
         self.layer.transform = CATransform3DIdentity;
     } completion:^(BOOL finished){
         self.isAnimating = NO;
         [self checkPages];
+        //[self fadeInScrollView];
         //if (spoke) { spoke = NO, [speaker startSpeakingString:@"Welcome to CardSwitcher"]; }
+    }];
+}
+
+-(void)fadeInScrollView {
+    [UIView animateWithDuration:0.2 animations:^{
+        self.scrollView.alpha = 1.0f;
     }];
 }
 
@@ -398,7 +408,6 @@ static SBApplication *openedOverApp;
     
     SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
     NSString *appId = [runningApp displayName];
-    NSLog(@"Currently running app is %@", appId);
     
     if (animate && !(runningApp == nil)) {
 
@@ -415,10 +424,8 @@ static SBApplication *openedOverApp;
         //[runningApp notifyResumeActiveForReason:1];
         //[SBWSuspendingDisplayStack pushDisplay:runningApp];
         //runningApp = nil;
-        NSLog(@"runningApp ain't nil!");
         [CSApplicationController sharedController].shouldAnimate = YES;
         [(SBUIController*)[objc_getClass("SBUIController") sharedInstance] activateApplicationFromSwitcher:runningApp];
-        NSLog(@"About to exit (animate && !(runningApp == nil))");
     }
 
     // Custom animation when closing on an app.
@@ -432,11 +439,8 @@ static SBApplication *openedOverApp;
     self.userInteractionEnabled = NO;
     self.scrollView.userInteractionEnabled = NO;
     self.layer.transform = CATransform3DIdentity;
-    NSLog(@"Set the variables");
 
     [self setRotation:[[UIDevice currentDevice] orientation]];
-
-    NSLog(@"Set the orientation");
 
     if(timer)
     {
@@ -444,8 +448,8 @@ static SBApplication *openedOverApp;
         timer = nil;
     }
     
-    // Correct animation for closing UI on a running app. Fades for now, need to integrate with finished animation.
-    if (runningApp != nil) {
+    // Correct animation for closing UI on a running app. Fades for now, need to integrate with finished animation. Disabled until I have time to fix it.
+    /*if (runningApp != nil) {
         [UIView animateWithDuration:0.35 animations:^{
             self.isAnimating = YES;
             self.alpha = 0.0f;
@@ -468,8 +472,8 @@ static SBApplication *openedOverApp;
             [backgroundView removeFromSuperview];
             backgroundView = nil;
         }];
-    } else {
-        [UIView animateWithDuration:(animate ? 0.4 : 0.0) animations:^{
+    } else {*/
+        [UIView animateWithDuration:(animate ? 0.25 : 0.0) animations:^{
             self.isAnimating = YES;
             self.layer.transform = CATransform3DMakeScale(2.5f, 2.5f, 1.0f);
             self.alpha = 0.0f;
@@ -492,7 +496,7 @@ static SBApplication *openedOverApp;
             [backgroundView removeFromSuperview];
             backgroundView = nil;
         }];
-    }
+    //}
 }
 
 -(void)openApp:(NSString*)bundleId {
@@ -508,13 +512,11 @@ static SBApplication *openedOverApp;
 #pragma mark UIScrollViewDelegate methods
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
-    NSLog(@"CSApplicationController scrollViewDidScroll");
     [self checkPages];
     //#error SCRAPING 3 visibleApps and adding LAZY image loading.
 }
 
 -(void)checkPages{
-    NSLog(@"CSApplicationController checkPages");
     CGFloat pageWidth = self.scrollView.frame.size.width;
     int page = (floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth)) + 1;
 
@@ -548,10 +550,18 @@ static SBApplication *openedOverApp;
         [self scrollViewDidScroll:self.scrollView];
         return;
     }
-    
+    NSLog(@"About to get screen image");
     CGImageRef screen = UIGetScreenImage();
+    NSLog(@"Got it");
     [CSResources setCurrentAppImage:[UIImage imageWithCGImage:screen]];
+    NSLog(@"Set as currentImage");
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [CSResources cachScreenShot:[UIImage imageWithCGImage:screen] forApp:runningApp];
+    });
+    NSLog(@"Setup dispatch queue");
     CGImageRelease(screen);
+    NSLog(@"Released screen");
 
     if (newActive && [[runningApp displayIdentifier] length]) {
         NSLog(@"newActive && [[runningApp displayIdentifier] length]");
@@ -607,6 +617,19 @@ static SBApplication *openedOverApp;
 
 - (void)activator:(LAActivator *)activator receiveDeactivateEvent:(LAEvent *)event{
     NSLog(@"CSApplicationController activator:receiveDeactivateEvent");
+    
+    // Need to get screenshot of app when home button is pressed -> this is run every time it's pressed, so take screenshot when not active, and in a running app.
+    SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+    if (!(self.isActive) && (runningApp != nil)) {
+        CGImageRef screen = UIGetScreenImage();
+        [CSResources setCurrentAppImage:[UIImage imageWithCGImage:screen]];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [CSResources cachScreenShot:[UIImage imageWithCGImage:screen] forApp:runningApp];
+        });
+        CGImageRelease(screen);
+    }
+    
     if (self.isActive == NO || self.isAnimating) { return; }
 
     [event setHandled:YES];

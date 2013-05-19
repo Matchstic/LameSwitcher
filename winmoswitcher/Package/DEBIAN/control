@@ -3,7 +3,7 @@ Name: WinMo Switcher
 Version: 1.0-1
 Description: 
 Section: Tweaks
-Depends: firmware (>= 6.0), mobilesubstrate
+Depends: firmware (>= 6.0), mobilesubstrate, preferenceloader, libactivator
 Conflicts: 
 Replaces: 
 Priority: optional
