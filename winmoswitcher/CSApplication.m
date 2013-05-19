@@ -214,9 +214,9 @@ static CSApplication *_instance;
         BOOL showsAppIcon = [CSResources showsAppIcon];
         if (showsAppIcon) {
             SBApplicationIcon *appIcon = [[objc_getClass("SBApplicationIcon") alloc] initWithApplication:APP];
-            UIImage *icon = [appIcon generateIconImage:3];
+            UIImage *icon = [appIcon generateIconImage:1];
             self.icon = [[[UIImageView alloc] initWithImage:icon] autorelease];
-            self.icon.frame = CGRectMake(17, self.snapshot.frame.size.height + self.snapshot.frame.origin.y + 14, self.icon.frame.size.width, self.icon.frame.size.height);
+            self.icon.frame = CGRectMake(1, self.snapshot.frame.size.height + self.snapshot.frame.origin.y + 5, self.icon.frame.size.width, self.icon.frame.size.height);
             [self addSubview:self.icon];
             
             [appIcon release];
@@ -249,7 +249,7 @@ static CSApplication *_instance;
         // Application label
         CGRect labelRect;
         if (showsAppIcon) {
-            labelRect.origin.x = (self.icon.frame.origin.x + self.icon.frame.size.width + 12);
+            labelRect.origin.x = (self.icon.frame.origin.x + self.icon.frame.size.width + 7);
             labelRect.origin.y = self.icon.frame.origin.y;
             labelRect.size.width = (self.snapshot.frame.origin.x + self.snapshot.frame.size.width)-(self.icon.frame.size.width + self.icon.frame.origin.x + 10);
             labelRect.size.height = self.icon.frame.size.height;
@@ -262,12 +262,7 @@ static CSApplication *_instance;
         }
 
         self.label = [[[UILabel alloc] initWithFrame:labelRect] autorelease];
-        if (showsAppIcon) {
-            self.label.font = [UIFont boldSystemFontOfSize:17];
-        } else {
-            self.label.font = [UIFont systemFontOfSize:14];
-        }
-        
+        self.label.font = [UIFont systemFontOfSize:14];
         self.label.backgroundColor = [UIColor clearColor];
         if ([CSResources backgroundStyle] == 3) {
             self.label.textColor = [UIColor blackColor];
@@ -276,14 +271,12 @@ static CSApplication *_instance;
         }
         self.label.numberOfLines = 0;
         //if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
-        //    self.label.text = @"Home";
+        //    self.label.text = @"Start";
         //} else {
         self.label.text = [APP displayName];
         //}
         [self addSubview:self.label];
         self.label.hidden = ![CSResources showsAppTitle];
-
-        [self layoutIcon];
 
         [[CSApplicationController sharedController].scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:@selector(updateAlpha:)];
         [self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:@selector(updateAlpha:)];
@@ -293,24 +286,7 @@ static CSApplication *_instance;
 
     return self;
 }
--(void)layoutIcon{
-    NSLog(@"CSApplication; layoutIcon");
-    if (self.label.hidden) {
-        self.icon.center = CGPointMake(self.center.x, self.icon.center.y);
-        return;
-    }
 
-    BOOL showsAppIcon = [CSResources showsAppIcon];
-    if (showsAppIcon) {
-        int totalWidth = [self.label.text sizeWithFont:self.label.font forWidth:self.label.frame.size.width lineBreakMode:NSLineBreakByClipping].width;
-        totalWidth += (self.icon.frame.size.width + 12);
-        int iconX = ((self.frame.size.width-totalWidth)*0.5)-10;
-        int labelX = iconX + self.icon.frame.size.width + 8;
-
-        self.icon.frame = CGRectMake(iconX, self.icon.frame.origin.y, self.icon.frame.size.width, self.icon.frame.size.height);
-        self.label.frame = CGRectMake(labelX, self.label.frame.origin.y, self.label.frame.size.width, self.label.frame.size.height);
-    }
-}
 -(UIImage*)drawText:(NSString*)text inImage:(UIImage*)image atPoint:(CGPoint)point {
     UIFont *font = [UIFont systemFontOfSize:12];
     UIGraphicsBeginImageContext(image.size);

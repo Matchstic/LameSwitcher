@@ -76,8 +76,10 @@ static SBApplication *openedOverApp;
         self.displayStacks = [[[NSMutableArray alloc] init] autorelease];
         self.runningApps = [[[NSMutableArray alloc] init] autorelease];
         self.ignoredApps = [[[NSMutableArray alloc] init] autorelease];
-        self.ignoredIDs = nil;
-        //[NSMutableArray arrayWithObjects:@"com.apple.mobileipod-MediaPlayer", @"com.apple.mobilephone", @"com.apple.mobilemail", @"com.apple.mobilesafari", nil];
+        
+        // *********************** Add any ignored apps to this 'ere array! *****************
+        self.ignoredIDs = [NSMutableArray arrayWithObjects:@"com.wynd.dreamboard", nil];
+        
         // ******************************************************* originx        originy                   width        height
         pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height-20, self.frame.size.width, 20)];
         pageControl.userInteractionEnabled = NO;
@@ -407,7 +409,6 @@ static SBApplication *openedOverApp;
     NSLog(@"CSApplicationController deactivateAnimated");
     
     SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
-    NSString *appId = [runningApp displayName];
     
     if (animate && !(runningApp == nil)) {
 
