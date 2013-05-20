@@ -12,6 +12,7 @@
 #import "CSResources.h"
 
 #define STRIFE_PREFS @"/var/mobile/Library/DreamBoard/Strife/Info.plist"
+#define BUNDLE @"/Library/Application Support/WinMoSwitcher/WinMoSwitcher.bundle"
 
 CGImageRef UIGetScreenImage(void);
 
@@ -228,6 +229,34 @@ static SBApplication *openedOverApp;
     [self addSubview:timeLabel];
     [self runTimer];
 
+    // Exit all apps button
+    [exitButton removeFromSuperview];
+    exitButton = nil;
+    
+    //Get the Bundle
+    NSBundle *bundle = [[NSBundle alloc] initWithPath:BUNDLE];
+    
+    // Exit button images
+    UIImage *close = [UIImage imageWithContentsOfFile:[bundle pathForResource:@"Close" ofType:@"png"]];
+    UIImage *closePressed = [UIImage imageWithContentsOfFile:[bundle pathForResource:@"ClosePressed" ofType:@"png"]];
+    
+    
+    if (([self.runningApps count] > 0) && [CSResources showExitAllButton]) {
+        exitButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [exitButton addTarget:[CSApplication sharedController]
+                       action:@selector(exitAllApps)
+                    forControlEvents:UIControlEventTouchUpInside];
+        [exitButton setImage:close forState:UIControlStateNormal];
+        [exitButton setImage:closePressed forState:UIControlStateHighlighted];
+        [exitButton setImage:closePressed forState:UIControlStateSelected];
+        
+        /*exitButton.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0];
+        exitButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        exitButton.titleLabel.textColor = [UIColor whiteColor];*/
+        // ***********              originx originy width height
+        exitButton.frame = CGRectMake(5, (SCREEN_HEIGHT - 35.0), 30.0, 30.0);
+        [self addSubview:exitButton];
+    }
 
     CGSize screenSize = self.scrollView.frame.size;
     self.scrollView.contentSize = CGSizeMake(screenSize.width * [self.runningApps count], screenSize.height);
@@ -418,17 +447,12 @@ static SBApplication *openedOverApp;
             NSLog(@"CSApplicationController deactivateAnimated: SPRINGBOARD setBackgroundingEnabled:forDisplayIdentifier");
         }
 
-        //[runningApp setDeactivationSetting:0x2 flag:NO];
-        //[runningApp notifyResumeActiveForReason:1];
-        //[SBWActiveDisplayStack popDisplay:runningApp];
-        //[self openApp:[runningApp displayIdentifier]];
-        //[runningApp notifyResumeActiveForReason:1];
-        //[SBWSuspendingDisplayStack pushDisplay:runningApp];
-        //runningApp = nil;
         [CSApplicationController sharedController].shouldAnimate = YES;
-        [(SBUIController*)[objc_getClass("SBUIController") sharedInstance] activateApplicationFromSwitcher:runningApp];
+        if (![CSResources goHomeOnHomeButton]) {
+            [(SBUIController*)[objc_getClass("SBUIController") sharedInstance] activateApplicationFromSwitcher:runningApp];
+        }
     }
-
+    
     // Custom animation when closing on an app.
     CGRect screenRect = self.frame;
     screenRect.size.width = SCREEN_WIDTH;
@@ -449,35 +473,56 @@ static SBApplication *openedOverApp;
         timer = nil;
     }
     
-    // Correct animation for closing UI on a running app. Fades for now, need to integrate with finished animation. Disabled until I have time to fix it.
-    /*if (runningApp != nil) {
-        [UIView animateWithDuration:0.35 animations:^{
+    // Deactivation animations
+    if ([CSResources closeAnimation] == 2) {
+        // We want the sliding animation
+        CGRect newFrame = self.layer.frame;
+        CGRect oldFrame = self.layer.frame;
+        
+        newFrame.origin.x = -SCREEN_WIDTH;
+        
+        [UIView animateWithDuration:0.3 animations:^{
             self.isAnimating = YES;
-            self.alpha = 0.0f;
+            self.layer.frame = newFrame;
         } completion:^(BOOL finished){
             self.hidden = YES;
             self.isAnimating = NO;
-            
+            self.layer.frame = oldFrame;
+     
             [CSResources reset];
-            
+     
             for (UIView *view in self.scrollView.subviews) {
                 [view removeFromSuperview];
             }
-            
+     
             [noAppsLabel removeFromSuperview];
             noAppsLabel = nil;
-            
+     
             [timeLabel removeFromSuperview];
             timeLabel = nil;
-            
+     
             [backgroundView removeFromSuperview];
             backgroundView = nil;
+     
+            [exitButton removeFromSuperview];
+            exitButton = nil;
         }];
-    } else {*/
-        [UIView animateWithDuration:(animate ? 0.4 : 0.0) animations:^{
+    } else {
+        // We want the rotating animation
+        CGRect frame = self.layer.frame;
+        self.layer.anchorPoint = CGPointMake(0.0f, 0.0f);
+        self.layer.frame = frame;
+    
+        CATransform3D rotationAndPerspectiveTransform = CATransform3DIdentity;
+        rotationAndPerspectiveTransform.m34 = 1.0 / 1500;
+        rotationAndPerspectiveTransform = CATransform3DRotate(rotationAndPerspectiveTransform, M_PI/2, 0, 1, 0);
+    
+        [UIView animateWithDuration:(animate ? 0.3 : 0.0) animations:^{
             self.isAnimating = YES;
-            self.layer.transform = CATransform3DMakeScale(2.5f, 2.5f, 1.0f);
-            self.alpha = 0.0f;
+            //self.layer.transform = CATransform3DMakeScale(2.5f, 2.5f, 1.0f);
+            // http://stackoverflow.com/questions/13887016/catransform3d-animation-set-x-axis
+            self.layer.transform = rotationAndPerspectiveTransform;
+            //self.alpha = 0.0f;
         } completion:^(BOOL finished){
             self.hidden = YES;
             self.isAnimating = NO;
@@ -496,8 +541,11 @@ static SBApplication *openedOverApp;
 
             [backgroundView removeFromSuperview];
             backgroundView = nil;
+        
+            [exitButton removeFromSuperview];
+            exitButton = nil;
         }];
-    //}
+    }
 }
 
 -(void)openApp:(NSString*)bundleId {
@@ -626,6 +674,11 @@ static SBApplication *openedOverApp;
             [CSResources cachScreenShot:[UIImage imageWithCGImage:screen] forApp:runningApp];
         });
         CGImageRelease(screen);
+    }
+    
+    if ([CSResources goHomeOnHomeButton] && !(runningApp == nil) && self.isActive) {
+        [runningApp notifyResumeActiveForReason:1];
+        [(SpringBoard *)[UIApplication sharedApplication] quitTopApplication:nil];
     }
     
     if (self.isActive == NO || self.isAnimating) { return; }

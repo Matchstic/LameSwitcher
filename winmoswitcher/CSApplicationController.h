@@ -39,6 +39,7 @@
     UILabel *noAppsLabel;
     UILabel *timeLabel;
     UIPageControl *pageControl;
+    UIButton *exitButton;
 
     //UIImageView *backgroundView;
 

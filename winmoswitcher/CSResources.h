@@ -33,6 +33,9 @@
 +(int)cornerRadius;
 +(int)tapsToLaunch;
 +(int)backgroundStyle;
++(BOOL)goHomeOnHomeButton;
++(BOOL)showExitAllButton;
++(int)closeAnimation;
 +(void)reloadSettings;
 
 @end

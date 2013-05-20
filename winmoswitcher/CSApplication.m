@@ -418,7 +418,7 @@ static CSApplication *_instance;
     [self removeFromSuperview];
 
 
-    //******************* Proper app quiting code thanks to 'jmeosbn' - start **************//
+    //******************* Proper app quiting code thanks to 'jmeosbn', but heavily modified - start **************//
 
     // Set app to terminate on suspend then call deactivate
     // Allows exiting root apps, even if already backgrounded,
@@ -448,6 +448,48 @@ static CSApplication *_instance;
     setuid(0);
     if ([APP pid] > 0)
         kill([APP pid], SIGTERM);
+}
+
+-(void)exitAllApps {
+    NSLog(@"Exit all apps");
+    [self retain];
+    NSMutableArray *toRemove = [NSMutableArray array];
+    for (SBApplication *app in [CSApplicationController sharedController].runningApps) {
+        // Prevent runningApps array from being mutated while enumerating
+        [toRemove addObject:app];
+        // Remove the app's snapshot from superview! Unless, we have tags though!
+        // Get app's index
+        int i = [[CSApplicationController sharedController].runningApps indexOfObject:app];
+        int tag = i + 1000;
+        
+        // Remove that from superview
+        [[[CSApplicationController sharedController].scrollView viewWithTag:tag] removeFromSuperview];
+        
+        [app notifyResignActiveForReason:1];
+        [app deactivate];
+        SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+        if ([[app displayIdentifier] isEqual:[runningApp displayIdentifier]]) {
+            [(SpringBoard *)[UIApplication sharedApplication] quitTopApplication:nil];
+        }
+        [UIView animateWithDuration:0.3 animations:^{
+            [[CSApplicationController sharedController].scrollView viewWithTag:tag].alpha = 0;
+        } completion:^(BOOL finished){
+            [[[CSApplicationController sharedController].scrollView viewWithTag:tag] removeFromSuperview];
+            [self performSelector:@selector(killItWithFireMkTwo:) withObject:app afterDelay:2];
+        }];
+    }
+    
+    for (SBApplication *app in toRemove) {
+        [[CSApplicationController sharedController] appQuit:app];
+    }
+    
+    [self release];
+}
+-(void)killItWithFireMkTwo:(SBApplication *)app {
+    // Let's make ourselves root to kill those pesky root applications! Except, that doesn't work.
+    setuid(0);
+    if ([app pid] > 0)
+        kill([app pid], SIGTERM);
 }
 
 -(void)quitPressed{

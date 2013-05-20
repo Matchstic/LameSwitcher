@@ -213,7 +213,18 @@ static UIImage *currentImage = nil;
     id temp = [settings objectForKey:@"Background"];
 	return (temp ? [temp intValue] : 1);
 }
-
++(BOOL)goHomeOnHomeButton {
+    id temp = [settings objectForKey:@"homeOnHome"];
+    return (temp ? [temp boolValue] : YES);
+}
++(BOOL)showExitAllButton {
+    id temp = [settings objectForKey:@"showExitAllButton"];
+    return (temp ? [temp boolValue] : NO);
+}
++(int)closeAnimation {
+    id temp = [settings objectForKey:@"deactivateAnimation"];
+    return (temp ? [temp intValue] : 1);
+}
 +(void)reloadSettings{
     NSLog(@"CSResources reloadSettings");
     [settings release];

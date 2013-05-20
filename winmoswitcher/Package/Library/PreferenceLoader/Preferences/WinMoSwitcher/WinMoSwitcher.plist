@@ -11,7 +11,7 @@
 		<key>label</key>
 		<string>WinMoSwitcher</string>
 		<key>icon</key>
-		<string>WinMoSwitcher-small.png</string>
+		<string>Icon.png</string>
 	</dict>
 	<key>items</key>
 	<array>
@@ -36,8 +36,6 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Interface</string>
-			<key>footerText</key>
-			<string>Based on LameSwitcher, by rpetrich</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -64,20 +62,6 @@
 			<string>showsAppIcon</string>
 			<key>label</key>
 			<string>Show App Icon</string>
-			<key>PostNotification</key>
-			<string>com.matchstic.winmoswitcher/settingschanged</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.matchstic.winmoswitcher</string>
-			<key>key</key>
-			<string>ShowPageDots</string>
-			<key>label</key>
-			<string>Page Dots</string>
 			<key>PostNotification</key>
 			<string>com.matchstic.winmoswitcher/settingschanged</string>
 		</dict>
@@ -132,6 +116,84 @@
 			</array>
 			<key>defaults</key>
 			<string>com.matchstic.winmoswitcher</string>
+			<key>PostNotification</key>
+			<string>com.matchstic.winmoswitcher/settingschanged</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>default</key>
+			<integer>1</integer>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>key</key>
+			<string>deactivateAnimation</string>
+			<key>label</key>
+			<string>Close Animation</string>
+			<key>validTitles</key>
+			<array>
+				<string>Rotate</string>
+				<string>Slide</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<integer>1</integer>
+				<integer>2</integer>
+			</array>
+			<key>defaults</key>
+			<string>com.matchstic.winmoswitcher</string>
+			<key>PostNotification</key>
+			<string>com.matchstic.winmoswitcher/settingschanged</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Extra</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSTextViewCell</string>
+			<key>label</key>
+			<string>Home button behaviour:</string>
+		</dict>
+		<dict>
+			<key>key</key>
+			<string>homeOnHome</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.matchstic.winmoswitcher</string>
+			<key>label</key>
+			<string>Exit running app</string>
+			<key>PostNotification</key>
+			<string>com.matchstic.winmoswitcher/settingschanged</string>
+		</dict>
+		<dict>
+			<key>footerText</key>
+			<string>Based on LameSwitcher</string>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSTextViewCell</string>
+			<key>label</key>
+			<string>Exit all apps button:</string>
+		</dict>
+		<dict>
+			<key>key</key>
+			<string>showExitAllButton</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.matchstic.winmoswitcher</string>
+			<key>label</key>
+			<string>Enabled</string>
 			<key>PostNotification</key>
 			<string>com.matchstic.winmoswitcher/settingschanged</string>
 		</dict>

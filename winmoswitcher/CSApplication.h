@@ -29,6 +29,7 @@
 -(void)layoutIcon;
 -(void)launch;
 -(void)exit;
+-(void)exitAllApps;
 -(void)quitPressed;
 -(void)launchGesture:(UIGestureRecognizer*)gesture;
 -(void)closeUpGesture:(UIGestureRecognizer*)gesture;
