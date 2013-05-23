@@ -304,6 +304,7 @@ static CSApplication *_instance;
     [self.superview bringSubviewToFront:self];
     [self bringSubviewToFront:self.snapshot];
     [CSApplicationController sharedController].scrollView.userInteractionEnabled = NO;
+    [CSApplicationController sharedController].applaunching = YES;
 
     [UIView animateWithDuration:0.1 animations:^{
         //self.badge.alpha = 0;
@@ -334,7 +335,7 @@ static CSApplication *_instance;
         return;
     }*/
     
-    // If we can open the app without the usual iOS animation, then we won't have weird effects at the end of ours. Could use [CSApplicationController openApp:[APP displayIdentifier]];
+    // If we can open the app without the usual iOS animation, or force iOS to give a faster animation, then we won't have weird effects at the end of ours. Could use [CSApplicationController openApp:[APP displayIdentifier]];
     if (runningApp != nil) {
         // An app is already open, so use the switcher animation, but first check if this is the same app.
         if (![[runningApp bundleIdentifier] isEqualToString:[APP bundleIdentifier]]) {
@@ -452,18 +453,19 @@ static CSApplication *_instance;
 
 -(void)exitAllApps {
     NSLog(@"Exit all apps");
+    [CSApplicationController sharedController].exitingAllApps = YES;
     [self retain];
     NSMutableArray *toRemove = [NSMutableArray array];
     for (SBApplication *app in [CSApplicationController sharedController].runningApps) {
         // Prevent runningApps array from being mutated while enumerating
         [toRemove addObject:app];
-        // Remove the app's snapshot from superview! Unless, we have tags though!
+        // Remove the app's snapshot from superview! Unless... we have tags!
         // Get app's index
-        int i = [[CSApplicationController sharedController].runningApps indexOfObject:app];
-        int tag = i + 1000;
+        //int i = [[CSApplicationController sharedController].runningApps indexOfObject:app];
+        //int tag = i + 1000;
         
         // Remove that from superview
-        [[[CSApplicationController sharedController].scrollView viewWithTag:tag] removeFromSuperview];
+        //[[[CSApplicationController sharedController].scrollView viewWithTag:tag] removeFromSuperview];
         
         [app notifyResignActiveForReason:1];
         [app deactivate];
@@ -471,12 +473,12 @@ static CSApplication *_instance;
         if ([[app displayIdentifier] isEqual:[runningApp displayIdentifier]]) {
             [(SpringBoard *)[UIApplication sharedApplication] quitTopApplication:nil];
         }
-        [UIView animateWithDuration:0.3 animations:^{
+        /*[UIView animateWithDuration:0.2 animations:^{
             [[CSApplicationController sharedController].scrollView viewWithTag:tag].alpha = 0;
         } completion:^(BOOL finished){
-            [[[CSApplicationController sharedController].scrollView viewWithTag:tag] removeFromSuperview];
-            [self performSelector:@selector(killItWithFireMkTwo:) withObject:app afterDelay:2];
-        }];
+            [[[CSApplicationController sharedController].scrollView viewWithTag:tag] removeFromSuperview];*/
+        [self performSelector:@selector(killItWithFireMkTwo:) withObject:app afterDelay:2];
+        //}];
     }
     
     for (SBApplication *app in toRemove) {

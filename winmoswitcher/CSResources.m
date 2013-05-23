@@ -9,6 +9,7 @@
 #import <SpringBoard/SpringBoard.h>
 #import "CSApplicationController.h"
 #import "CSResources.h"
+#import <dispatch/dispatch.h>
 
 CGImageRef UIGetScreenImage(void);
 
@@ -38,6 +39,7 @@ static UIImage *currentImage = nil;
 
 +(void)reset{
     NSLog(@"CSResources reset");
+    // To be honest, I don't know why removeAllObjects is being run, let's change it and see what happens!
     [cache removeAllObjects];
     [currentImage release];
     currentImage = nil;
@@ -85,12 +87,19 @@ static UIImage *currentImage = nil;
         if (!cache)
             cache = [[NSMutableDictionary alloc] init];
         if (cache) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:@"/User/Library/Caches/WinMoSwitcher" withIntermediateDirectories:YES attributes:nil error:nil];
-            NSString *pngPath = [NSString stringWithFormat:@"/User/Library/Caches/WinMoSwitcher/%@", [app displayIdentifier]];
-            BOOL success = [UIImagePNGRepresentation(currentImage) writeToFile:pngPath atomically:YES];
-            if (success)
-                [cache setObject:currentImage forKey:[app displayIdentifier]];
-                [cache writeToFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist" atomically:YES];
+            // Ensure there's no lag opening the switcher
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
+                if (![[NSFileManager defaultManager] fileExistsAtPath:@"/User/Library/Caches/WinMoSwitcher"]) {
+                    [[NSFileManager defaultManager] createDirectoryAtPath:@"/User/Library/Caches/WinMoSwitcher" withIntermediateDirectories:YES attributes:nil error:nil];
+                }
+                
+                NSString *pngPath = [NSString stringWithFormat:@"/User/Library/Caches/WinMoSwitcher/%@", [app displayIdentifier]];
+                [UIImagePNGRepresentation(currentImage) writeToFile:pngPath atomically:YES];
+            });
+            
+            [cache setObject:currentImage forKey:[app displayIdentifier]];
+            [cache writeToFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist" atomically:YES];
         }
         return currentImage;
     }

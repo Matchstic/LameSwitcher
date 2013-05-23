@@ -141,6 +141,7 @@ static NSString * const CARDSWITCHER_ID = @"com.matchstic.winmoswitcher";
 
 -(void)lock{
     NSLog(@"SBAwayController: lock");
+    [CSApplicationController sharedController].isLocking = YES;
     [[CSApplicationController sharedController] setActive:NO animated:NO];
     
     %orig;
@@ -170,7 +171,6 @@ static NSString * const CARDSWITCHER_ID = @"com.matchstic.winmoswitcher";
 }
 
 %end
-
 
 /*%group IPAD
 %hook SBUIController

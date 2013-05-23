@@ -148,6 +148,7 @@ static void _logos_method$_ungrouped$SBDisplayStack$dealloc(SBDisplayStack* self
 
 static void _logos_method$_ungrouped$SBAwayController$lock(SBAwayController* self, SEL _cmd){
     NSLog(@"SBAwayController: lock");
+    [CSApplicationController sharedController].isLocking = YES;
     [[CSApplicationController sharedController] setActive:NO animated:NO];
     
     _logos_orig$_ungrouped$SBAwayController$lock(self, _cmd);
@@ -175,7 +176,6 @@ static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(
         {Class _logos_class$OldDevices$SBApplication = objc_getClass("SBApplication"); MSHookMessageEx(_logos_class$OldDevices$SBApplication, @selector(launch), (IMP)&_logos_method$OldDevices$SBApplication$launch, (IMP*)&_logos_orig$OldDevices$SBApplication$launch);}
     }
 }
-
 
 
 

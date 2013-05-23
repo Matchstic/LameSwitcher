@@ -1,17 +1,16 @@
 Package: com.matchstic.winmoswitcher
-Name: WinMo Switcher
-Version: 1.1-1
-Description: 
+Name: WinMoSwitcher
+Version: 1.2-2
+Description: A Windows Phone inspired app switcher.
 Section: Tweaks
 Depends: firmware (>= 6.0), mobilesubstrate, preferenceloader, libactivator
 Conflicts: 
 Replaces: 
 Priority: optional
 Architecture: iphoneos-arm
-Author: Matt Clarke
+Author: Matchstic
 dev: 
 Homepage: 
 Depiction: 
 Maintainer: 
-Icon: 
 

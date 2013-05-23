@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C9212792174BB5A100FED6DF /* SpringBoardUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9212791174BB5A100FED6DF /* SpringBoardUI.framework */; };
+		C9212794174BBDF800FED6DF /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9212793174BBDF800FED6DF /* CoreImage.framework */; };
 		C9ABB5751741591E004CB921 /* SpringBoardServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABB5741741591E004CB921 /* SpringBoardServices.framework */; };
 		C9FB09441740355100DD72A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FB09431740355100DD72A5 /* Foundation.framework */; };
 		C9FB094F1740355100DD72A5 /* winmoswitcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9FB094E1740355100DD72A5 /* winmoswitcher.mm */; };
@@ -27,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C9212791174BB5A100FED6DF /* SpringBoardUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpringBoardUI.framework; path = System/Library/PrivateFrameworks/SpringBoardUI.framework; sourceTree = SDKROOT; };
+		C9212793174BBDF800FED6DF /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		C9ABB5741741591E004CB921 /* SpringBoardServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpringBoardServices.framework; path = System/Library/PrivateFrameworks/SpringBoardServices.framework; sourceTree = SDKROOT; };
 		C9ABB57717415BA0004CB921 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		C9D3C5C8174AD2C30088A538 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -72,6 +76,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9212794174BBDF800FED6DF /* CoreImage.framework in Frameworks */,
+				C9212792174BB5A100FED6DF /* SpringBoardUI.framework in Frameworks */,
 				C9ABB5751741591E004CB921 /* SpringBoardServices.framework in Frameworks */,
 				C9FB097417404B6F00DD72A5 /* libactivator.dylib in Frameworks */,
 				C9FB0972174035D400DD72A5 /* GraphicsServices.framework in Frameworks */,
@@ -89,6 +95,8 @@
 		C9FB09351740355100DD72A5 = {
 			isa = PBXGroup;
 			children = (
+				C9212793174BBDF800FED6DF /* CoreImage.framework */,
+				C9212791174BB5A100FED6DF /* SpringBoardUI.framework */,
 				C9ABB57717415BA0004CB921 /* Entitlements.plist */,
 				C9ABB5741741591E004CB921 /* SpringBoardServices.framework */,
 				C9FB097317404B6F00DD72A5 /* libactivator.dylib */,

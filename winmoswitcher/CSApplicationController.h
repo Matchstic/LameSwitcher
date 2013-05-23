@@ -53,6 +53,11 @@
 @property (nonatomic, retain) NSString *ignoreRelaunchID;
 @property (nonatomic, readwrite) BOOL shouldAnimate;
 
+@property (nonatomic, readwrite) BOOL pressedHome;
+@property (nonatomic, readwrite) BOOL applaunching;
+@property (nonatomic,readwrite) BOOL exitingAllApps;
+@property (nonatomic, readwrite) BOOL isLocking;
+
 @property (nonatomic, retain) NSMutableArray *displayStacks;
 @property (nonatomic, retain) NSMutableArray *ignoredApps;
 @property (nonatomic, retain) NSMutableArray *runningApps;
@@ -63,6 +68,7 @@
 @property (nonatomic, assign) SpringBoard *springBoard;
 @property (nonatomic, retain) UIImage *springBoardImage;
 @property (nonatomic,retain) UIImageView* backgroundView;
+@property (nonatomic, retain) UIImageView *exitBar;
 
 @property (nonatomic, retain) UIImage *closeBox;
 @property (nonatomic, retain) UIImage *statusBarDefault;

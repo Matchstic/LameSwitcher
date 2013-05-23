@@ -7,6 +7,7 @@
 //
 
 #import <SpringBoard/SpringBoard.h>
+#import <SpringBoardUI/SpringBoardUI.h>
 #import "CSApplicationController.h"
 #import "CSApplication.h"
 #import "CSResources.h"
@@ -50,7 +51,13 @@ static SBApplication *openedOverApp;
 @synthesize closeBox = _closeBox;
 @synthesize isActive = _isActive;
 
+@synthesize pressedHome = _pressedHome;
+@synthesize applaunching = _applaunching;
+@synthesize exitingAllApps = _exitingAllApps;
+@synthesize isLocking = _isLocking;
+
 @synthesize backgroundView;
+@synthesize exitBar;
 
 +(CSApplicationController*)sharedController{
     if (!_instance) {
@@ -147,7 +154,7 @@ static SBApplication *openedOverApp;
     //Defaults
     pageControl.hidden = ![CSResources showsPageControl];
 
-    self.backgroundColor = [UIColor blackColor];
+    self.backgroundColor = [UIColor clearColor];
     
     // Change background as appropriate
     //backgroundView = nil;
@@ -168,6 +175,7 @@ static SBApplication *openedOverApp;
             
         UIImage *tile = UIGraphicsGetImageFromCurrentImageContext();
         backgroundView.image = tile;
+        // Why is this being given a tag?!
         backgroundView.tag = 5;
         UIGraphicsEndImageContext();
 
@@ -175,15 +183,56 @@ static SBApplication *openedOverApp;
         
         [dict release];
     } else if ([CSResources backgroundStyle] == 2) {
+        
         // Dark background
+        
         backgroundView = [[[UIImageView alloc] initWithFrame:self.frame] autorelease];
-        backgroundView.backgroundColor = [UIColor blackColor];
+        CGRect rect = [[UIScreen mainScreen] bounds];
+        UIGraphicsBeginImageContext(rect.size);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetFillColorWithColor(context,  [[UIColor blackColor] CGColor]);
+        CGContextFillRect(context, rect);
+        UIImage *tile = UIGraphicsGetImageFromCurrentImageContext();
+        backgroundView.image = tile;
+        UIGraphicsEndImageContext();
         [self insertSubview:backgroundView atIndex:0];
+        
     } else if ([CSResources backgroundStyle] == 3) {
+        
         // Light background - remember to adjust text colour accordingly
+        
         backgroundView = [[[UIImageView alloc] initWithFrame:self.frame] autorelease];
-        backgroundView.backgroundColor = [UIColor whiteColor];
+        CGRect rect = [[UIScreen mainScreen] bounds];
+        UIGraphicsBeginImageContext(rect.size);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetFillColorWithColor(context,  [[UIColor whiteColor] CGColor]);
+        CGContextFillRect(context, rect);
+        UIImage *tile = UIGraphicsGetImageFromCurrentImageContext();
+        backgroundView.image = tile;
+        UIGraphicsEndImageContext();
         [self insertSubview:backgroundView atIndex:0];
+        
+    } else if ([CSResources backgroundStyle] == 4) {
+        
+        // Blurred lockscreen image - this doesn't work yet
+        
+        // Get lockscreen image
+        SBWallpaperImage *image = [[SBWallpaperImage alloc] initWithVariant:0];
+        NSData *wallpaper = [image data];
+        UIImage *loadImage = [UIImage imageWithData:wallpaper];
+        
+        // Blur the UIImage
+        /*CIImage *imageToBlur = [CIImage imageWithCGImage:loadImage.CGImage];
+        CIFilter *gaussianBlurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
+        [gaussianBlurFilter setValue:imageToBlur forKey:@"inputImage"];
+        [gaussianBlurFilter setValue:[NSNumber numberWithFloat:2] forKey:@"inputRadius"];
+        CIImage *resultImage = [gaussianBlurFilter valueForKey:@"outputImage"];
+        UIImage *endImage = [[UIImage alloc] initWithCIImage:resultImage];*/
+        
+        backgroundView.image = loadImage;
+        [self insertSubview:backgroundView atIndex:0];
+        //[wallpaper release];
+        [image release];
     }
     
     //noAppsLabel = nil;
@@ -233,29 +282,51 @@ static SBApplication *openedOverApp;
     [exitButton removeFromSuperview];
     exitButton = nil;
     
+    /*[exitBar removeFromSuperview];
+    exitBar = nil;*/
+    
     //Get the Bundle
     NSBundle *bundle = [[NSBundle alloc] initWithPath:BUNDLE];
     
     // Exit button images
     UIImage *close = [UIImage imageWithContentsOfFile:[bundle pathForResource:@"Close" ofType:@"png"]];
+    UIImage *darkClose = [UIImage imageWithContentsOfFile:[bundle pathForResource:@"DarkClose" ofType:@"png"]];
     UIImage *closePressed = [UIImage imageWithContentsOfFile:[bundle pathForResource:@"ClosePressed" ofType:@"png"]];
-    
     
     if (([self.runningApps count] > 0) && [CSResources showExitAllButton]) {
         exitButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [exitButton addTarget:[CSApplication sharedController]
                        action:@selector(exitAllApps)
                     forControlEvents:UIControlEventTouchUpInside];
-        [exitButton setImage:close forState:UIControlStateNormal];
+        if (!([CSResources backgroundStyle] == 3)) {
+            [exitButton setImage:close forState:UIControlStateNormal];
+        } else {
+            [exitButton setImage:darkClose forState:UIControlStateNormal];
+        }
+        
         [exitButton setImage:closePressed forState:UIControlStateHighlighted];
         [exitButton setImage:closePressed forState:UIControlStateSelected];
         
         /*exitButton.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0];
         exitButton.titleLabel.font = [UIFont systemFontOfSize:15];
         exitButton.titleLabel.textColor = [UIColor whiteColor];*/
-        // ***********              originx originy width height
-        exitButton.frame = CGRectMake(5, (SCREEN_HEIGHT - 35.0), 30.0, 30.0);
+        // ***********                            originx                           originy         width height
+        exitButton.frame = CGRectMake((SCREEN_WIDTH/2)-(close.size.width/2), (SCREEN_HEIGHT*0.91), 30.0, 30.0);
         [self addSubview:exitButton];
+        
+        // Background bar for it
+        /*CGRect barFrame = CGRectMake(0, (SCREEN_HEIGHT*0.8), SCREEN_WIDTH, (close.size.height*1.5));
+        exitBar = [[[UIImageView alloc] initWithFrame:barFrame] autorelease];
+        CGRect rect = barFrame;
+        UIGraphicsBeginImageContext(rect.size);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetFillColorWithColor(context,  [[UIColor grayColor] CGColor]);
+        CGContextFillRect(context, rect);
+        UIImage *bar = UIGraphicsGetImageFromCurrentImageContext();
+        exitBar.image = bar;
+        UIGraphicsEndImageContext();
+        
+        [self addSubview:exitBar];*/
     }
 
     CGSize screenSize = self.scrollView.frame.size;
@@ -274,6 +345,7 @@ static SBApplication *openedOverApp;
 
         i++;
     }
+    [bundle release];
 }
 
 
@@ -349,6 +421,7 @@ static SBApplication *openedOverApp;
         }
 
         if (self.runningApps.count == 0) {
+            self.pressedHome = YES;
             [self setActive:NO];
         }
 
@@ -448,7 +521,7 @@ static SBApplication *openedOverApp;
         }
 
         [CSApplicationController sharedController].shouldAnimate = YES;
-        if (![CSResources goHomeOnHomeButton]) {
+        if (![CSResources goHomeOnHomeButton] && !(self.exitingAllApps)) {
             [(SBUIController*)[objc_getClass("SBUIController") sharedInstance] activateApplicationFromSwitcher:runningApp];
         }
     }
@@ -467,87 +540,146 @@ static SBApplication *openedOverApp;
 
     [self setRotation:[[UIDevice currentDevice] orientation]];
 
-    if(timer)
-    {
+    if (timer) {
         [timer invalidate];
         timer = nil;
     }
     
-    // Deactivation animations
-    if ([CSResources closeAnimation] == 2) {
-        // We want the sliding animation
-        CGRect newFrame = self.layer.frame;
-        CGRect oldFrame = self.layer.frame;
+    if (self.pressedHome) {
+        // Get current image to do our animations with
+        CGImageRef screen = UIGetScreenImage();
+        UIImageView *winmoUi = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        winmoUi.image = [UIImage imageWithCGImage:screen scale:[[UIScreen mainScreen] scale] orientation:UIImageOrientationUp];
+        CGImageRelease(screen);
+    
+        winmoUi.opaque = NO;
+        winmoUi.backgroundColor = [UIColor clearColor];
         
-        newFrame.origin.x = -SCREEN_WIDTH;
+        [self addSubview:winmoUi];
         
-        [UIView animateWithDuration:0.3 animations:^{
-            self.isAnimating = YES;
-            self.layer.frame = newFrame;
-        } completion:^(BOOL finished){
-            self.hidden = YES;
-            self.isAnimating = NO;
-            self.layer.frame = oldFrame;
-     
-            [CSResources reset];
-     
+        // Deactivation animations
+        if ([CSResources closeAnimation] == 2) {
+            // We want the sliding animation
+            CGRect newFrame = winmoUi.frame;
+            CGRect oldFrame = winmoUi.frame;
+        
+            newFrame.origin.x = -SCREEN_WIDTH;
+            
             for (UIView *view in self.scrollView.subviews) {
                 [view removeFromSuperview];
             }
-     
+            
             [noAppsLabel removeFromSuperview];
             noAppsLabel = nil;
-     
+            
             [timeLabel removeFromSuperview];
             timeLabel = nil;
-     
+            
             [backgroundView removeFromSuperview];
             backgroundView = nil;
-     
+            
             [exitButton removeFromSuperview];
             exitButton = nil;
-        }];
-    } else {
-        // We want the rotating animation
-        CGRect frame = self.layer.frame;
-        self.layer.anchorPoint = CGPointMake(0.0f, 0.0f);
-        self.layer.frame = frame;
-    
-        CATransform3D rotationAndPerspectiveTransform = CATransform3DIdentity;
-        rotationAndPerspectiveTransform.m34 = 1.0 / 1500;
-        rotationAndPerspectiveTransform = CATransform3DRotate(rotationAndPerspectiveTransform, M_PI/2, 0, 1, 0);
-    
-        [UIView animateWithDuration:(animate ? 0.3 : 0.0) animations:^{
-            self.isAnimating = YES;
-            //self.layer.transform = CATransform3DMakeScale(2.5f, 2.5f, 1.0f);
-            // http://stackoverflow.com/questions/13887016/catransform3d-animation-set-x-axis
-            self.layer.transform = rotationAndPerspectiveTransform;
-            //self.alpha = 0.0f;
-        } completion:^(BOOL finished){
-            self.hidden = YES;
-            self.isAnimating = NO;
-
-            [CSResources reset];
+            
+            /*[exitBar removeFromSuperview];
+            exitBar = nil;*/
         
+            [UIView animateWithDuration:0.3 animations:^{
+                self.isAnimating = YES;
+                winmoUi.frame = newFrame;
+            } completion:^(BOOL finished){
+                self.hidden = YES;
+                self.isAnimating = NO;
+                self.pressedHome = NO;
+                winmoUi.frame = oldFrame;
+                
+                [CSResources reset];
+                
+                [winmoUi removeFromSuperview];
+                [winmoUi release];
+                
+            }];
+        } else {
+            // We want the rotating animation
+            CGRect frame = winmoUi.frame;
+            
+            winmoUi.layer.anchorPoint = CGPointMake(0.0f, 0.0f);
+            winmoUi.layer.frame = frame;
+    
+            CATransform3D rotationAndPerspectiveTransform = CATransform3DIdentity;
+            rotationAndPerspectiveTransform.m34 = 1.0 / 1500;
+            //rotationAndPerspectiveTransform.m34 = 0;
+            rotationAndPerspectiveTransform = CATransform3DRotate(rotationAndPerspectiveTransform, M_PI/2, 0, 1, 0);
+    
             for (UIView *view in self.scrollView.subviews) {
                 [view removeFromSuperview];
             }
-
+            
             [noAppsLabel removeFromSuperview];
             noAppsLabel = nil;
-        
+            
             [timeLabel removeFromSuperview];
             timeLabel = nil;
-
+            
             [backgroundView removeFromSuperview];
             backgroundView = nil;
-        
+            
             [exitButton removeFromSuperview];
             exitButton = nil;
-        }];
+            
+            /*[exitBar removeFromSuperview];
+            exitBar = nil;*/
+            
+            [UIView animateWithDuration:(animate ? 0.3 : 0.0) animations:^{
+                self.isAnimating = YES;
+                //self.layer.transform = CATransform3DMakeScale(2.5f, 2.5f, 1.0f);
+                // http://stackoverflow.com/questions/13887016/catransform3d-animation-set-x-axis
+                winmoUi.layer.transform = rotationAndPerspectiveTransform;
+                //self.alpha = 0.0f;
+            } completion:^(BOOL finished){
+                self.hidden = YES;
+                self.isAnimating = NO;
+                self.pressedHome = NO;
+
+                [CSResources reset];
+                
+                [winmoUi removeFromSuperview];
+                [winmoUi release];
+            }];
+        }
+        // Make sure we remove things from superview when launching apps/locking device too
+    } else if (self.applaunching || self.isLocking) {
+        self.isAnimating = YES;
+        self.hidden = YES;
+        self.isAnimating = NO;
+        self.applaunching = NO;
+            
+        [CSResources reset];
+            
+        for (UIView *view in self.scrollView.subviews) {
+            [view removeFromSuperview];
+        }
+            
+        [noAppsLabel removeFromSuperview];
+        noAppsLabel = nil;
+            
+        [timeLabel removeFromSuperview];
+        timeLabel = nil;
+            
+        [backgroundView removeFromSuperview];
+        backgroundView = nil;
+            
+        [exitButton removeFromSuperview];
+        exitButton = nil;
+    }
+    
+    // Logic to sort out exiting all apps (otherwise, dragons will fly out your arse!) Seriously though, we need this code to make sure that exitingAllApps is reset after, well, the exit all apps button is pressed.
+    if (self.exitingAllApps) {
+        self.exitingAllApps = NO;
     }
 }
 
+// Is this code even neccessary now?!
 -(void)openApp:(NSString*)bundleId {
     
     // the SpringboardServices.framework private framework can launch apps,
@@ -583,18 +715,15 @@ static SBApplication *openedOverApp;
 	if ([(SBAwayController*)[objc_getClass("SBAwayController") sharedAwayController] isLocked] || self.isAnimating)
 		return;
 
-    NSLog(@"about to setHandled:YES");
     // Set the event handled
     [event setHandled:YES];
     BOOL newActive = ![self isActive];
     //[self setActive:newActive];
-    NSLog(@"Done that, next!");
 
     SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
     
     // SpringBoard is active, just activate
     if (runningApp == nil) {
-        NSLog(@"SpringBoard is active...");
         [self setActive:newActive];
         [self scrollViewDidScroll:self.scrollView];
         return;
@@ -610,7 +739,6 @@ static SBApplication *openedOverApp;
     CGImageRelease(screen);
 
     if (newActive && [[runningApp displayIdentifier] length]) {
-        NSLog(@"newActive && [[runningApp displayIdentifier] length]");
         openedOverApp = runningApp;
         [self setActive:YES animated:NO];
 
@@ -621,7 +749,6 @@ static SBApplication *openedOverApp;
 
         self.scrollView.userInteractionEnabled = NO;
         
-        NSLog(@"CSApplication psApp");
         CSApplication *psApp = [self csAppforApplication:application];
         UIImageView *snapshot = psApp.snapshot;
 
@@ -684,12 +811,12 @@ static SBApplication *openedOverApp;
     if (self.isActive == NO || self.isAnimating) { return; }
 
     [event setHandled:YES];
+    self.pressedHome = YES;
     [self setActive:NO];
 }
 
 
 -(void)dealloc{
-    NSLog(@"CSApplicationController dealloc");
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     
     for (UIView *view in self.scrollView.subviews) {
