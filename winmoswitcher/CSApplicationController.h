@@ -70,6 +70,8 @@
 @property (nonatomic,retain) UIImageView* backgroundView;
 @property (nonatomic, retain) UIImageView *exitBar;
 
+@property (nonatomic, retain) UIImage *transparentImage;
+
 @property (nonatomic, retain) UIImage *closeBox;
 @property (nonatomic, retain) UIImage *statusBarDefault;
 

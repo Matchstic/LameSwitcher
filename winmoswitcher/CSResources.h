@@ -36,6 +36,9 @@
 +(BOOL)goHomeOnHomeButton;
 +(BOOL)showExitAllButton;
 +(int)closeAnimation;
++(BOOL)excludeFromExiting:(SBApplication *)app;
++(BOOL)blurForTransparent;
++(float)blurRadius;
 +(void)reloadSettings;
 
 @end

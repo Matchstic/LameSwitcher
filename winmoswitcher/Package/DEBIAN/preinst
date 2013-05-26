@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ -e '/var/mobile/Library/Preferences/com.matchstic.winmoswitcher.plist' ]
+  then
+    cp '/var/mobile/Library/Preferences/com.matchstic.winmoswitcher.plist' '/var/mobile/Library/Preferences/com.matchstic.winmoswitcher.plist.bak'
+    
+fi

@@ -10,6 +10,9 @@
 #import <UIKit/UIKit.h>
 #import <Strife/SLockWindow.h>
 #import <Strife/SRootScrollView.h>
+#import <SpringBoard/SBAppToAppTransitionController.h>
+#import <SpringBoard/SBAppToAppWorkspaceTransaction.h>
+#import <SpringBoard/SBUIAnimationController.h>
 
 
 
@@ -27,26 +30,66 @@ static NSString * const CARDSWITCHER_ID = @"com.matchstic.winmoswitcher";
 
 #include <logos/logos.h>
 #include <substrate.h>
-@class SBApplication; @class SBApplicationIcon; @class SBAwayController; @class SBDisplayStack; @class SpringBoard; @class SBAppSwitcherController; 
-static void (*_logos_orig$_ungrouped$SBAppSwitcherController$applicationLaunched$)(SBAppSwitcherController*, SEL, SBApplication*); static void _logos_method$_ungrouped$SBAppSwitcherController$applicationLaunched$(SBAppSwitcherController*, SEL, SBApplication*); static void (*_logos_orig$_ungrouped$SBAppSwitcherController$applicationDied$)(SBAppSwitcherController*, SEL, SBApplication*); static void _logos_method$_ungrouped$SBAppSwitcherController$applicationDied$(SBAppSwitcherController*, SEL, SBApplication*); static void (*_logos_orig$_ungrouped$SBApplicationIcon$launch)(SBApplicationIcon*, SEL); static void _logos_method$_ungrouped$SBApplicationIcon$launch(SBApplicationIcon*, SEL); static void (*_logos_orig$_ungrouped$SBApplication$exitedCommon)(SBApplication*, SEL); static void _logos_method$_ungrouped$SBApplication$exitedCommon(SBApplication*, SEL); static void (*_logos_orig$_ungrouped$SBApplication$_relaunchAfterExitIfNecessary)(SBApplication*, SEL); static void _logos_method$_ungrouped$SBApplication$_relaunchAfterExitIfNecessary(SBApplication*, SEL); static id (*_logos_orig$_ungrouped$SBDisplayStack$init)(SBDisplayStack*, SEL); static id _logos_method$_ungrouped$SBDisplayStack$init(SBDisplayStack*, SEL); static void (*_logos_orig$_ungrouped$SBDisplayStack$dealloc)(SBDisplayStack*, SEL); static void _logos_method$_ungrouped$SBDisplayStack$dealloc(SBDisplayStack*, SEL); static void (*_logos_orig$_ungrouped$SBAwayController$lock)(SBAwayController*, SEL); static void _logos_method$_ungrouped$SBAwayController$lock(SBAwayController*, SEL); static void (*_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$)(SpringBoard*, SEL, UIApplication *); static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(SpringBoard*, SEL, UIApplication *); 
+@class SBApplication; @class SBUIAnimationController; @class SBApplicationIcon; @class SBAwayController; @class SBDisplayStack; @class SBAppToAppTransitionController; @class SpringBoard; @class SBAppSwitcherController; @class SBAppToAppWorkspaceTransaction; 
+static void (*_logos_orig$_ungrouped$SBAppSwitcherController$applicationLaunched$)(SBAppSwitcherController*, SEL, SBApplication*); static void _logos_method$_ungrouped$SBAppSwitcherController$applicationLaunched$(SBAppSwitcherController*, SEL, SBApplication*); static void (*_logos_orig$_ungrouped$SBAppSwitcherController$applicationDied$)(SBAppSwitcherController*, SEL, SBApplication*); static void _logos_method$_ungrouped$SBAppSwitcherController$applicationDied$(SBAppSwitcherController*, SEL, SBApplication*); static void (*_logos_orig$_ungrouped$SBAppToAppTransitionController$appTransitionView$animationWillStartWithDuration$afterDelay$)(SBAppToAppTransitionController*, SEL, id, double, double); static void _logos_method$_ungrouped$SBAppToAppTransitionController$appTransitionView$animationWillStartWithDuration$afterDelay$(SBAppToAppTransitionController*, SEL, id, double, double); static void (*_logos_orig$_ungrouped$SBAppToAppWorkspaceTransaction$animationController$didCommitAnimation$withDuration$afterDelay$)(SBAppToAppWorkspaceTransaction*, SEL, id, BOOL, double, double); static void _logos_method$_ungrouped$SBAppToAppWorkspaceTransaction$animationController$didCommitAnimation$withDuration$afterDelay$(SBAppToAppWorkspaceTransaction*, SEL, id, BOOL, double, double); static void (*_logos_orig$_ungrouped$SBUIAnimationController$_noteAnimationDidCommit$withDuration$afterDelay$)(SBUIAnimationController*, SEL, BOOL, double, double); static void _logos_method$_ungrouped$SBUIAnimationController$_noteAnimationDidCommit$withDuration$afterDelay$(SBUIAnimationController*, SEL, BOOL, double, double); static void (*_logos_orig$_ungrouped$SBApplicationIcon$launch)(SBApplicationIcon*, SEL); static void _logos_method$_ungrouped$SBApplicationIcon$launch(SBApplicationIcon*, SEL); static void (*_logos_orig$_ungrouped$SBApplication$exitedCommon)(SBApplication*, SEL); static void _logos_method$_ungrouped$SBApplication$exitedCommon(SBApplication*, SEL); static void (*_logos_orig$_ungrouped$SBApplication$_relaunchAfterExitIfNecessary)(SBApplication*, SEL); static void _logos_method$_ungrouped$SBApplication$_relaunchAfterExitIfNecessary(SBApplication*, SEL); static id (*_logos_orig$_ungrouped$SBDisplayStack$init)(SBDisplayStack*, SEL); static id _logos_method$_ungrouped$SBDisplayStack$init(SBDisplayStack*, SEL); static void (*_logos_orig$_ungrouped$SBDisplayStack$dealloc)(SBDisplayStack*, SEL); static void _logos_method$_ungrouped$SBDisplayStack$dealloc(SBDisplayStack*, SEL); static void (*_logos_orig$_ungrouped$SBAwayController$lock)(SBAwayController*, SEL); static void _logos_method$_ungrouped$SBAwayController$lock(SBAwayController*, SEL); static void (*_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$)(SpringBoard*, SEL, UIApplication *); static void _logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$(SpringBoard*, SEL, UIApplication *); 
 
-#line 27 "/Users/Matt/iOS/Projects/winmoswitcher/winmoswitcher/winmoswitcher.xm"
+#line 30 "/Users/Matt/iOS/Projects/winmoswitcher/winmoswitcher/winmoswitcher.xm"
 
 
-static void _logos_method$_ungrouped$SBAppSwitcherController$applicationLaunched$(SBAppSwitcherController* self, SEL _cmd, SBApplication* app){
+static void _logos_method$_ungrouped$SBAppSwitcherController$applicationLaunched$(SBAppSwitcherController* self, SEL _cmd, SBApplication* app) {
     _logos_orig$_ungrouped$SBAppSwitcherController$applicationLaunched$(self, _cmd, app);
     
     NSLog(@"SBAppSwitcherController: applicationLaunched");
     [[CSApplicationController sharedController] appLaunched:app];
 }
 
-static void _logos_method$_ungrouped$SBAppSwitcherController$applicationDied$(SBAppSwitcherController* self, SEL _cmd, SBApplication* app){
+static void _logos_method$_ungrouped$SBAppSwitcherController$applicationDied$(SBAppSwitcherController* self, SEL _cmd, SBApplication* app) {
     NSLog(@"SBAppSwitcherController: applicationDied");
     [[CSApplicationController sharedController] appQuit:app];
     
     _logos_orig$_ungrouped$SBAppSwitcherController$applicationDied$(self, _cmd, app);
 }
 
+
+
+
+
+
+static void _logos_method$_ungrouped$SBAppToAppTransitionController$appTransitionView$animationWillStartWithDuration$afterDelay$(SBAppToAppTransitionController* self, SEL _cmd, id fp8, double fp12, double fp20) {
+    NSLog(@"appTransitionView:animationWillStartWithDuration:afterDelay started with animation duration of %f", fp12);
+    
+    
+    if ([CSApplicationController sharedController].applaunching == YES) {
+        _logos_orig$_ungrouped$SBAppToAppTransitionController$appTransitionView$animationWillStartWithDuration$afterDelay$(self, _cmd, fp8, fp12*0.01, fp20*0.5);
+    } else {
+        _logos_orig$_ungrouped$SBAppToAppTransitionController$appTransitionView$animationWillStartWithDuration$afterDelay$(self, _cmd, fp8, fp12, fp20);
+    }
+}
+
+
+
+
+
+static void _logos_method$_ungrouped$SBAppToAppWorkspaceTransaction$animationController$didCommitAnimation$withDuration$afterDelay$(SBAppToAppWorkspaceTransaction* self, SEL _cmd, id fp8, BOOL fp12, double fp16, double fp24) {
+    NSLog(@"animationController:didCommitAnimation:withDuration:afterDelay: has a duration of %f", fp16);
+    if ([CSApplicationController sharedController].applaunching == YES) {
+        _logos_orig$_ungrouped$SBAppToAppWorkspaceTransaction$animationController$didCommitAnimation$withDuration$afterDelay$(self, _cmd, fp8, fp12, fp16*0.01, fp24*0.5);
+    } else {
+        _logos_orig$_ungrouped$SBAppToAppWorkspaceTransaction$animationController$didCommitAnimation$withDuration$afterDelay$(self, _cmd, fp8, fp12, fp16, fp24);
+    }
+}
+
+
+
+
+
+static void _logos_method$_ungrouped$SBUIAnimationController$_noteAnimationDidCommit$withDuration$afterDelay$(SBUIAnimationController* self, SEL _cmd, BOOL arg1, double arg2, double arg3) {
+    if ([CSApplicationController sharedController].applaunching == YES) {
+        _logos_orig$_ungrouped$SBUIAnimationController$_noteAnimationDidCommit$withDuration$afterDelay$(self, _cmd, arg1, arg2*0.01, arg3*0.5);
+    } else {
+        _logos_orig$_ungrouped$SBUIAnimationController$_noteAnimationDidCommit$withDuration$afterDelay$(self, _cmd, arg1, arg2, arg3);
+    }
+}
 
 
 
@@ -277,10 +320,10 @@ static void CSSettingsChanged(CFNotificationCenterRef center, void *observer, CF
 	[CSResources reloadSettings];
 }
 
-static __attribute__((constructor)) void _logosLocalCtor_7a614fd0()
+static __attribute__((constructor)) void _logosLocalCtor_ad13a2a0()
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	{Class _logos_class$_ungrouped$SBAppSwitcherController = objc_getClass("SBAppSwitcherController"); MSHookMessageEx(_logos_class$_ungrouped$SBAppSwitcherController, @selector(applicationLaunched:), (IMP)&_logos_method$_ungrouped$SBAppSwitcherController$applicationLaunched$, (IMP*)&_logos_orig$_ungrouped$SBAppSwitcherController$applicationLaunched$);MSHookMessageEx(_logos_class$_ungrouped$SBAppSwitcherController, @selector(applicationDied:), (IMP)&_logos_method$_ungrouped$SBAppSwitcherController$applicationDied$, (IMP*)&_logos_orig$_ungrouped$SBAppSwitcherController$applicationDied$);Class _logos_class$_ungrouped$SBApplicationIcon = objc_getClass("SBApplicationIcon"); MSHookMessageEx(_logos_class$_ungrouped$SBApplicationIcon, @selector(launch), (IMP)&_logos_method$_ungrouped$SBApplicationIcon$launch, (IMP*)&_logos_orig$_ungrouped$SBApplicationIcon$launch);Class _logos_class$_ungrouped$SBApplication = objc_getClass("SBApplication"); MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(exitedCommon), (IMP)&_logos_method$_ungrouped$SBApplication$exitedCommon, (IMP*)&_logos_orig$_ungrouped$SBApplication$exitedCommon);MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(_relaunchAfterExitIfNecessary), (IMP)&_logos_method$_ungrouped$SBApplication$_relaunchAfterExitIfNecessary, (IMP*)&_logos_orig$_ungrouped$SBApplication$_relaunchAfterExitIfNecessary);Class _logos_class$_ungrouped$SBDisplayStack = objc_getClass("SBDisplayStack"); MSHookMessageEx(_logos_class$_ungrouped$SBDisplayStack, @selector(init), (IMP)&_logos_method$_ungrouped$SBDisplayStack$init, (IMP*)&_logos_orig$_ungrouped$SBDisplayStack$init);MSHookMessageEx(_logos_class$_ungrouped$SBDisplayStack, @selector(dealloc), (IMP)&_logos_method$_ungrouped$SBDisplayStack$dealloc, (IMP*)&_logos_orig$_ungrouped$SBDisplayStack$dealloc);Class _logos_class$_ungrouped$SBAwayController = objc_getClass("SBAwayController"); MSHookMessageEx(_logos_class$_ungrouped$SBAwayController, @selector(lock), (IMP)&_logos_method$_ungrouped$SBAwayController$lock, (IMP*)&_logos_orig$_ungrouped$SBAwayController$lock);Class _logos_class$_ungrouped$SpringBoard = objc_getClass("SpringBoard"); MSHookMessageEx(_logos_class$_ungrouped$SpringBoard, @selector(applicationDidFinishLaunching:), (IMP)&_logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$, (IMP*)&_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$);}
+	{Class _logos_class$_ungrouped$SBAppSwitcherController = objc_getClass("SBAppSwitcherController"); MSHookMessageEx(_logos_class$_ungrouped$SBAppSwitcherController, @selector(applicationLaunched:), (IMP)&_logos_method$_ungrouped$SBAppSwitcherController$applicationLaunched$, (IMP*)&_logos_orig$_ungrouped$SBAppSwitcherController$applicationLaunched$);MSHookMessageEx(_logos_class$_ungrouped$SBAppSwitcherController, @selector(applicationDied:), (IMP)&_logos_method$_ungrouped$SBAppSwitcherController$applicationDied$, (IMP*)&_logos_orig$_ungrouped$SBAppSwitcherController$applicationDied$);Class _logos_class$_ungrouped$SBAppToAppTransitionController = objc_getClass("SBAppToAppTransitionController"); MSHookMessageEx(_logos_class$_ungrouped$SBAppToAppTransitionController, @selector(appTransitionView:animationWillStartWithDuration:afterDelay:), (IMP)&_logos_method$_ungrouped$SBAppToAppTransitionController$appTransitionView$animationWillStartWithDuration$afterDelay$, (IMP*)&_logos_orig$_ungrouped$SBAppToAppTransitionController$appTransitionView$animationWillStartWithDuration$afterDelay$);Class _logos_class$_ungrouped$SBAppToAppWorkspaceTransaction = objc_getClass("SBAppToAppWorkspaceTransaction"); MSHookMessageEx(_logos_class$_ungrouped$SBAppToAppWorkspaceTransaction, @selector(animationController:didCommitAnimation:withDuration:afterDelay:), (IMP)&_logos_method$_ungrouped$SBAppToAppWorkspaceTransaction$animationController$didCommitAnimation$withDuration$afterDelay$, (IMP*)&_logos_orig$_ungrouped$SBAppToAppWorkspaceTransaction$animationController$didCommitAnimation$withDuration$afterDelay$);Class _logos_class$_ungrouped$SBUIAnimationController = objc_getClass("SBUIAnimationController"); MSHookMessageEx(_logos_class$_ungrouped$SBUIAnimationController, @selector(_noteAnimationDidCommit:withDuration:afterDelay:), (IMP)&_logos_method$_ungrouped$SBUIAnimationController$_noteAnimationDidCommit$withDuration$afterDelay$, (IMP*)&_logos_orig$_ungrouped$SBUIAnimationController$_noteAnimationDidCommit$withDuration$afterDelay$);Class _logos_class$_ungrouped$SBApplicationIcon = objc_getClass("SBApplicationIcon"); MSHookMessageEx(_logos_class$_ungrouped$SBApplicationIcon, @selector(launch), (IMP)&_logos_method$_ungrouped$SBApplicationIcon$launch, (IMP*)&_logos_orig$_ungrouped$SBApplicationIcon$launch);Class _logos_class$_ungrouped$SBApplication = objc_getClass("SBApplication"); MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(exitedCommon), (IMP)&_logos_method$_ungrouped$SBApplication$exitedCommon, (IMP*)&_logos_orig$_ungrouped$SBApplication$exitedCommon);MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(_relaunchAfterExitIfNecessary), (IMP)&_logos_method$_ungrouped$SBApplication$_relaunchAfterExitIfNecessary, (IMP*)&_logos_orig$_ungrouped$SBApplication$_relaunchAfterExitIfNecessary);Class _logos_class$_ungrouped$SBDisplayStack = objc_getClass("SBDisplayStack"); MSHookMessageEx(_logos_class$_ungrouped$SBDisplayStack, @selector(init), (IMP)&_logos_method$_ungrouped$SBDisplayStack$init, (IMP*)&_logos_orig$_ungrouped$SBDisplayStack$init);MSHookMessageEx(_logos_class$_ungrouped$SBDisplayStack, @selector(dealloc), (IMP)&_logos_method$_ungrouped$SBDisplayStack$dealloc, (IMP*)&_logos_orig$_ungrouped$SBDisplayStack$dealloc);Class _logos_class$_ungrouped$SBAwayController = objc_getClass("SBAwayController"); MSHookMessageEx(_logos_class$_ungrouped$SBAwayController, @selector(lock), (IMP)&_logos_method$_ungrouped$SBAwayController$lock, (IMP*)&_logos_orig$_ungrouped$SBAwayController$lock);Class _logos_class$_ungrouped$SpringBoard = objc_getClass("SpringBoard"); MSHookMessageEx(_logos_class$_ungrouped$SpringBoard, @selector(applicationDidFinishLaunching:), (IMP)&_logos_method$_ungrouped$SpringBoard$applicationDidFinishLaunching$, (IMP*)&_logos_orig$_ungrouped$SpringBoard$applicationDidFinishLaunching$);}
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, CSSettingsChanged, CFSTR("com.matchstic.winmoswitcher/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 	[pool release];
 }

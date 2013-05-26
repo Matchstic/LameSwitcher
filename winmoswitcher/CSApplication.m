@@ -457,28 +457,28 @@ static CSApplication *_instance;
     [self retain];
     NSMutableArray *toRemove = [NSMutableArray array];
     for (SBApplication *app in [CSApplicationController sharedController].runningApps) {
-        // Prevent runningApps array from being mutated while enumerating
-        [toRemove addObject:app];
-        // Remove the app's snapshot from superview! Unless... we have tags!
-        // Get app's index
-        //int i = [[CSApplicationController sharedController].runningApps indexOfObject:app];
-        //int tag = i + 1000;
+        // First, check if it's in our exclusion list.
+        // Then, if it's excluded, don't run the code!
+        if (![CSResources excludeFromExiting:app]) {
+            // Prevent runningApps array from being mutated while enumerating
+            [toRemove addObject:app];
         
-        // Remove that from superview
-        //[[[CSApplicationController sharedController].scrollView viewWithTag:tag] removeFromSuperview];
+            [app notifyResignActiveForReason:1];
+            [app deactivate];
+            SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+            if ([[app displayIdentifier] isEqual:[runningApp displayIdentifier]]) {
+                [(SpringBoard *)[UIApplication sharedApplication] quitTopApplication:nil];
+            }
+            
+            // Why doesn't this animation work correctly? 
+            CSApplication *appView = [[CSApplicationController sharedController] csAppforApplication:app];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                appView.snapshot.alpha = 0;
+            }];
         
-        [app notifyResignActiveForReason:1];
-        [app deactivate];
-        SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
-        if ([[app displayIdentifier] isEqual:[runningApp displayIdentifier]]) {
-            [(SpringBoard *)[UIApplication sharedApplication] quitTopApplication:nil];
+            [self performSelector:@selector(killItWithFireMkTwo:) withObject:app afterDelay:2];
         }
-        /*[UIView animateWithDuration:0.2 animations:^{
-            [[CSApplicationController sharedController].scrollView viewWithTag:tag].alpha = 0;
-        } completion:^(BOOL finished){
-            [[[CSApplicationController sharedController].scrollView viewWithTag:tag] removeFromSuperview];*/
-        [self performSelector:@selector(killItWithFireMkTwo:) withObject:app afterDelay:2];
-        //}];
     }
     
     for (SBApplication *app in toRemove) {

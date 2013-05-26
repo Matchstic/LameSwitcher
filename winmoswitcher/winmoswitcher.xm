@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <Strife/SLockWindow.h>
 #import <Strife/SRootScrollView.h>
+#import <SpringBoard/SBAppToAppTransitionController.h>
+#import <SpringBoard/SBAppToAppWorkspaceTransaction.h>
+#import <SpringBoard/SBUIAnimationController.h>
 
 //UIKIT_EXTERN CGImageRef UIGetScreenImage();
 
@@ -26,14 +29,14 @@ static NSString * const CARDSWITCHER_ID = @"com.matchstic.winmoswitcher";
 
 %hook SBAppSwitcherController
 
--(void)applicationLaunched:(SBApplication*)app{
+-(void)applicationLaunched:(SBApplication*)app {
     %orig;
     
     NSLog(@"SBAppSwitcherController: applicationLaunched");
     [[CSApplicationController sharedController] appLaunched:app];
 }
 
--(void)applicationDied:(SBApplication*)app{
+-(void)applicationDied:(SBApplication*)app {
     NSLog(@"SBAppSwitcherController: applicationDied");
     [[CSApplicationController sharedController] appQuit:app];
     
@@ -42,6 +45,46 @@ static NSString * const CARDSWITCHER_ID = @"com.matchstic.winmoswitcher";
 
 %end
 
+// Animation speeding up
+%hook SBAppToAppTransitionController
+
+-(void)appTransitionView:(id)fp8 animationWillStartWithDuration:(double)fp12 afterDelay:(double)fp20 {
+    NSLog(@"appTransitionView:animationWillStartWithDuration:afterDelay started with animation duration of %f", fp12);
+    
+    // Make sure we're launching with a shorter animation when in switcher
+    if ([CSApplicationController sharedController].applaunching == YES) {
+        %orig(fp8, fp12*0.01, fp20*0.5);
+    } else {
+        %orig;
+    }
+}
+
+%end
+
+%hook SBAppToAppWorkspaceTransaction
+
+-(void)animationController:(id)fp8 didCommitAnimation:(BOOL)fp12 withDuration:(double)fp16 afterDelay:(double)fp24 {
+    NSLog(@"animationController:didCommitAnimation:withDuration:afterDelay: has a duration of %f", fp16);
+    if ([CSApplicationController sharedController].applaunching == YES) {
+        %orig(fp8, fp12, fp16*0.01, fp24*0.5);
+    } else {
+        %orig;
+    }
+}
+
+%end
+
+%hook SBUIAnimationController
+
+-(void)_noteAnimationDidCommit:(BOOL)arg1 withDuration:(double)arg2 afterDelay:(double)arg3 {
+    if ([CSApplicationController sharedController].applaunching == YES) {
+        %orig(arg1, arg2*0.01, arg3*0.5);
+    } else {
+        %orig;
+    }
+}
+
+%end
 
 %hook SBApplicationIcon
 

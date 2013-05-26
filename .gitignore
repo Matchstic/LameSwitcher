@@ -5,3 +5,6 @@ theos
 *.zip
 .git.bak
 Packages
+winmoswitcher-prefs/Packages
+winmoswitcher-prefs/LatestBuild
+temp

@@ -67,6 +67,20 @@
 		</dict>
 		<dict>
 			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.matchstic.winmoswitcher</string>
+			<key>key</key>
+			<string>ShowPageDots</string>
+			<key>label</key>
+			<string>Page Dots</string>
+			<key>PostNotification</key>
+			<string>com.matchstic.winmoswitcher/settingschanged</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSLinkListCell</string>
 			<key>default</key>
 			<integer>1</integer>
@@ -94,30 +108,14 @@
 		<dict>
 			<key>cell</key>
 			<string>PSLinkListCell</string>
-			<key>default</key>
-			<integer>1</integer>
 			<key>detail</key>
-			<string>PSListItemsController</string>
-			<key>key</key>
-			<string>Background</string>
+			<string>backgroundController</string>
 			<key>label</key>
 			<string>Background</string>
-			<key>validTitles</key>
-			<array>
-				<string>Tile colour</string>
-				<string>Dark</string>
-				<string>Light</string>
-			</array>
-			<key>validValues</key>
-			<array>
-				<integer>1</integer>
-				<integer>2</integer>
-				<integer>3</integer>
-			</array>
-			<key>defaults</key>
-			<string>com.matchstic.winmoswitcher</string>
-			<key>PostNotification</key>
-			<string>com.matchstic.winmoswitcher/settingschanged</string>
+			<key>isController</key>
+			<true/>
+			<key>get</key>
+			<string>getBackgroundValue</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -196,6 +194,51 @@
 			<string>Enabled</string>
 			<key>PostNotification</key>
 			<string>com.matchstic.winmoswitcher/settingschanged</string>
+		</dict>
+		<dict>
+			<key>ALAllowsSelection</key>
+			<string>1</string>
+			<key>ALChangeNotification</key>
+			<string>com.matchstic.winmoswitcher/settingschanged</string>
+			<key>ALSectionDescriptors</key>
+			<array>
+				<dict>
+					<key>cell-class-name</key>
+					<string>ALSwitchCell</string>
+					<key>icon-size</key>
+					<string>29</string>
+					<key>predicate</key>
+					<string>(isSystemApplication = TRUE) AND NOT (tags contains &apos;no-suspendresume&apos;)</string>
+					<key>suppress-hidden-apps</key>
+					<string>1</string>
+					<key>title</key>
+					<string>System Applications</string>
+				</dict>
+				<dict>
+					<key>cell-class-name</key>
+					<string>ALSwitchCell</string>
+					<key>icon-size</key>
+					<string>29</string>
+					<key>predicate</key>
+					<string>(isSystemApplication = FALSE) AND NOT (tags contains &apos;no-suspendresume&apos;)</string>
+					<key>suppress-hidden-apps</key>
+					<string>1</string>
+					<key>title</key>
+					<string>User Applications</string>
+				</dict>
+			</array>
+			<key>ALSettingsKeyPrefix</key>
+			<string>Exclude-</string>
+			<key>ALSettingsPath</key>
+			<string>/var/mobile/Library/Preferences/com.matchstic.winmoswitcher.plist</string>
+			<key>bundle</key>
+			<string>AppList</string>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>isController</key>
+			<true/>
+			<key>label</key>
+			<string>Exclude apps</string>
 		</dict>
 	</array>
 </dict>

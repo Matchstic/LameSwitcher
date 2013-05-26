@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'winmoswitcher-prefs' target in the 'winmoswitcher-prefs' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import <UIKit/UIKit.h>
+#endif

@@ -234,6 +234,18 @@ static UIImage *currentImage = nil;
     id temp = [settings objectForKey:@"deactivateAnimation"];
     return (temp ? [temp intValue] : 1);
 }
++(BOOL)excludeFromExiting:(SBApplication *)app {
+    BOOL exclude = [[settings objectForKey:[@"Exclude-" stringByAppendingString:[app displayIdentifier]]] boolValue];
+    return exclude;
+}
++(BOOL)blurForTransparent {
+    id temp = [settings objectForKey:@"blurred"];
+    return (temp ? [temp boolValue] : NO);
+}
++(float)blurRadius {
+    id temp = [settings objectForKey:@"blurriness"];
+    return (temp ? [temp floatValue] : 0.0f);
+}
 +(void)reloadSettings{
     NSLog(@"CSResources reloadSettings");
     [settings release];

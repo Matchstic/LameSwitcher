@@ -26,7 +26,7 @@
 -(void)loadImages;
 -(void)reset;
 -(id)initWithApplication:(SBApplication*)application;
--(void)layoutIcon;
+//-(void)layoutIcon;
 -(void)launch;
 -(void)exit;
 -(void)exitAllApps;

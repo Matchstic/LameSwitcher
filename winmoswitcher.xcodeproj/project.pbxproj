@@ -33,8 +33,11 @@
 		C9212793174BBDF800FED6DF /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		C9ABB5741741591E004CB921 /* SpringBoardServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpringBoardServices.framework; path = System/Library/PrivateFrameworks/SpringBoardServices.framework; sourceTree = SDKROOT; };
 		C9ABB57717415BA0004CB921 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
-		C9D3C5C8174AD2C30088A538 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		C9D3C5C9174AD2C30088A538 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		C9CE6EDF1752B26C00FD82AC /* postinst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = postinst; path = Package/DEBIAN/postinst; sourceTree = "<group>"; };
+		C9CE6EE01752B26C00FD82AC /* preinst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = preinst; path = Package/DEBIAN/preinst; sourceTree = "<group>"; };
+		C9CE6EE51752B27600FD82AC /* com.matchstic.winmoswitcher.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = com.matchstic.winmoswitcher.plist; sourceTree = "<group>"; };
+		C9CE6EE71752B28000FD82AC /* winmoswitcher-prefs.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = "winmoswitcher-prefs.bundle"; sourceTree = "<group>"; };
+		C9CE6EE81752B28A00FD82AC /* winmoswitcher_prefs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = winmoswitcher_prefs.plist; sourceTree = "<group>"; };
 		C9FB09401740355100DD72A5 /* winmoswitcher.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = winmoswitcher.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9FB09431740355100DD72A5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C9FB09491740355100DD72A5 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; name = control; path = Package/DEBIAN/control; sourceTree = "<group>"; };
@@ -66,9 +69,6 @@
 		C9FB098017404C2000DD72A5 /* closebox@2x.png.bak */ = {isa = PBXFileReference; lastKnownFileType = file; path = "closebox@2x.png.bak"; sourceTree = "<group>"; };
 		C9FB098117404C2000DD72A5 /* UIStatusBarStyleBlackOpaque.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIStatusBarStyleBlackOpaque.png; sourceTree = "<group>"; };
 		C9FB098217404C2000DD72A5 /* UIStatusBarStyleDefault.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIStatusBarStyleDefault.png; sourceTree = "<group>"; };
-		C9FB098617404C2000DD72A5 /* CardSwitcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CardSwitcher.png; sourceTree = "<group>"; };
-		C9FB098717404C2000DD72A5 /* CardSwitcher@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CardSwitcher@2x.png"; sourceTree = "<group>"; };
-		C9FB098A17404C2000DD72A5 /* WinMoSwitcher.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = WinMoSwitcher.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +92,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C9CE6EE11752B27600FD82AC /* var */ = {
+			isa = PBXGroup;
+			children = (
+				C9CE6EE21752B27600FD82AC /* mobile */,
+			);
+			name = var;
+			path = Package/var;
+			sourceTree = "<group>";
+		};
+		C9CE6EE21752B27600FD82AC /* mobile */ = {
+			isa = PBXGroup;
+			children = (
+				C9CE6EE31752B27600FD82AC /* Library */,
+			);
+			path = mobile;
+			sourceTree = "<group>";
+		};
+		C9CE6EE31752B27600FD82AC /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				C9CE6EE41752B27600FD82AC /* Preferences */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		C9CE6EE41752B27600FD82AC /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				C9CE6EE51752B27600FD82AC /* com.matchstic.winmoswitcher.plist */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
+		C9CE6EE61752B28000FD82AC /* PreferenceBundles */ = {
+			isa = PBXGroup;
+			children = (
+				C9CE6EE71752B28000FD82AC /* winmoswitcher-prefs.bundle */,
+			);
+			name = PreferenceBundles;
+			path = Package/Library/PreferenceBundles;
+			sourceTree = "<group>";
+		};
 		C9FB09351740355100DD72A5 = {
 			isa = PBXGroup;
 			children = (
@@ -149,6 +191,7 @@
 		C9FB09461740355100DD72A5 /* Package */ = {
 			isa = PBXGroup;
 			children = (
+				C9CE6EE11752B27600FD82AC /* var */,
 				C9FB09471740355100DD72A5 /* DEBIAN */,
 				C9FB09501740355100DD72A5 /* Library */,
 			);
@@ -158,6 +201,8 @@
 		C9FB09471740355100DD72A5 /* DEBIAN */ = {
 			isa = PBXGroup;
 			children = (
+				C9CE6EDF1752B26C00FD82AC /* postinst */,
+				C9CE6EE01752B26C00FD82AC /* preinst */,
 				C9FB09491740355100DD72A5 /* control */,
 			);
 			name = DEBIAN;
@@ -175,6 +220,7 @@
 		C9FB09501740355100DD72A5 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				C9CE6EE61752B28000FD82AC /* PreferenceBundles */,
 				C9FB097517404C2000DD72A5 /* Activator */,
 				C9FB097D17404C2000DD72A5 /* Application Support */,
 				C9FB098317404C2000DD72A5 /* PreferenceLoader */,
@@ -260,21 +306,9 @@
 		C9FB098417404C2000DD72A5 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
-				C9FB098517404C2000DD72A5 /* WinMoSwitcher */,
+				C9CE6EE81752B28A00FD82AC /* winmoswitcher_prefs.plist */,
 			);
 			path = Preferences;
-			sourceTree = "<group>";
-		};
-		C9FB098517404C2000DD72A5 /* WinMoSwitcher */ = {
-			isa = PBXGroup;
-			children = (
-				C9D3C5C8174AD2C30088A538 /* Icon.png */,
-				C9D3C5C9174AD2C30088A538 /* Icon@2x.png */,
-				C9FB098617404C2000DD72A5 /* CardSwitcher.png */,
-				C9FB098717404C2000DD72A5 /* CardSwitcher@2x.png */,
-				C9FB098A17404C2000DD72A5 /* WinMoSwitcher.plist */,
-			);
-			path = WinMoSwitcher;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

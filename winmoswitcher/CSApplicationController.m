@@ -8,6 +8,8 @@
 
 #import <SpringBoard/SpringBoard.h>
 #import <SpringBoardUI/SpringBoardUI.h>
+#import <QuartzCore/QuartzCore.h>
+#import <IOSurface/IOSurface3.h>
 #import "CSApplicationController.h"
 #import "CSApplication.h"
 #import "CSResources.h"
@@ -16,7 +18,6 @@
 #define BUNDLE @"/Library/Application Support/WinMoSwitcher/WinMoSwitcher.bundle"
 
 CGImageRef UIGetScreenImage(void);
-
 
 @interface SBAwayController ()
 +(id)sharedAwayController;
@@ -31,7 +32,13 @@ CGImageRef UIGetScreenImage(void);
 - (void)setBackgroundingEnabled:(BOOL)backgroundingEnabled forDisplayIdentifier:(NSString *)displayIdentifier;
 @end
 
+@interface UIImage (IOSurface)
+- (id)_initWithIOSurface:(IOSurfaceRef)surface scale:(CGFloat)scale orientation:(UIImageOrientation)orientation;
+@end
 
+@interface UIWindow (IOSurface)
++(IOSurfaceRef)createScreenIOSurface;
+@end
 
 static CSApplicationController *_instance;
 static SBApplication *openedOverApp;
@@ -56,6 +63,7 @@ static SBApplication *openedOverApp;
 @synthesize exitingAllApps = _exitingAllApps;
 @synthesize isLocking = _isLocking;
 
+@synthesize transparentImage;
 @synthesize backgroundView;
 @synthesize exitBar;
 
@@ -89,7 +97,7 @@ static SBApplication *openedOverApp;
         self.ignoredIDs = [NSMutableArray arrayWithObjects:@"com.wynd.dreamboard", nil];
         
         // ******************************************************* originx        originy                   width        height
-        pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height-20, self.frame.size.width, 20)];
+        pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, (SCREEN_HEIGHT*0.97), self.frame.size.width, 20)];
         pageControl.userInteractionEnabled = NO;
         pageControl.numberOfPages = 1;
         pageControl.currentPage = 1;
@@ -161,11 +169,24 @@ static SBApplication *openedOverApp;
     [backgroundView removeFromSuperview];
     backgroundView = nil;
     if ([CSResources backgroundStyle] == 1) {
-        // Look's like the user wants the background to be the same as the tile colour.
+        // Look's like the user wants the background to be the same as the tile colour/a custom colour.
+        // First, check if Strife is installed
         backgroundView = [[[UIImageView alloc] initWithFrame:self.frame] autorelease];
-        // Get RBG from hex value, and add into an image
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/DreamBoard/Strife/Info.plist"];
-        NSString *tileColour = [dict objectForKey:@"AccentColorHex"];
+        
+        NSFileManager *file = [NSFileManager defaultManager];
+        NSString *tileColour;
+        
+        // If Strife is there, use the tile colour - which is what's shown in Settings anyway.
+        if ([file fileExistsAtPath:@"/DreamBoard/Strife/Info.plist"]) {
+            // Get RBG from hex value, and add into an image
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/DreamBoard/Strife/Info.plist"];
+            tileColour = [dict objectForKey:@"AccentColorHex"];
+            [dict release];
+        } else {
+            // Give them a cyan colour for now
+            tileColour = @"1BA1E2";
+        }
+        
         CGRect rect = [[UIScreen mainScreen] bounds];
         UIGraphicsBeginImageContext(rect.size);
         CGContextRef context = UIGraphicsGetCurrentContext();
@@ -180,8 +201,6 @@ static SBApplication *openedOverApp;
         UIGraphicsEndImageContext();
 
         [self insertSubview:backgroundView atIndex:0];
-        
-        [dict release];
     } else if ([CSResources backgroundStyle] == 2) {
         
         // Dark background
@@ -218,8 +237,7 @@ static SBApplication *openedOverApp;
         
         // Get lockscreen image
         SBWallpaperImage *image = [[SBWallpaperImage alloc] initWithVariant:0];
-        NSData *wallpaper = [image data];
-        UIImage *loadImage = [UIImage imageWithData:wallpaper];
+        UIImage *wallpaper = [UIImage imageWithData:image.data];
         
         // Blur the UIImage
         /*CIImage *imageToBlur = [CIImage imageWithCGImage:loadImage.CGImage];
@@ -229,10 +247,34 @@ static SBApplication *openedOverApp;
         CIImage *resultImage = [gaussianBlurFilter valueForKey:@"outputImage"];
         UIImage *endImage = [[UIImage alloc] initWithCIImage:resultImage];*/
         
-        backgroundView.image = loadImage;
+        backgroundView.image = wallpaper;
         [self insertSubview:backgroundView atIndex:0];
         //[wallpaper release];
         [image release];
+    } else if ([CSResources backgroundStyle] == 5) {
+        
+        // Transparent background - no settings support
+        
+        backgroundView = [[[UIImageView alloc] initWithFrame:self.frame] autorelease];
+        
+        // Check if user wants blur
+        //if ([CSResources blurForTransparent]) {
+        // Blur the UIImage
+        CIImage *imageToBlur = [CIImage imageWithCGImage:transparentImage.CGImage];
+        CIFilter *gaussianBlurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
+        [gaussianBlurFilter setValue:imageToBlur forKey:@"inputImage"];
+        [gaussianBlurFilter setValue:[NSNumber numberWithFloat:5] forKey:@"inputRadius"];
+        CIImage *resultImage = [gaussianBlurFilter valueForKey:@"outputImage"];
+        UIImage *endImage = [[UIImage alloc] initWithCIImage:resultImage];
+        
+        backgroundView.image = endImage;
+        backgroundView.alpha = 1.0f;
+        
+        [transparentImage release];
+        transparentImage = nil;
+        [endImage release];
+    
+        [self insertSubview:backgroundView atIndex:0];
     }
     
     //noAppsLabel = nil;
@@ -503,7 +545,7 @@ static SBApplication *openedOverApp;
 
 -(void)fadeInScrollView {
     [UIView animateWithDuration:0.2 animations:^{
-        self.scrollView.alpha = 1.0f;
+        self.scrollView.alpha = 1.0;
     }];
 }
 
@@ -721,6 +763,11 @@ static SBApplication *openedOverApp;
     //[self setActive:newActive];
 
     SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+    
+    // Used only if transparent background is enabled
+    if ([CSResources backgroundStyle] == 5) {
+        transparentImage = [[UIImage alloc] _initWithIOSurface:[UIWindow createScreenIOSurface] scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+    }
     
     // SpringBoard is active, just activate
     if (runningApp == nil) {

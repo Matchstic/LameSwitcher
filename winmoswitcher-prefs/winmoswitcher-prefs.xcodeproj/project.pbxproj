@@ -1,0 +1,400 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C98B5C6C175139FB00C7A4F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98B5C6B175139FB00C7A4F6 /* Foundation.framework */; };
+		C98B5C6E175139FB00C7A4F6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98B5C6D175139FB00C7A4F6 /* UIKit.framework */; };
+		C98B5C70175139FB00C7A4F6 /* Preferences.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98B5C6F175139FB00C7A4F6 /* Preferences.framework */; };
+		C98B5C7B175139FB00C7A4F6 /* winmoswitcher_prefsController.m in Sources */ = {isa = PBXBuildFile; fileRef = C98B5C7A175139FB00C7A4F6 /* winmoswitcher_prefsController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C98B5C68175139FB00C7A4F6 /* winmoswitcher-prefs.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "winmoswitcher-prefs.bundle"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C98B5C6B175139FB00C7A4F6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C98B5C6D175139FB00C7A4F6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C98B5C6F175139FB00C7A4F6 /* Preferences.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Preferences.framework; path = Library/Frameworks/Preferences.framework; sourceTree = DEVELOPER_DIR; };
+		C98B5C75175139FB00C7A4F6 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; name = control; path = Package/DEBIAN/control; sourceTree = "<group>"; };
+		C98B5C77175139FB00C7A4F6 /* PackageVersion.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PackageVersion.plist; sourceTree = "<group>"; };
+		C98B5C78175139FB00C7A4F6 /* winmoswitcher_prefs-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "winmoswitcher_prefs-Info.plist"; sourceTree = "<group>"; };
+		C98B5C79175139FB00C7A4F6 /* winmoswitcher_prefsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = winmoswitcher_prefsController.h; sourceTree = "<group>"; };
+		C98B5C7A175139FB00C7A4F6 /* winmoswitcher_prefsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = winmoswitcher_prefsController.m; sourceTree = "<group>"; };
+		C98B5C7F175139FB00C7A4F6 /* winmoswitcher_prefs.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = winmoswitcher_prefs.plist; path = Package/Library/PreferenceLoader/Preferences/winmoswitcher_prefs.plist; sourceTree = "<group>"; };
+		C98B5C89175139FB00C7A4F6 /* com.matchstic.winmoswitcher_prefs.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = com.matchstic.winmoswitcher_prefs.plist; path = Package/var/mobile/Library/Preferences/com.matchstic.winmoswitcher_prefs.plist; sourceTree = "<group>"; };
+		C98B5C8A175139FB00C7A4F6 /* winmoswitcher-prefs-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "winmoswitcher-prefs-Prefix.pch"; sourceTree = "<group>"; };
+		C98B5C9017513F1400C7A4F6 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = "Package/Library/PreferenceBundles/winmoswitcher-prefs.bundle/Icon.png"; sourceTree = "<group>"; };
+		C98B5C9117513F1400C7A4F6 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Package/Library/PreferenceBundles/winmoswitcher-prefs.bundle/Icon@2x.png"; sourceTree = "<group>"; };
+		C98B5C9217513F1400C7A4F6 /* WinMoSwitcher.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = WinMoSwitcher.plist; path = "Package/Library/PreferenceBundles/winmoswitcher-prefs.bundle/WinMoSwitcher.plist"; sourceTree = "<group>"; };
+		C98B5C9417513F8400C7A4F6 /* Background.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Background.plist; path = "Package/Library/PreferenceBundles/winmoswitcher-prefs.bundle/Background.plist"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C98B5C64175139FB00C7A4F6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C98B5C6C175139FB00C7A4F6 /* Foundation.framework in Frameworks */,
+				C98B5C6E175139FB00C7A4F6 /* UIKit.framework in Frameworks */,
+				C98B5C70175139FB00C7A4F6 /* Preferences.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C98B5C5E175139FB00C7A4F6 = {
+			isa = PBXGroup;
+			children = (
+				C98B5C71175139FB00C7A4F6 /* winmoswitcher-prefs */,
+				C98B5C6A175139FB00C7A4F6 /* Frameworks */,
+				C98B5C69175139FB00C7A4F6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C98B5C69175139FB00C7A4F6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C68175139FB00C7A4F6 /* winmoswitcher-prefs.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C98B5C6A175139FB00C7A4F6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C6B175139FB00C7A4F6 /* Foundation.framework */,
+				C98B5C6D175139FB00C7A4F6 /* UIKit.framework */,
+				C98B5C6F175139FB00C7A4F6 /* Preferences.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C98B5C71175139FB00C7A4F6 /* winmoswitcher-prefs */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C79175139FB00C7A4F6 /* winmoswitcher_prefsController.h */,
+				C98B5C7A175139FB00C7A4F6 /* winmoswitcher_prefsController.m */,
+				C98B5C72175139FB00C7A4F6 /* Package */,
+				C98B5C76175139FB00C7A4F6 /* Supporting Files */,
+			);
+			path = "winmoswitcher-prefs";
+			sourceTree = "<group>";
+		};
+		C98B5C72175139FB00C7A4F6 /* Package */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C73175139FB00C7A4F6 /* DEBIAN */,
+				C98B5C7C175139FB00C7A4F6 /* Library */,
+				C98B5C85175139FB00C7A4F6 /* var */,
+			);
+			name = Package;
+			sourceTree = "<group>";
+		};
+		C98B5C73175139FB00C7A4F6 /* DEBIAN */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C75175139FB00C7A4F6 /* control */,
+			);
+			name = DEBIAN;
+			sourceTree = "<group>";
+		};
+		C98B5C76175139FB00C7A4F6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C77175139FB00C7A4F6 /* PackageVersion.plist */,
+				C98B5C78175139FB00C7A4F6 /* winmoswitcher_prefs-Info.plist */,
+				C98B5C8A175139FB00C7A4F6 /* winmoswitcher-prefs-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C98B5C7C175139FB00C7A4F6 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C7D175139FB00C7A4F6 /* PreferenceLoader */,
+				C98B5C80175139FB00C7A4F6 /* PreferenceBundles */,
+			);
+			name = Library;
+			sourceTree = "<group>";
+		};
+		C98B5C7D175139FB00C7A4F6 /* PreferenceLoader */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C7E175139FB00C7A4F6 /* Preferences */,
+			);
+			name = PreferenceLoader;
+			sourceTree = "<group>";
+		};
+		C98B5C7E175139FB00C7A4F6 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C7F175139FB00C7A4F6 /* winmoswitcher_prefs.plist */,
+			);
+			name = Preferences;
+			sourceTree = "<group>";
+		};
+		C98B5C80175139FB00C7A4F6 /* PreferenceBundles */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C81175139FB00C7A4F6 /* ___PACKAGENAME___.bundle */,
+			);
+			name = PreferenceBundles;
+			sourceTree = "<group>";
+		};
+		C98B5C81175139FB00C7A4F6 /* ___PACKAGENAME___.bundle */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C9417513F8400C7A4F6 /* Background.plist */,
+				C98B5C9017513F1400C7A4F6 /* Icon.png */,
+				C98B5C9117513F1400C7A4F6 /* Icon@2x.png */,
+				C98B5C9217513F1400C7A4F6 /* WinMoSwitcher.plist */,
+			);
+			name = "___PACKAGENAME___.bundle";
+			sourceTree = "<group>";
+		};
+		C98B5C85175139FB00C7A4F6 /* var */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C86175139FB00C7A4F6 /* mobile */,
+			);
+			name = var;
+			sourceTree = "<group>";
+		};
+		C98B5C86175139FB00C7A4F6 /* mobile */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C87175139FB00C7A4F6 /* Library */,
+			);
+			name = mobile;
+			sourceTree = "<group>";
+		};
+		C98B5C87175139FB00C7A4F6 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C88175139FB00C7A4F6 /* Preferences */,
+			);
+			name = Library;
+			sourceTree = "<group>";
+		};
+		C98B5C88175139FB00C7A4F6 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				C98B5C89175139FB00C7A4F6 /* com.matchstic.winmoswitcher_prefs.plist */,
+			);
+			name = Preferences;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		C98B5C65175139FB00C7A4F6 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		C98B5C67175139FB00C7A4F6 /* winmoswitcher-prefs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C98B5C8D175139FB00C7A4F6 /* Build configuration list for PBXNativeTarget "winmoswitcher-prefs" */;
+			buildPhases = (
+				C98B5C63175139FB00C7A4F6 /* Sources */,
+				C98B5C64175139FB00C7A4F6 /* Frameworks */,
+				C98B5C65175139FB00C7A4F6 /* Headers */,
+				C98B5C66175139FB00C7A4F6 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "winmoswitcher-prefs";
+			productName = "winmoswitcher-prefs";
+			productReference = C98B5C68175139FB00C7A4F6 /* winmoswitcher-prefs.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C98B5C5F175139FB00C7A4F6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+			};
+			buildConfigurationList = C98B5C62175139FB00C7A4F6 /* Build configuration list for PBXProject "winmoswitcher-prefs" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C98B5C5E175139FB00C7A4F6;
+			productRefGroup = C98B5C69175139FB00C7A4F6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C98B5C67175139FB00C7A4F6 /* winmoswitcher-prefs */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C98B5C66175139FB00C7A4F6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/iOSOpenDev/bin/iosod --xcbp";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C98B5C63175139FB00C7A4F6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C98B5C7B175139FB00C7A4F6 /* winmoswitcher_prefsController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C98B5C8B175139FB00C7A4F6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(iOSOpenDevPath)/frameworks/**",
+					"$(SDKROOT)/System/Library/PrivateFrameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = NO;
+				iOSOpenDevPath = /opt/iOSOpenDev;
+			};
+			name = Debug;
+		};
+		C98B5C8C175139FB00C7A4F6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(iOSOpenDevPath)/frameworks/**",
+					"$(SDKROOT)/System/Library/PrivateFrameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				iOSOpenDevPath = /opt/iOSOpenDev;
+			};
+			name = Release;
+		};
+		C98B5C8E175139FB00C7A4F6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "winmoswitcher-prefs/winmoswitcher-prefs-Prefix.pch";
+				INFOPLIST_FILE = "winmoswitcher-prefs/winmoswitcher-prefs-Info.plist";
+				INSTALL_PATH = /Library/PreferenceBundles;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = "";
+				iOSOpenDevInstallOnAnyBuild = NO;
+				iOSOpenDevInstallOnProfiling = YES;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Debug;
+		};
+		C98B5C8F175139FB00C7A4F6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "winmoswitcher-prefs/winmoswitcher-prefs-Prefix.pch";
+				INFOPLIST_FILE = "winmoswitcher-prefs/winmoswitcher-prefs-Info.plist";
+				INSTALL_PATH = /Library/PreferenceBundles;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = "";
+				iOSOpenDevInstallOnAnyBuild = NO;
+				iOSOpenDevInstallOnProfiling = YES;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C98B5C62175139FB00C7A4F6 /* Build configuration list for PBXProject "winmoswitcher-prefs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C98B5C8B175139FB00C7A4F6 /* Debug */,
+				C98B5C8C175139FB00C7A4F6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C98B5C8D175139FB00C7A4F6 /* Build configuration list for PBXNativeTarget "winmoswitcher-prefs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C98B5C8E175139FB00C7A4F6 /* Debug */,
+				C98B5C8F175139FB00C7A4F6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C98B5C5F175139FB00C7A4F6 /* Project object */;
+}

@@ -1,0 +1,17 @@
+Package: com.matchstic.winmoswitcher-prefs
+Name: winmoswitcher-prefs
+Version: 1.0-1
+Description: A test preference bundle for WinMoSwitcher
+Section: Preference Bundles
+Depends: firmware (>= 6.0), mobilesubstrate, preferenceloader, applist
+Conflicts: 
+Replaces: 
+Priority: optional
+Architecture: iphoneos-arm
+Author: Matt Clarke
+dev: 
+Homepage: 
+Depiction: 
+Maintainer: 
+Icon: 
+
