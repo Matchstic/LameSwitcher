@@ -146,6 +146,24 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>Only Run in Strife</string>
+			<key>key</key>
+			<string>noRunOutStrife</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.matchstic.winmoswitcher</string>
+			<key>PostNotification</key>
+			<string>com.matchstic.winmoswitcher/settingschanged</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Extra</string>
 		</dict>
@@ -153,7 +171,7 @@
 			<key>cell</key>
 			<string>PSTextViewCell</string>
 			<key>label</key>
-			<string>Home button behaviour:</string>
+			<string>Home Button Behaviour:</string>
 		</dict>
 		<dict>
 			<key>key</key>
@@ -165,7 +183,7 @@
 			<key>defaults</key>
 			<string>com.matchstic.winmoswitcher</string>
 			<key>label</key>
-			<string>Exit running app</string>
+			<string>Exit Running App</string>
 			<key>PostNotification</key>
 			<string>com.matchstic.winmoswitcher/settingschanged</string>
 		</dict>
@@ -179,7 +197,7 @@
 			<key>cell</key>
 			<string>PSTextViewCell</string>
 			<key>label</key>
-			<string>Exit all apps button:</string>
+			<string>Exit All Apps Button:</string>
 		</dict>
 		<dict>
 			<key>key</key>
@@ -238,7 +256,7 @@
 			<key>isController</key>
 			<true/>
 			<key>label</key>
-			<string>Exclude apps</string>
+			<string>Exclude Apps</string>
 		</dict>
 	</array>
 </dict>

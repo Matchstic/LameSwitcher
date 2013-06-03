@@ -7,6 +7,7 @@
 //
 
 #import <SpringBoard/SBApplication.h>
+#import <SpringBoard/SBApplicationController.h>
 //#import <SpringBoard/SBWorkspace.h>
 #import <libactivator/libactivator.h>
 #import <QuartzCore/QuartzCore.h>
@@ -14,6 +15,7 @@
 #import "CSScrollView.h"
 #import <UIKit/UIKit.h>
 #import "CSResources.h"
+#import "Overview.h"
 #include <dispatch/dispatch.h>
 #include <dlfcn.h>
 
@@ -30,6 +32,8 @@
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define X_SCALE ([UIScreen mainScreen].bounds.size.width/320)
 #define Y_SCALE ([UIScreen mainScreen].bounds.size.height/480)
+#define IPAD_X_SCALE ([UIScreen mainScreen].bounds.size.width/768)
+#define IPAD_Y_SCALE ([UIScreen mainScreen].bounds.size.height/1024)
 #define SBSERVPATH "/System/Library/PrivateFrameworks/SpringBoardServices.framework/SpringBoardServices"
 
 
@@ -68,7 +72,9 @@
 @property (nonatomic, assign) SpringBoard *springBoard;
 @property (nonatomic, retain) UIImage *springBoardImage;
 @property (nonatomic,retain) UIImageView* backgroundView;
+@property (nonatomic, retain) UIImageView *blur;
 @property (nonatomic, retain) UIImageView *exitBar;
+@property (nonatomic, retain) OverviewController *overview;
 
 @property (nonatomic, retain) UIImage *transparentImage;
 

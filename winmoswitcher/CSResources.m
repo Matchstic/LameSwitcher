@@ -54,7 +54,7 @@ static UIImage *currentImage = nil;
 
 
 +(BOOL)cachScreenShot:(UIImage*)screenshot forApp:(SBApplication*)app{
-    NSLog(@"CSResources cacheScreenShot:forApp");
+    NSLog(@"CSResources cachScreenShot:forApp");
     if (!cache)
         cache = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist"];
     if (!cache)
@@ -78,8 +78,11 @@ static UIImage *currentImage = nil;
 }
 
 +(UIImage*)cachedScreenShot:(SBApplication*)app{
-    NSLog(@"CSResources cachedScreenShot");
+    NSLog(@"CSResources cachedScreenShot:");
     SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+    if (runningApp == nil) {
+        runningApp = [(SBApplicationController *)[objc_getClass("SBApplicationController") sharedInstance] applicationWithDisplayIdentifier:@"com.apple.springboard"];
+    }
     if (currentImage && [[runningApp displayIdentifier] isEqualToString:[app displayIdentifier]]) {
         // Add the current image as the most up-to-date snapshot
         if (!cache)
@@ -119,7 +122,7 @@ static UIImage *currentImage = nil;
             return [cache objectForKey:[app displayIdentifier]];
     }
     
-    // Backup in the event there isn't a saved snapshot - get image from currently running app; will be useful for getting it for SpringBoard
+    // Backup in the event there isn't a saved snapshot - get image from currently running app; will be useful for getting it for SpringBoard?
     return [self appScreenShot:app];
 }
 
@@ -238,14 +241,41 @@ static UIImage *currentImage = nil;
     BOOL exclude = [[settings objectForKey:[@"Exclude-" stringByAppendingString:[app displayIdentifier]]] boolValue];
     return exclude;
 }
-+(BOOL)blurForTransparent {
-    id temp = [settings objectForKey:@"blurred"];
-    return (temp ? [temp boolValue] : NO);
-}
 +(float)blurRadius {
     id temp = [settings objectForKey:@"blurriness"];
-    return (temp ? [temp floatValue] : 0.0f);
+    return (temp ? [temp intValue] : 0.9);
 }
++(float)transparency {
+    id temp  = [settings objectForKey:@"transparency"];
+    return (temp ? [temp floatValue] : 1.0f);
+}
++(BOOL)noRunOutStrife {
+    id temp = [settings objectForKey:@"noRunOutStrife"];
+    return (temp ? [temp boolValue] : NO);
+}
+
+// Support for those without Strife
++(BOOL)customColourWasSet {
+    id temp = [settings objectForKey:@"customColourWasSet"];
+    return (temp ? [temp boolValue] : NO);
+}
++(NSString *)customHexColour {
+    id string = [settings objectForKey:@"customHexColour"];
+    if (string != nil) {
+        return string;
+    } else {
+        return @"1BA1E2";
+    }
+}
++(NSString *)preDefinedColour {
+    id string = [settings objectForKey:@"preDefinedColour"];
+    if (string != nil) {
+        return string;
+    } else {
+        return @"1BA1E2";
+    }
+}
+
 +(void)reloadSettings{
     NSLog(@"CSResources reloadSettings");
     [settings release];

@@ -37,8 +37,14 @@
 +(BOOL)showExitAllButton;
 +(int)closeAnimation;
 +(BOOL)excludeFromExiting:(SBApplication *)app;
-+(BOOL)blurForTransparent;
++(float)transparency;
 +(float)blurRadius;
++(BOOL)noRunOutStrife;
+
++(BOOL)customColourWasSet;
++(NSString *)customHexColour;
++(NSString *)preDefinedColour;
+
 +(void)reloadSettings;
 
 @end

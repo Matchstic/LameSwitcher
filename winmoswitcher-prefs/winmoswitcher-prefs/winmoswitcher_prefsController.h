@@ -19,8 +19,6 @@
 @end
 
 @interface backgroundController : PSListController
-//-(void)viewWillAppear:(BOOL)view;
-//-(void)viewDidUnload;
--(void)setBackgroundValue:(id)value forSpecifier:(id)specifier;
--(int)getBackgroundValue;
+-(void)enableCustomColour:(id)value forSpecifier:(id)specifier;
+//-(void)setPreDefinedColour:(id)value forSpecifier:(id)specifier;
 @end

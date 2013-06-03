@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		C9212792174BB5A100FED6DF /* SpringBoardUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9212791174BB5A100FED6DF /* SpringBoardUI.framework */; };
 		C9212794174BBDF800FED6DF /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9212793174BBDF800FED6DF /* CoreImage.framework */; };
+		C928CF9317576E2D00ABF576 /* Overview.h in Headers */ = {isa = PBXBuildFile; fileRef = C928CF9117576E2D00ABF576 /* Overview.h */; };
+		C928CF9417576E2D00ABF576 /* Overview.m in Sources */ = {isa = PBXBuildFile; fileRef = C928CF9217576E2D00ABF576 /* Overview.m */; };
+		C928CF971757BC6D00ABF576 /* stackBlur.h in Headers */ = {isa = PBXBuildFile; fileRef = C928CF951757BC6D00ABF576 /* stackBlur.h */; };
+		C928CF981757BC6D00ABF576 /* stackBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = C928CF961757BC6D00ABF576 /* stackBlur.m */; };
 		C9ABB5751741591E004CB921 /* SpringBoardServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABB5741741591E004CB921 /* SpringBoardServices.framework */; };
 		C9FB09441740355100DD72A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FB09431740355100DD72A5 /* Foundation.framework */; };
 		C9FB094F1740355100DD72A5 /* winmoswitcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9FB094E1740355100DD72A5 /* winmoswitcher.mm */; };
@@ -26,11 +30,16 @@
 		C9FB0970174035CE00DD72A5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FB096F174035CE00DD72A5 /* CoreGraphics.framework */; };
 		C9FB0972174035D400DD72A5 /* GraphicsServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FB0971174035D400DD72A5 /* GraphicsServices.framework */; };
 		C9FB097417404B6F00DD72A5 /* libactivator.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FB097317404B6F00DD72A5 /* libactivator.dylib */; };
+		C9FC84941754187700507163 /* DreamBoard.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FC84931754187700507163 /* DreamBoard.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		C9212791174BB5A100FED6DF /* SpringBoardUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpringBoardUI.framework; path = System/Library/PrivateFrameworks/SpringBoardUI.framework; sourceTree = SDKROOT; };
 		C9212793174BBDF800FED6DF /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		C928CF9117576E2D00ABF576 /* Overview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Overview.h; sourceTree = "<group>"; };
+		C928CF9217576E2D00ABF576 /* Overview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Overview.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		C928CF951757BC6D00ABF576 /* stackBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stackBlur.h; sourceTree = "<group>"; };
+		C928CF961757BC6D00ABF576 /* stackBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = stackBlur.m; sourceTree = "<group>"; };
 		C9ABB5741741591E004CB921 /* SpringBoardServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpringBoardServices.framework; path = System/Library/PrivateFrameworks/SpringBoardServices.framework; sourceTree = SDKROOT; };
 		C9ABB57717415BA0004CB921 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		C9CE6EDF1752B26C00FD82AC /* postinst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = postinst; path = Package/DEBIAN/postinst; sourceTree = "<group>"; };
@@ -38,6 +47,10 @@
 		C9CE6EE51752B27600FD82AC /* com.matchstic.winmoswitcher.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = com.matchstic.winmoswitcher.plist; sourceTree = "<group>"; };
 		C9CE6EE71752B28000FD82AC /* winmoswitcher-prefs.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = "winmoswitcher-prefs.bundle"; sourceTree = "<group>"; };
 		C9CE6EE81752B28A00FD82AC /* winmoswitcher_prefs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = winmoswitcher_prefs.plist; sourceTree = "<group>"; };
+		C9E56A071758BD4500B0598B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		C9E56A091758BD4F00B0598B /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		C9E56A0B1758BD5E00B0598B /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		C9E56A0D1758BD6700B0598B /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C9FB09401740355100DD72A5 /* winmoswitcher.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = winmoswitcher.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9FB09431740355100DD72A5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C9FB09491740355100DD72A5 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; name = control; path = Package/DEBIAN/control; sourceTree = "<group>"; };
@@ -46,7 +59,7 @@
 		C9FB094D1740355100DD72A5 /* winmoswitcher.xm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = winmoswitcher.xm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		C9FB094E1740355100DD72A5 /* winmoswitcher.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = winmoswitcher.mm; sourceTree = "<group>"; };
 		C9FB09531740355100DD72A5 /* winmoswitcher.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = winmoswitcher.plist; path = Package/Library/MobileSubstrate/DynamicLibraries/winmoswitcher.plist; sourceTree = "<group>"; };
-		C9FB09591740356800DD72A5 /* libsubstrate.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsubstrate.dylib; path = ../../../../../opt/iOSOpenDev/lib/libsubstrate.dylib; sourceTree = "<group>"; };
+		C9FB09591740356800DD72A5 /* libsubstrate.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsubstrate.dylib; path = /opt/iOSOpenDev/lib/libsubstrate.dylib; sourceTree = "<absolute>"; };
 		C9FB095B1740359600DD72A5 /* CSApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSApplication.h; sourceTree = "<group>"; };
 		C9FB095C1740359600DD72A5 /* CSApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSApplication.m; sourceTree = "<group>"; };
 		C9FB095D1740359600DD72A5 /* CSApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSApplicationController.h; sourceTree = "<group>"; };
@@ -59,7 +72,7 @@
 		C9FB096D174035C700DD72A5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C9FB096F174035CE00DD72A5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		C9FB0971174035D400DD72A5 /* GraphicsServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GraphicsServices.framework; path = System/Library/PrivateFrameworks/GraphicsServices.framework; sourceTree = SDKROOT; };
-		C9FB097317404B6F00DD72A5 /* libactivator.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libactivator.dylib; path = ../../../../../opt/iOSOpenDev/lib/libactivator.dylib; sourceTree = "<group>"; };
+		C9FB097317404B6F00DD72A5 /* libactivator.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libactivator.dylib; path = /opt/iOSOpenDev/lib/libactivator.dylib; sourceTree = "<absolute>"; };
 		C9FB097817404C2000DD72A5 /* CardSwitcher-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CardSwitcher-small.png"; sourceTree = "<group>"; };
 		C9FB097917404C2000DD72A5 /* CardSwitcher-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CardSwitcher-small@2x.png"; sourceTree = "<group>"; };
 		C9FB097A17404C2000DD72A5 /* CardSwitcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CardSwitcher.png; sourceTree = "<group>"; };
@@ -69,6 +82,7 @@
 		C9FB098017404C2000DD72A5 /* closebox@2x.png.bak */ = {isa = PBXFileReference; lastKnownFileType = file; path = "closebox@2x.png.bak"; sourceTree = "<group>"; };
 		C9FB098117404C2000DD72A5 /* UIStatusBarStyleBlackOpaque.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIStatusBarStyleBlackOpaque.png; sourceTree = "<group>"; };
 		C9FB098217404C2000DD72A5 /* UIStatusBarStyleDefault.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIStatusBarStyleDefault.png; sourceTree = "<group>"; };
+		C9FC84931754187700507163 /* DreamBoard.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = DreamBoard.dylib; path = /opt/iOSOpenDev/lib/DreamBoard.dylib; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9FC84941754187700507163 /* DreamBoard.dylib in Frameworks */,
 				C9212794174BBDF800FED6DF /* CoreImage.framework in Frameworks */,
 				C9212792174BB5A100FED6DF /* SpringBoardUI.framework in Frameworks */,
 				C9ABB5751741591E004CB921 /* SpringBoardServices.framework in Frameworks */,
@@ -137,16 +152,7 @@
 		C9FB09351740355100DD72A5 = {
 			isa = PBXGroup;
 			children = (
-				C9212793174BBDF800FED6DF /* CoreImage.framework */,
-				C9212791174BB5A100FED6DF /* SpringBoardUI.framework */,
 				C9ABB57717415BA0004CB921 /* Entitlements.plist */,
-				C9ABB5741741591E004CB921 /* SpringBoardServices.framework */,
-				C9FB097317404B6F00DD72A5 /* libactivator.dylib */,
-				C9FB0971174035D400DD72A5 /* GraphicsServices.framework */,
-				C9FB096F174035CE00DD72A5 /* CoreGraphics.framework */,
-				C9FB096D174035C700DD72A5 /* QuartzCore.framework */,
-				C9FB096B174035BF00DD72A5 /* UIKit.framework */,
-				C9FB09591740356800DD72A5 /* libsubstrate.dylib */,
 				C9FB09451740355100DD72A5 /* winmoswitcher */,
 				C9FB09421740355100DD72A5 /* Frameworks */,
 				C9FB09411740355100DD72A5 /* Products */,
@@ -164,6 +170,20 @@
 		C9FB09421740355100DD72A5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C9FB097317404B6F00DD72A5 /* libactivator.dylib */,
+				C9212791174BB5A100FED6DF /* SpringBoardUI.framework */,
+				C9212793174BBDF800FED6DF /* CoreImage.framework */,
+				C9FC84931754187700507163 /* DreamBoard.dylib */,
+				C9E56A071758BD4500B0598B /* AVFoundation.framework */,
+				C9E56A091758BD4F00B0598B /* OpenGLES.framework */,
+				C9E56A0B1758BD5E00B0598B /* CoreMedia.framework */,
+				C9E56A0D1758BD6700B0598B /* CoreVideo.framework */,
+				C9ABB5741741591E004CB921 /* SpringBoardServices.framework */,
+				C9FB0971174035D400DD72A5 /* GraphicsServices.framework */,
+				C9FB09591740356800DD72A5 /* libsubstrate.dylib */,
+				C9FB096F174035CE00DD72A5 /* CoreGraphics.framework */,
+				C9FB096D174035C700DD72A5 /* QuartzCore.framework */,
+				C9FB096B174035BF00DD72A5 /* UIKit.framework */,
 				C9FB09431740355100DD72A5 /* Foundation.framework */,
 			);
 			name = Frameworks;
@@ -172,11 +192,15 @@
 		C9FB09451740355100DD72A5 /* winmoswitcher */ = {
 			isa = PBXGroup;
 			children = (
+				C928CF951757BC6D00ABF576 /* stackBlur.h */,
+				C928CF961757BC6D00ABF576 /* stackBlur.m */,
 				C9FB095B1740359600DD72A5 /* CSApplication.h */,
 				C9FB095C1740359600DD72A5 /* CSApplication.m */,
 				C9FB095D1740359600DD72A5 /* CSApplicationController.h */,
 				C9FB095E1740359600DD72A5 /* CSApplicationController.m */,
 				C9FB095F1740359600DD72A5 /* CSResources.h */,
+				C928CF9117576E2D00ABF576 /* Overview.h */,
+				C928CF9217576E2D00ABF576 /* Overview.m */,
 				C9FB09601740359600DD72A5 /* CSResources.m */,
 				C9FB09611740359600DD72A5 /* CSScrollView.h */,
 				C9FB09621740359600DD72A5 /* CSScrollView.m */,
@@ -322,6 +346,8 @@
 				C9FB09651740359600DD72A5 /* CSApplicationController.h in Headers */,
 				C9FB09671740359600DD72A5 /* CSResources.h in Headers */,
 				C9FB09691740359600DD72A5 /* CSScrollView.h in Headers */,
+				C928CF9317576E2D00ABF576 /* Overview.h in Headers */,
+				C928CF971757BC6D00ABF576 /* stackBlur.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,6 +437,8 @@
 				C9FB09661740359600DD72A5 /* CSApplicationController.m in Sources */,
 				C9FB09681740359600DD72A5 /* CSResources.m in Sources */,
 				C9FB096A1740359600DD72A5 /* CSScrollView.m in Sources */,
+				C928CF9417576E2D00ABF576 /* Overview.m in Sources */,
+				C928CF981757BC6D00ABF576 /* stackBlur.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,7 +465,10 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				HEADER_SEARCH_PATHS = (
+					"$(iOSOpenDevPath)/include/**",
+					"GPUImage/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
 				ONLY_ACTIVE_ARCH = YES;
@@ -461,7 +492,10 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
+				HEADER_SEARCH_PATHS = (
+					"$(iOSOpenDevPath)/include/**",
+					"GPUImage/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
 				SDKROOT = iphoneos;
@@ -484,11 +518,16 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "winmoswitcher/winmoswitcher-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(iOSOpenDevPath)/include/**",
+					"GPUImage/**",
+				);
 				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/iOSOpenDev/lib,
 				);
+				OTHER_LDFLAGS = "-fobjc-arc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
 				iOSOpenDevCopyOnBuild = NO;
@@ -513,11 +552,16 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "winmoswitcher/winmoswitcher-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(iOSOpenDevPath)/include/**",
+					"GPUImage/**",
+				);
 				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/iOSOpenDev/lib,
 				);
+				OTHER_LDFLAGS = "-fobjc-arc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
 				iOSOpenDevCopyOnBuild = NO;

@@ -66,13 +66,9 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Configure</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSTextViewCell</string>
-			<key>label</key>
-			<string>Transparency:</string>
+			<string>Transparency</string>
+			<key>footerText</key>
+			<string>A more blurred background takes longer for the switcher to open.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -90,25 +86,11 @@
 			<key>max</key>
 			<integer>1</integer>
 			<key>min</key>
-			<integer>0</integer>
+			<real>0.1</real>
 			<key>rightImage</key>
 			<string>Opaque.png</string>
 			<key>showValue</key>
 			<false/>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>label</key>
-			<string>Blurred</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.matchstic.winmoswitcher</string>
-			<key>PostNotification</key>
-			<string>com.matchstic.winmoswitcher/settingschanged</string>
-			<key>key</key>
-			<string>blurred</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -124,13 +106,115 @@
 			<key>leftImage</key>
 			<string>Sharp.png</string>
 			<key>max</key>
-			<integer>1</integer>
+			<integer>20</integer>
 			<key>min</key>
-			<integer>0</integer>
+			<real>0.9</real>
 			<key>rightImage</key>
 			<string>Blurred.png</string>
 			<key>showValue</key>
 			<false/>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Custom Colour Style</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.matchstic.winmoswitcher/settingschanged</string>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>defaults</key>
+			<string>com.matchstic.winmoswitcher</string>
+			<key>default</key>
+			<string>1BA1E2</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>key</key>
+			<string>preDefinedColour</string>
+			<key>label</key>
+			<string>Pre-Defined Colours</string>
+			<key>validTitles</key>
+			<array>
+				<string>Lime</string>
+				<string>Green</string>
+				<string>Emerald</string>
+				<string>Teal</string>
+				<string>Cyan</string>
+				<string>Cobalt</string>
+				<string>Indigo</string>
+				<string>Violet</string>
+				<string>Pink</string>
+				<string>Magenta</string>
+				<string>Crimson</string>
+				<string>Red</string>
+				<string>Orange</string>
+				<string>Amber</string>
+				<string>Yellow</string>
+				<string>Brown</string>
+				<string>Olive</string>
+				<string>Steel</string>
+				<string>Mauve</string>
+				<string>Taupe</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<string>A4C400</string>
+				<string>60A917</string>
+				<string>008A00</string>
+				<string>00ABA9</string>
+				<string>1BA1E2</string>
+				<string>0050EF</string>
+				<string>6A00FF</string>
+				<string>AA00FF</string>
+				<string>F472D0</string>
+				<string>D80073</string>
+				<string>A20025</string>
+				<string>E51400</string>
+				<string>FA6800</string>
+				<string>F0A30A</string>
+				<string>E3C800</string>
+				<string>825A2C</string>
+				<string>6D8764</string>
+				<string>647687</string>
+				<string>76608A</string>
+				<string>87794E</string>
+			</array>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>set</key>
+			<string>enableCustomColour:forSpecifier:</string>
+			<key>label</key>
+			<string>Use Custom Colour</string>
+			<key>key</key>
+			<string>customColourWasSet</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.matchstic.winmoswitcher</string>
+			<key>PostNotification</key>
+			<string>com.matchstic.winmoswitcher/settingschanged</string>
+		</dict>
+		<dict>
+			<key>noAutoCorrect</key>
+			<true/>
+			<key>PostNotification</key>
+			<string>com.matchstic.winmoswitcher/settingschanged</string>
+			<key>default</key>
+			<string></string>
+			<key>cell</key>
+			<string>PSEditTextCell</string>
+			<key>label</key>
+			<string></string>
+			<key>placeholder</key>
+			<string>Hex colour...</string>
+			<key>defaults</key>
+			<string>com.matchstic.winmoswitcher</string>
+			<key>key</key>
+			<string>customHexColour</string>
 		</dict>
 	</array>
 </dict>

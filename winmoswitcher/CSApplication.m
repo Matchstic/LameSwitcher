@@ -79,7 +79,7 @@ static CSApplication *_instance;
 @synthesize snapshot = _snapshot;
 @synthesize application = _application;
 
-+(CSApplication*)sharedController{
++(CSApplication*)sharedController {
     if (!_instance) {
         _instance = [[CSApplication alloc] init];
     }
@@ -87,7 +87,7 @@ static CSApplication *_instance;
     return _instance;
 }
 
--(id)init{
+-(id)init {
     NSLog(@"CSApplication; init");
     if ((self = [super initWithFrame:CGRectMake(0, 0, (SCREEN_WIDTH*0.625), [UIScreen mainScreen].bounds.size.height)])) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -154,14 +154,14 @@ static CSApplication *_instance;
     return self;
 }
 
--(void)loadImages{
+-(void)loadImages {
     if (self.appImage != nil)
         return;
 
     self.appImage = [CSResources cachedScreenShot:APP];
     self.snapshot.image = self.appImage;
 }
--(void)reset{
+-(void)reset {
     NSLog(@"CSApplication; reset");
     self.appImage = nil;
     self.snapshot.image = nil;
@@ -212,7 +212,7 @@ static CSApplication *_instance;
         
         // Get app icon
         BOOL showsAppIcon = [CSResources showsAppIcon];
-        if (showsAppIcon) {
+        if (showsAppIcon && ![[APP displayIdentifier] isEqual:@"com.apple.springboard"]) {
             SBApplicationIcon *appIcon = [[objc_getClass("SBApplicationIcon") alloc] initWithApplication:APP];
             UIImage *icon = [appIcon generateIconImage:1];
             self.icon = [[[UIImageView alloc] initWithImage:icon] autorelease];
@@ -270,11 +270,11 @@ static CSApplication *_instance;
             self.label.textColor = [UIColor whiteColor];
         }
         self.label.numberOfLines = 0;
-        //if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
-        //    self.label.text = @"Start";
-        //} else {
+        if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
+            self.label.text = @"Start";
+        } else {
         self.label.text = [APP displayName];
-        //}
+        }
         [self addSubview:self.label];
         self.label.hidden = ![CSResources showsAppTitle];
 
@@ -299,13 +299,13 @@ static CSApplication *_instance;
     return newImage;
 }
 
--(void)launch{
+-(void)launch {
     NSLog(@"CSApplication; launch");
     [self.superview bringSubviewToFront:self];
     [self bringSubviewToFront:self.snapshot];
     [CSApplicationController sharedController].scrollView.userInteractionEnabled = NO;
     [CSApplicationController sharedController].applaunching = YES;
-
+    
     [UIView animateWithDuration:0.1 animations:^{
         //self.badge.alpha = 0;
         self.closeBox.alpha = 0;
@@ -315,25 +315,14 @@ static CSApplication *_instance;
     CGRect screenRect = self.frame;
     screenRect.size.width = SCREEN_WIDTH;
     screenRect.size.height = SCREEN_HEIGHT;
-    screenRect.origin.x = -[CSApplicationController sharedController].scrollView.frame.origin.x - (([CSApplicationController sharedController].scrollView.frame.size.width-self.frame.size.width)*0.5)+60;
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        screenRect.origin.x = -[CSApplicationController sharedController].scrollView.frame.origin.x - (([CSApplicationController sharedController].scrollView.frame.size.width-self.frame.size.width)*0.5)+60;    // Need to adjust for iPhone 3GS though
+    } else {
+        screenRect.origin.x = -[CSApplicationController sharedController].scrollView.frame.origin.x - (([CSApplicationController sharedController].scrollView.frame.size.width-self.frame.size.width)*0.5)+(144*IPAD_X_SCALE);
+    }
     screenRect.origin.y = -[CSApplicationController sharedController].scrollView.frame.origin.y;
 
     SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
-    
-    // Ensure that SpringBoard is not relaunched, and closes running app instead
-    /*if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
-        // Close current app
-        [runningApp notifyResignActive];
-        // Animate out
-        [UIView animateWithDuration:0.55 animations:^{
-            self.snapshot.frame = screenRect;
-            self.snapshot.layer.cornerRadius = 0;
-        } completion:^(BOOL finished){
-            [[CSApplicationController sharedController] setActive:NO animated:NO];
-            [self sendSubviewToBack:self.snapshot];
-        }];
-        return;
-    }*/
     
     // If we can open the app without the usual iOS animation, or force iOS to give a faster animation, then we won't have weird effects at the end of ours. Could use [CSApplicationController openApp:[APP displayIdentifier]];
     if (runningApp != nil) {
@@ -342,10 +331,14 @@ static CSApplication *_instance;
             [CSApplicationController sharedController].shouldAnimate = YES;
             [(SBUIController*)[objc_getClass("SBUIController") sharedInstance] activateApplicationFromSwitcher:APP];
         }
-    }
-    else {
+    } else {
         // Else we are on SpringBoard
-        [(SBUIController*)[objc_getClass("SBUIController") sharedInstance] activateApplicationAnimated:APP];
+        if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
+            // Close the topmost app if we're opening SpringBoard
+            [(SpringBoard *)[UIApplication sharedApplication] quitTopApplication:nil];
+        } else {
+            [(SBUIController*)[objc_getClass("SBUIController") sharedInstance] activateApplicationAnimated:APP];
+        }
     }
     
     /*static SBWorkspace *workspace$ = nil;
@@ -409,12 +402,13 @@ static CSApplication *_instance;
     }
 }
 
--(void)exit{
+-(void)exit {
     NSLog(@"CSApplication; exit");
     [self retain];
 
     //[[CSApplicationController sharedController].ignoreRelaunchID release], [CSApplicationController sharedController].ignoreRelaunchID = nil;
     //[CSApplicationController sharedController].ignoreRelaunchID = [APP.displayIdentifier retain];
+    
     [[CSApplicationController sharedController] appQuit:APP];
     [self removeFromSuperview];
 
@@ -458,8 +452,8 @@ static CSApplication *_instance;
     NSMutableArray *toRemove = [NSMutableArray array];
     for (SBApplication *app in [CSApplicationController sharedController].runningApps) {
         // First, check if it's in our exclusion list.
-        // Then, if it's excluded, don't run the code!
-        if (![CSResources excludeFromExiting:app]) {
+        // Then, if it's excluded, or is SpringBoard, don't run the code!
+        if (![CSResources excludeFromExiting:app] && ![[app displayIdentifier] isEqual:@"com.apple.springboard"]) {
             // Prevent runningApps array from being mutated while enumerating
             [toRemove addObject:app];
         
@@ -494,7 +488,7 @@ static CSApplication *_instance;
         kill([app pid], SIGTERM);
 }
 
--(void)quitPressed{
+-(void)quitPressed {
     NSLog(@"CSApplication; quitPressed");
     [UIView animateWithDuration:0.2 animations:^{
         self.icon.alpha = 0;
@@ -512,7 +506,7 @@ static CSApplication *_instance;
 }
 
 
--(void)launchGesture:(UITapGestureRecognizer*)gesture{
+-(void)launchGesture:(UITapGestureRecognizer*)gesture {
     NSLog(@"CSApplication; launchGesture");
     if (gesture.state != UIGestureRecognizerStateEnded)
         return;
@@ -520,23 +514,30 @@ static CSApplication *_instance;
     [self launch];
 }
 
--(void)closeDownGesture:(UIGestureRecognizer*)gesture{
+-(void)closeDownGesture:(UIGestureRecognizer*)gesture {
     NSLog(@"CSApplication; closeGesture");
     if (gesture.state != UIGestureRecognizerStateEnded || ![CSResources swipeCloses])
         return;
     
     // Ensure that SpringBoard cannot be closed
-    /*if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
+    if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
+        
+        CGRect frameOld = self.snapshot.frame;
+        CGRect frameNew = self.snapshot.frame;
+        
+        frameNew.origin.y = frameNew.origin.y+(SCREEN_HEIGHT*0.15);
+        
         [UIView animateWithDuration:0.2 animations:^{
-            self.snapshot.alpha = 0;
-            self.snapshot.frame = CGRectMake(0, self.snapshot.frame.size.height+20, self.snapshot.frame.size.width, self.snapshot.frame.size.height);
-        } completion:^(BOOL finished){}];
-        [UIView animateWithDuration:0.1 animations:^{
-            self.snapshot.alpha = 0;
-            self.snapshot.frame = CGRectMake(0, self.snapshot.frame.size.height, self.snapshot.frame.size.width, self.snapshot.frame.size.height);
-        } completion:^(BOOL finished){}];
+            self.label.alpha = 0;
+            self.snapshot.frame = frameNew;
+        } completion:^(BOOL finished){
+            [UIView animateWithDuration:0.1 animations:^{
+                self.label.alpha = 1;
+                self.snapshot.frame = frameOld;
+            }];
+        }];
         return;
-    }*/
+    }
     
     [UIView animateWithDuration:0.2 animations:^{
         self.icon.alpha = 0;
@@ -553,22 +554,29 @@ static CSApplication *_instance;
     }];
 }
 
--(void)closeUpGesture:(UIGestureRecognizer*)gesture{
+-(void)closeUpGesture:(UIGestureRecognizer*)gesture {
     NSLog(@"CSApplication; closeGesture");
     if (gesture.state != UIGestureRecognizerStateEnded || ![CSResources swipeCloses])
         return;
+    
     // Ensure that SpringBoard cannot be closed
-    /*if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
+    if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
+        
+        CGRect frameOld = self.snapshot.frame;
+        CGRect frameNew = self.snapshot.frame;
+        
+        frameNew.origin.y = frameNew.origin.y-(SCREEN_HEIGHT*0.15);
+        
         [UIView animateWithDuration:0.2 animations:^{
-            self.snapshot.alpha = 0;
-            self.snapshot.frame = CGRectMake(0, self.snapshot.frame.size.height-20, self.snapshot.frame.size.width, self.snapshot.frame.size.height);
-        } completion:^(BOOL finished){}];
-        [UIView animateWithDuration:0.1 animations:^{
-            self.snapshot.alpha = 0;
-            self.snapshot.frame = CGRectMake(0, self.snapshot.frame.size.height, self.snapshot.frame.size.width, self.snapshot.frame.size.height);
-        } completion:^(BOOL finished){}];
+            self.snapshot.frame = frameNew;
+        } completion:^(BOOL finished){
+            [UIView animateWithDuration:0.1 animations:^{
+                self.snapshot.frame = frameOld;
+            }];
+        }];
         return;
-    }*/
+    }
+
     
     [UIView animateWithDuration:0.2 animations:^{
         self.icon.alpha = 0;
@@ -609,7 +617,7 @@ static CSApplication *_instance;
 }
 
 
--(void)dealloc{
+-(void)dealloc {
     NSLog(@"CSApplication; dealloc");
     [[CSApplicationController sharedController].scrollView removeObserver:self forKeyPath:@"contentOffset"];
     [self removeObserver:self forKeyPath:@"frame"];
