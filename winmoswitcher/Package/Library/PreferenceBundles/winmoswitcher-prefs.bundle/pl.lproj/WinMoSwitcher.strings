@@ -1,0 +1,31 @@
+// WinMoSwitcher.strings
+
+"AC_METHODS" = "Metody aktywacji";
+
+"INTERFACE" = "Interfejs";
+"APP_TITLE" = "Pokaż nazwę aplikacji";
+"APP_ICON" = "Pokaż ikonę aplikacji";
+"PD" = "Wskaźniki stron";
+"TAPS_AC" = "Ilość stuknięc w celu aktywacji";
+"ONE" = "Jedno";
+"TWO" = "Dwa";
+"BG" = "Tło";
+"CLOSE_ANIM" = "Animacja zamykania";
+"SLIDE" = "Przesunięcie"; 
+"ROTATE" = "Obrót";
+
+"RUN_STRIFE" = "Działaj tylko w Strife";
+
+"EXTRA" = "Dodatki";
+"HOME" = "Zachowanie przycisku Home:";
+"EXIT_APP" = "Wyjdź z działającej aplikacji";
+
+"BASED_ON" = "Na podstawie LameSwitcher";
+"EXIT_APP_BUTTON" = "Przycisk zamknięcia wszytskich aplikacji:";
+"ON" = "Widoczny";
+
+"SYSTEM_APP" = "Aplikacje systemowe";
+"USER_APP" = "Aplikacje użytkownika";
+"EXCLUDE" = "Wyjątki";
+
+"TRANSLATED_BY" = "Napisane przez Michała 'MikelThief' Batora";

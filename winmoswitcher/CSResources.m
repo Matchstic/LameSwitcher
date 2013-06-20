@@ -10,10 +10,10 @@
 #import "CSApplicationController.h"
 #import "CSResources.h"
 #import <dispatch/dispatch.h>
+#import <objc/runtime.h>
 
 CGImageRef UIGetScreenImage(void);
 
-static NSMutableDictionary *cache = nil;
 static NSDictionary *settings = nil;
 static UIImage *currentImage = nil;
 
@@ -39,40 +39,23 @@ static UIImage *currentImage = nil;
 
 +(void)reset{
     NSLog(@"CSResources reset");
-    // To be honest, I don't know why removeAllObjects is being run, let's change it and see what happens!
-    [cache removeAllObjects];
     [currentImage release];
     currentImage = nil;
 }
 
 +(void)didReceiveMemoryWarning{
     NSLog(@"CSResources didReceiveMemoryWarning");
-    [cache removeAllObjects];
-    [cache release];
-    cache = nil;
 }
 
 
 +(BOOL)cachScreenShot:(UIImage*)screenshot forApp:(SBApplication*)app{
     NSLog(@"CSResources cachScreenShot:forApp");
-    if (!cache)
-        cache = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist"];
-    if (!cache)
-        cache = [[NSMutableDictionary alloc] init];
-
-    [screenshot retain];
 
     // Save snapshot to disk
     [[NSFileManager defaultManager] createDirectoryAtPath:@"/User/Library/Caches/WinMoSwitcher" withIntermediateDirectories:YES attributes:nil error:nil];
     NSString *pngPath = [NSString stringWithFormat:@"/User/Library/Caches/WinMoSwitcher/%@", [app displayIdentifier]];
-    BOOL success = [UIImagePNGRepresentation(screenshot) writeToFile:pngPath atomically:YES];
-
-    // Add into cache
-    if (success)
-        [cache setObject:screenshot forKey:[app displayIdentifier]];
-        [cache writeToFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist" atomically:YES];
-
-    [screenshot release];
+    //BOOL success = [UIImagePNGRepresentation(screenshot) writeToFile:pngPath atomically:YES];
+    [UIImagePNGRepresentation(screenshot) writeToFile:pngPath atomically:YES];
 
     return YES;
 }
@@ -85,25 +68,17 @@ static UIImage *currentImage = nil;
     }
     if (currentImage && [[runningApp displayIdentifier] isEqualToString:[app displayIdentifier]]) {
         // Add the current image as the most up-to-date snapshot
-        if (!cache)
-            cache = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist"];
-        if (!cache)
-            cache = [[NSMutableDictionary alloc] init];
-        if (cache) {
-            // Ensure there's no lag opening the switcher
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // Ensure there's no lag opening the switcher
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 
-                if (![[NSFileManager defaultManager] fileExistsAtPath:@"/User/Library/Caches/WinMoSwitcher"]) {
-                    [[NSFileManager defaultManager] createDirectoryAtPath:@"/User/Library/Caches/WinMoSwitcher" withIntermediateDirectories:YES attributes:nil error:nil];
-                }
+            if (![[NSFileManager defaultManager] fileExistsAtPath:@"/User/Library/Caches/WinMoSwitcher"]) {
+                [[NSFileManager defaultManager] createDirectoryAtPath:@"/User/Library/Caches/WinMoSwitcher" withIntermediateDirectories:YES attributes:nil error:nil];
+            }
                 
-                NSString *pngPath = [NSString stringWithFormat:@"/User/Library/Caches/WinMoSwitcher/%@", [app displayIdentifier]];
-                [UIImagePNGRepresentation(currentImage) writeToFile:pngPath atomically:YES];
-            });
+            NSString *pngPath = [NSString stringWithFormat:@"/User/Library/Caches/WinMoSwitcher/%@", [app displayIdentifier]];
+            [UIImagePNGRepresentation(currentImage) writeToFile:pngPath atomically:YES];
+        });
             
-            [cache setObject:currentImage forKey:[app displayIdentifier]];
-            [cache writeToFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist" atomically:YES];
-        }
         return currentImage;
     }
 
@@ -112,22 +87,12 @@ static UIImage *currentImage = nil;
     UIImage *img = [UIImage imageWithContentsOfFile:pngPath];
     if (img) return img;
     
-    // Load from cache?
-    if (!cache)
-        cache = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist"];
-    if (!cache)
-        cache = [[NSMutableDictionary alloc] init];
-    if (cache) {
-        if ([cache objectForKey:[app displayIdentifier]])
-            return [cache objectForKey:[app displayIdentifier]];
-    }
-    
     // Backup in the event there isn't a saved snapshot - get image from currently running app; will be useful for getting it for SpringBoard?
     return [self appScreenShot:app];
 }
 
 +(UIImage*)appScreenShot:(SBApplication*)app{
-    NSLog(@"CSResources appScreenShot");
+    NSLog(@"CSResources appScreenShot:");
     int originalOrientation = 0;
     int currentOrientation = 0;
     CGFloat scale = [[UIScreen mainScreen] scale];
@@ -145,13 +110,8 @@ static UIImage *currentImage = nil;
     // Else to avoid weirdness we need to render a fake status bar above the snapshot
     UIGraphicsBeginImageContext([UIScreen mainScreen].bounds.size);
 
-    //if ([app statusBarStyle] == UIStatusBarStyleBlackOpaque) {
     [[UIColor blackColor] set];
     UIRectFill([UIScreen mainScreen].bounds);
-    //}
-    /*else {
-        [[CSApplicationController sharedController].statusBarDefault drawInRect:CGRectMake(0, 0, SCREEN_WIDTH, 20)];
-    }*/
 
     [[app defaultImage:NULL preferredScale:scale originalOrientation:&originalOrientation currentOrientation:&currentOrientation] drawInRect:CGRectMake(0, 20, SCREEN_WIDTH, SCREEN_HEIGHT-20)];
 
@@ -163,65 +123,44 @@ static UIImage *currentImage = nil;
 }
 
 +(void)removeScreenshotForApp:(SBApplication *)app {
-    if (cache) {
-        NSError *error;
+    NSError *error;
         
-        NSString *pngPath = [NSString stringWithFormat:@"/User/Library/Caches/WinMoSwitcher/%@", [app displayIdentifier]];
-        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:pngPath error:&error];
-        
-        if (success)
-            [cache removeObjectForKey:[app displayIdentifier]];
-            [cache writeToFile:@"/User/Library/Caches/WinMoSwitcher/cache.plist" atomically:YES];
-    }
+    NSString *pngPath = [NSString stringWithFormat:@"/User/Library/Caches/WinMoSwitcher/%@", [app displayIdentifier]];
+    [[NSFileManager defaultManager] removeItemAtPath:pngPath error:&error];
 }
 
 #pragma mark Settings
 
 +(BOOL)swipeCloses{
-    NSLog(@"CSResources swipeCloses");
-    //id temp = [settings objectForKey:@"CSSwipeClose"];
-	//return (temp ? [temp boolValue] : YES);
     return YES;
 }
 +(BOOL)showsCloseBox{
-    NSLog(@"CSResources showsCloseBox");
-    //id temp = [settings objectForKey:@"CSShowCloseButtons"];
-	//return (temp ? [temp boolValue] : YES);
     return NO;
 }
 +(BOOL)showsAppTitle{
-    NSLog(@"CSResources showsAppTitle");
     id temp = [settings objectForKey:@"ShowAppTitle"];
 	return (temp ? [temp boolValue] : YES);
 }
 +(BOOL)showsAppIcon {
-    NSLog(@"CSResources showsAppIcon");
     id temp = [settings objectForKey:@"showsAppIcon"];
     return (temp ? [temp boolValue] : NO);
 }
-+(BOOL)showsPageControl{
-    NSLog(@"CSResources showsPageControl");
++(BOOL)showsPageControl {
     id temp = [settings objectForKey:@"ShowPageDots"];
-    return (temp ? [temp boolValue] : YES);
+    return (temp ? [temp boolValue] : NO);
 }
-+(BOOL)autoBackgroundApps{
-    NSLog(@"CSResources autoBackgroundApps");
++(BOOL)autoBackgroundApps {
     id temp = [settings objectForKey:@"AutoBackground"];
     return (temp ? [temp boolValue] : NO);
 }
-+(int)cornerRadius{
-    NSLog(@"CSResources cornerRadius");
-    //id temp = [settings objectForKey:@"CornerRadius"];
-	//return (temp ? [temp intValue] : 10);
++(int)cornerRadius {
     return 0;
 }
-+(int)tapsToLaunch{
-    NSLog(@"CSResources tapsToLaunch");
++(int)tapsToLaunch {
     id temp = [settings objectForKey:@"TapsActivate"];
 	return (temp ? [temp intValue] : 1);
 }
 +(int)backgroundStyle{
-    NSLog(@"CSResources backgroundStyle");
     id temp = [settings objectForKey:@"Background"];
 	return (temp ? [temp intValue] : 1);
 }
@@ -235,7 +174,7 @@ static UIImage *currentImage = nil;
 }
 +(int)closeAnimation {
     id temp = [settings objectForKey:@"deactivateAnimation"];
-    return (temp ? [temp intValue] : 1);
+    return (temp ? [temp intValue] : 2);
 }
 +(BOOL)excludeFromExiting:(SBApplication *)app {
     BOOL exclude = [[settings objectForKey:[@"Exclude-" stringByAppendingString:[app displayIdentifier]]] boolValue];
@@ -251,6 +190,11 @@ static UIImage *currentImage = nil;
 }
 +(BOOL)noRunOutStrife {
     id temp = [settings objectForKey:@"noRunOutStrife"];
+    return (temp ? [temp boolValue] : NO);
+}
+
++(BOOL)alwaysShowHomeSnapshot {
+    id temp = [settings objectForKey:@"alwaysShowHomeSnapshot"];
     return (temp ? [temp boolValue] : NO);
 }
 
@@ -277,7 +221,6 @@ static UIImage *currentImage = nil;
 }
 
 +(void)reloadSettings{
-    NSLog(@"CSResources reloadSettings");
     [settings release];
     settings = nil;
     settings = [[NSDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.winmoswitcher.plist"];

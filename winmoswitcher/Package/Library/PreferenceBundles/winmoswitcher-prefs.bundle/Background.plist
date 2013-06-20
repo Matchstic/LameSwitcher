@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>title</key>
-	<string>Background</string>
+	<string>TITLE</string>
 	<key>items</key>
 	<array>
 		<dict>
@@ -16,12 +16,12 @@
 			<key>key</key>
 			<string>Background</string>
 			<key>label</key>
-			<string>Style</string>
+			<string>STYLE</string>
 			<key>validTitles</key>
 			<array>
-				<string>Tile colour</string>
-				<string>Dark</string>
-				<string>Light</string>
+				<string>TILE_COLOUR</string>
+				<string>DARK</string>
+				<string>LIGHT</string>
 			</array>
 			<key>validValues</key>
 			<array>
@@ -44,12 +44,12 @@
 			<key>key</key>
 			<string>Background</string>
 			<key>label</key>
-			<string>Style</string>
+			<string>STYLE</string>
 			<key>validTitles</key>
 			<array>
-				<string>Custom colour</string>
-				<string>Dark</string>
-				<string>Light</string>
+				<string>CUSTOM_COLOUR</string>
+				<string>DARK</string>
+				<string>LIGHT</string>
 			</array>
 			<key>validValues</key>
 			<array>
@@ -66,9 +66,9 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Transparency</string>
+			<string>TRANS</string>
 			<key>footerText</key>
-			<string>A more blurred background takes longer for the switcher to open.</string>
+			<string>TRANS_FOOTER</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -118,7 +118,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Custom Colour Style</string>
+			<string>CUSTOM_STYLE</string>
 		</dict>
 		<dict>
 			<key>PostNotification</key>
@@ -134,29 +134,29 @@
 			<key>key</key>
 			<string>preDefinedColour</string>
 			<key>label</key>
-			<string>Pre-Defined Colours</string>
+			<string>PRE_DEFINED</string>
 			<key>validTitles</key>
 			<array>
-				<string>Lime</string>
-				<string>Green</string>
-				<string>Emerald</string>
-				<string>Teal</string>
-				<string>Cyan</string>
-				<string>Cobalt</string>
-				<string>Indigo</string>
-				<string>Violet</string>
-				<string>Pink</string>
-				<string>Magenta</string>
-				<string>Crimson</string>
-				<string>Red</string>
-				<string>Orange</string>
-				<string>Amber</string>
-				<string>Yellow</string>
-				<string>Brown</string>
-				<string>Olive</string>
-				<string>Steel</string>
-				<string>Mauve</string>
-				<string>Taupe</string>
+				<string>LIME</string>
+				<string>GREEN</string>
+				<string>EMERALD</string>
+				<string>TEAL</string>
+				<string>CYAN</string>
+				<string>COBALT</string>
+				<string>INDIGO</string>
+				<string>VIOLET</string>
+				<string>PINK</string>
+				<string>MAGENTA</string>
+				<string>CRIMSON</string>
+				<string>RED</string>
+				<string>ORANGE</string>
+				<string>AMBER</string>
+				<string>YELLOW</string>
+				<string>BROWN</string>
+				<string>OLIVE</string>
+				<string>STEEL</string>
+				<string>MAUVE</string>
+				<string>TAUPE</string>
 			</array>
 			<key>validValues</key>
 			<array>
@@ -188,7 +188,7 @@
 			<key>set</key>
 			<string>enableCustomColour:forSpecifier:</string>
 			<key>label</key>
-			<string>Use Custom Colour</string>
+			<string>USE_CUSTOM</string>
 			<key>key</key>
 			<string>customColourWasSet</string>
 			<key>default</key>
@@ -210,7 +210,7 @@
 			<key>label</key>
 			<string></string>
 			<key>placeholder</key>
-			<string>Hex colour...</string>
+			<string>HEX</string>
 			<key>defaults</key>
 			<string>com.matchstic.winmoswitcher</string>
 			<key>key</key>

@@ -1,0 +1,37 @@
+// Background.strings
+
+"TITLE" = "Background";
+"STYLE" = "Style";
+
+"TILE_COLOUR" = "Tile colour";
+"CUSTOM_COLOUR" = "Custom colour";
+"DARK" = "Dark";
+"LIGHT" = "Light";
+
+"TRANS" = "Transparency";
+"TRANS_FOOTER" = "A more blurred background takes longer for the switcher to open.";
+
+"CUSTOM_STYLE" = "Custom Colour Style";
+"PRE_DEFINED" = "Pre-Defined Colours";
+"LIME" = "Lime";
+"GREEN" = "Green";
+"EMERALD" = "Emerald";
+"TEAL" = "Teal";
+"CYAN" = "Cyan";
+"COBALT" = "Cobalt";
+"INDIGO" = "Indigo";
+"VIOLET" = "Violet";
+"PINK" = "Pink";
+"MAGENTA" = "Magenta";
+"CRIMSON" = "Crimson";
+"RED" = "Red";
+"ORANGE" = "Orange";
+"AMBER" = "Amber";
+"YELLOW" = "Yellow";
+"BROWN" = "Brown";
+"OLIVE" = "Olive";
+"STEEL" = "Steel";
+"MAUVE" = "Mauve";
+"TAUPE" = "Taupe";
+"USE_CUSTOM" = "Use Custom Colour";
+"HEX" = "Hex colour...";

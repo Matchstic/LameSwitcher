@@ -1,0 +1,38 @@
+// Background.strings
+
+"TITLE" = "Tło";
+"STYLE" = "Motyw";
+
+"TILE_COLOUR" = "Kolor kafelków";
+"CUSTOM_COLOUR" = "Własny kolor";
+"DARK" = "Czarny";
+"LIGHT" = "Biały";
+
+"TRANS" = "Rozmycie";
+"TRANS_FOOTER" = "Bardziej rozmyte tło wymaga więcej czasu w celu otwarcia.";
+
+"CUSTOM_STYLE" = "Własny motyw";
+"PRE_DEFINED" = "Domyślne kolory";
+
+"LIME" = "Limetkowy";
+"GREEN" = "Zielony";
+"EMERALD" = "Szmaragdowy";
+"TEAL" = "Cyraneczka";
+"CYAN" = "Turkusowy";
+"COBALT" = "Kobaltowy";
+"INDIGO" = "Indygo";
+"VIOLET" = "Fioletowy";
+"PINK" = "Różowy";
+"MAGENTA" = "Fuksja";
+"CRIMSON" = "Karmazynowy";
+"RED" = "Czerwony";
+"ORANGE" = "Pomarańczowy";
+"AMBER" = "Bursztynowy";
+"YELLOW" = "Żółty";
+"BROWN" = "Brązowy";
+"OLIVE" = "Oliwny";
+"STEEL" = "Stalowy";
+"MAUVE" = "Fiołkowy";
+"TAUPE" = "Brązowoszary";
+"USE_CUSTOM" = "Użyj własnego koloru";
+"HEX" = "Wartość heksadecymalna koloru:";

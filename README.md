@@ -20,4 +20,6 @@ This is a Windows Phone based switcher for iOS 6+, and is forked from LameSwitch
 - An overview of all running apps
 - Translations
 
+Utilises <a href="https://github.com/tomsoft1/StackBluriOS">StackBluriOS by tomsoft1</a>
+
 Enjoy!

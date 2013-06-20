@@ -40,6 +40,7 @@
 +(float)transparency;
 +(float)blurRadius;
 +(BOOL)noRunOutStrife;
++(BOOL)alwaysShowHomeSnapshot;
 
 +(BOOL)customColourWasSet;
 +(NSString *)customHexColour;

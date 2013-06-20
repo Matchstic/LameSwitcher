@@ -17,6 +17,8 @@
 #import "DreamBoard.h"
 #import "stackBlur.h"
 
+#import <SpringBoardServices/SpringBoardServices.h>
+
 #define STRIFE_PREFS @"/var/mobile/Library/DreamBoard/Strife/Info.plist"
 #define BUNDLE @"/Library/Application Support/WinMoSwitcher/WinMoSwitcher.bundle"
 
@@ -45,6 +47,7 @@ CGImageRef UIGetScreenImage(void);
 
 static CSApplicationController *_instance;
 static SBApplication *openedOverApp;
+static UIImageView *alertView;
 
 @implementation CSApplicationController
 @synthesize springBoardImage = _springBoardImage;
@@ -60,11 +63,15 @@ static SBApplication *openedOverApp;
 @synthesize scrollView = _scrollView;
 @synthesize closeBox = _closeBox;
 @synthesize isActive = _isActive;
+@synthesize oldOrigin;
 
 @synthesize pressedHome = _pressedHome;
 @synthesize applaunching = _applaunching;
 @synthesize exitingAllApps = _exitingAllApps;
 @synthesize isLocking = _isLocking;
+@synthesize overviewAnim = _overviewAnim;
+
+@synthesize timeLabel;
 
 @synthesize transparentImage;
 @synthesize backgroundView;
@@ -110,8 +117,8 @@ static SBApplication *openedOverApp;
 
         int edgeInset = 40;
         CGRect scrollViewFrame = self.bounds;
-        scrollViewFrame.size.width = (self.bounds.size.width-(edgeInset*2));
-        scrollViewFrame.origin.x = edgeInset;
+        scrollViewFrame.size.width = (self.bounds.size.width-(edgeInset*2))*0.875;
+        scrollViewFrame.origin.x = ((SCREEN_WIDTH/2)-((SCREEN_WIDTH*0.625)/2))-((scrollViewFrame.size.width-(SCREEN_WIDTH*0.625))/2);
         self.scrollView = [[[CSScrollView alloc] initWithFrame:scrollViewFrame] autorelease];
         self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.scrollView.showsHorizontalScrollIndicator = NO;
@@ -124,9 +131,13 @@ static SBApplication *openedOverApp;
         [self addSubview:self.scrollView];
 
         [CSResources reloadSettings];
-
-        UIPinchGestureRecognizer *pinch = [[[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(showOverview)] autorelease];
-        [self addGestureRecognizer:pinch];
+        
+        // Ugh. For now, use a pan gesture for showing overview
+        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panRecognized:)];
+        panGestureRecognizer.minimumNumberOfTouches = 2;
+        panGestureRecognizer.maximumNumberOfTouches = 2;
+        panGestureRecognizer.cancelsTouchesInView = YES;
+        [self.scrollView addGestureRecognizer:panGestureRecognizer];
 
         currentOrientation = UIInterfaceOrientationPortrait;
 
@@ -136,22 +147,200 @@ static SBApplication *openedOverApp;
     return self;
 }
 
+- (void)panRecognized:(UIPanGestureRecognizer *)rec {
+    if (rec.state != UIGestureRecognizerStateEnded)
+     return;
+    
+    CGPoint vel = [rec velocityInView:self];
+    if (vel.x < 0) {
+        // user dragged towards the left
+        // Hide scrollview
+        oldOrigin = self.scrollView.frame.origin.x;
+        self.overviewAnim = YES;
+        
+        [UIView animateWithDuration:0.4 animations:^{
+            self.scrollView.alpha = 0.0f;
+            self.scrollView.frame = CGRectMake(-SCREEN_WIDTH*[self.runningApps count], self.scrollView.frame.origin.y, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+        } completion:^(BOOL finished){
+            [self showOverview];
+            for (UIView *view in self.scrollView.subviews) {
+                [view removeFromSuperview];
+            }
+            self.scrollView.alpha = 1.0f;
+            CGRect scrollViewFrame = self.scrollView.bounds;
+            scrollViewFrame.origin.x = oldOrigin;
+            self.scrollView.frame = scrollViewFrame;
+            self.overviewAnim = NO;
+        }];
+
+    } else {
+        return;
+    }
+}
+
 -(void)showOverview {
+    
     [overview.view removeFromSuperview];
     overview = nil;
     
     OverviewFlowLayout *layout = [[OverviewFlowLayout alloc] init];
-    layout.itemSize = CGSizeMake((SCREEN_WIDTH*0.3), (SCREEN_WIDTH*0.3));
+    layout.itemSize = CGSizeMake((SCREEN_WIDTH*0.27), (SCREEN_HEIGHT*0.27));
     
     overview = [[OverviewController alloc] initWithCollectionViewLayout:layout];
-    overview.collectionView.backgroundView = backgroundView;
+    overview.collectionView.backgroundColor = [UIColor clearColor];
+    
+    CGRect viewFrame = overview.collectionView.frame;
+    viewFrame.size.width *= 0.9;
+    viewFrame.origin.x += (SCREEN_WIDTH*0.05);
+    viewFrame.origin.y += (SCREEN_HEIGHT*0.05);
+    
+    overview.collectionView.frame = viewFrame;
+    
     overview.wantsFullScreenLayout = YES;
+    overview.collectionView.showsHorizontalScrollIndicator = NO;
+    overview.collectionView.showsVerticalScrollIndicator = NO;
+    overview.collectionView.alwaysBounceVertical = YES;
+    overview.view.alpha = 0.0f;
     
     [overview.collectionView registerClass:[OverviewCell class] forCellWithReuseIdentifier:@"OverviewCell"];
 
     [self addSubview:overview.view];
     [layout release];
+    
+    // Fade in
+    [UIView animateWithDuration:0.3 animations:^{
+        overview.view.alpha = 1.0f;
+    }];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        exitButton.alpha = 0.0f;
+    } completion:^(BOOL finished){
+        [exitButton removeFromSuperview];
+        exitButton = nil;
+    }];
+    
+    pageControl.hidden = YES;
+    
+    // Ugh. For now, use a pan gesture for showing scrollview again
+    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(reshowScrollView:)];
+    panRecognizer.minimumNumberOfTouches = 2;
+    panRecognizer.maximumNumberOfTouches = 2;
+    panRecognizer.cancelsTouchesInView = YES;
+    [self.overview.view addGestureRecognizer:panRecognizer];
 }
+
+-(void)reshowScrollView:(UIPanGestureRecognizer *)rec {
+    if (rec.state != UIGestureRecognizerStateEnded)
+        return;
+
+    // Check if going to the right.
+    CGPoint vel = [rec velocityInView:self];
+    if (vel.x > 0) {
+        self.scrollView.alpha = 0.0f; // It's set to 1.0f after the overview is shown if the user quits there instead
+        self.overviewAnim = YES;
+        
+        // Move scrollview back to hidden position
+        self.scrollView.frame = CGRectMake(-SCREEN_WIDTH*[self.runningApps count], self.scrollView.frame.origin.y, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+        
+        CGRect scrollViewFrame = self.scrollView.bounds;
+        scrollViewFrame.origin.x = oldOrigin;
+        
+        // populate with the snapshots
+        CGSize screenSize = self.scrollView.frame.size;
+        self.scrollView.contentSize = CGSizeMake(screenSize.width * [self.runningApps count], screenSize.height);
+        
+        static int i;
+        i = 0;
+        for (SBApplication *app in self.runningApps) {
+            CSApplication *csApp = [[[CSApplication alloc] initWithApplication:app] autorelease];
+            CGRect appRect = csApp.frame;
+            appRect.origin.x = (i * screenSize.width) + ((screenSize.width-appRect.size.width)*0.5);
+            csApp.frame = appRect;
+            csApp.tag = (i + 1000);
+            [csApp reset];
+            [self.scrollView addSubview:csApp];
+            
+            i++;
+        }
+        
+        [self hideOverview];
+        
+        // Re-add close apps button
+        // Get the Bundle
+        NSBundle *bundle = [[NSBundle alloc] initWithPath:BUNDLE];
+        
+        // Exit button images
+        UIImage *close = [UIImage imageWithContentsOfFile:[bundle pathForResource:@"Close" ofType:@"png"]];
+        UIImage *darkClose = [UIImage imageWithContentsOfFile:[bundle pathForResource:@"DarkClose" ofType:@"png"]];
+        UIImage *closePressed = [UIImage imageWithContentsOfFile:[bundle pathForResource:@"ClosePressed" ofType:@"png"]];
+        
+        SBApplication *sb = [(SBApplicationController *)[objc_getClass("SBApplicationController") sharedInstance] applicationWithDisplayIdentifier:@"com.apple.springboard"];
+        
+        if (([self.runningApps count] > 0) && [CSResources showExitAllButton]) {
+            if (([self.runningApps count] == 1) && [self.runningApps containsObject:sb]) {
+                NSLog(@"Only SpringBoard has a snapshot, no need for an exit button!");
+            } else {
+                exitButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                [exitButton addTarget:[CSApplication sharedController]
+                               action:@selector(exitAllApps)
+                     forControlEvents:UIControlEventTouchUpInside];
+                if (!([CSResources backgroundStyle] == 3)) {
+                    [exitButton setImage:close forState:UIControlStateNormal];
+                } else {
+                    [exitButton setImage:darkClose forState:UIControlStateNormal];
+                }
+                
+                [exitButton setImage:closePressed forState:UIControlStateHighlighted];
+                [exitButton setImage:closePressed forState:UIControlStateSelected];
+
+                // ***********                            originx                           originy         width height
+                exitButton.frame = CGRectMake((SCREEN_WIDTH/2)-(close.size.width/2), (SCREEN_HEIGHT*0.91), 30.0, 30.0);
+                exitButton.alpha = 0.0f;
+                [self addSubview:exitButton];
+                [UIView animateWithDuration:0.4 animations:^{ exitButton.alpha = 1.0f; }];
+            }
+        }
+        
+        
+        [UIView animateWithDuration:0.4 animations:^{
+            self.scrollView.alpha = 1.0f;
+            self.scrollView.frame = scrollViewFrame;
+        } completion:^(BOOL finished){
+            self.overviewAnim = NO;
+        }];
+        
+    } else {
+        return;
+    }
+}
+
+-(void)hideOverview {
+    [UIView animateWithDuration:0.3 animations:^{
+        self.overview.view.alpha = 0.0f;
+    } completion:^(BOOL finished){
+        [self removeOverview];
+    }];
+}
+
+/*-(void)setAnchorPoint:(CGPoint)anchorPoint forView:(UIView *)view
+{
+    CGPoint newPoint = CGPointMake(view.bounds.size.width * anchorPoint.x, view.bounds.size.height * anchorPoint.y);
+    CGPoint oldPoint = CGPointMake(view.bounds.size.width * view.layer.anchorPoint.x, view.bounds.size.height * view.layer.anchorPoint.y);
+    
+    newPoint = CGPointApplyAffineTransform(newPoint, view.transform);
+    oldPoint = CGPointApplyAffineTransform(oldPoint, view.transform);
+    
+    CGPoint position = view.layer.position;
+    
+    position.x -= oldPoint.x;
+    position.x += newPoint.x;
+    
+    position.y -= oldPoint.y;
+    position.y += newPoint.y;
+    
+    view.layer.position = position;
+    view.layer.anchorPoint = anchorPoint;
+}*/
 
 -(void)setHidden:(BOOL)_hidden {
     self.userInteractionEnabled = !_hidden;
@@ -194,9 +383,10 @@ static SBApplication *openedOverApp;
     if ([CSResources blurRadius] >= 1) {
     
         blur = [[[UIImageView alloc] initWithFrame:self.frame] autorelease];
-        blur.image = [[CSResources currentAppImage] stackBlur:[CSResources blurRadius]];
-
         [self insertSubview:blur atIndex:0];
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+            blur.image = [[CSResources currentAppImage] stackBlur:[CSResources blurRadius]];
+        } completion:^(BOOL finished){}];
     }
     
     [noAppsLabel removeFromSuperview];
@@ -223,7 +413,11 @@ static SBApplication *openedOverApp;
 
     timeLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, (SCREEN_WIDTH - 5), 24)] autorelease];
     timeLabel.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0];
-    timeLabel.font = [UIFont systemFontOfSize:13];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        timeLabel.font = [UIFont systemFontOfSize:13];
+    } else {
+        timeLabel.font = [UIFont systemFontOfSize:17];
+    }
     timeLabel.textAlignment = NSTextAlignmentRight;
     if ([CSResources backgroundStyle] == 3) {
         timeLabel.textColor = [UIColor blackColor];
@@ -306,7 +500,6 @@ static SBApplication *openedOverApp;
     for (SBApplication *app in self.runningApps) {
         CSApplication *csApp = [[[CSApplication alloc] initWithApplication:app] autorelease];
         CGRect appRect = csApp.frame;
-        // Adjust this to change the spacing between apps
         appRect.origin.x = (i * screenSize.width) + ((screenSize.width-appRect.size.width)*0.5);
         csApp.frame = appRect;
         csApp.tag = (i + 1000);
@@ -407,41 +600,59 @@ static SBApplication *openedOverApp;
     if (self.isActive) {
         // Remove from the screen
         CSApplication *appView = [self csAppforApplication:app];
-        [appView removeFromSuperview];
-
-        // And remove it from the array
-        [self.runningApps removeObject:app];
         
-        // Remove its cached screenshot from disk
-        [CSResources removeScreenshotForApp:app];
-
-        // Animate the ScrollView smaller
-        [UIView animateWithDuration:0.2 animations:^{
-            self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * self.runningApps.count, 0);
-        } completion:^(BOOL finished){}];
-        [self checkPages];
-
-        // Animate the apps closer together
-        CGSize screenSize = self.scrollView.frame.size;
+        SBApplication *sb = [(SBApplicationController *)[objc_getClass("SBApplicationController") sharedInstance] applicationWithDisplayIdentifier:@"com.apple.springboard"];
         
-        static int i; // Work around for using "for (* in *)" rather then "for (int i = 0; i < array.count; i++)"
-        i = 0;
-        for (CSApplication *psApp in self.scrollView.subviews) {
-            psApp.tag = (1000+i);
+        // Let our animations run
+        [UIView animateWithDuration:(([self.runningApps containsObject:sb] && (self.exitingAllApps = YES)) ? 0.3 : 0.0) animations:^{
+            if ([self.runningApps containsObject:sb] && (self.exitingAllApps = YES)) { // sort out this logic
+                appView.snapshot.alpha = 0.0f;
+                appView.label.alpha = 0.0f;
+            }
+        } completion:^(BOOL finished){
+            [appView removeFromSuperview];
 
-            CGRect appRect = psApp.frame;
-            appRect.origin.x = (i * screenSize.width) + ((screenSize.width-appRect.size.width)*0.5);
+            // And remove it from the array
+            [self.runningApps removeObject:app];
+        
+            // Remove its cached screenshot from disk
+            [CSResources removeScreenshotForApp:app];
+
+            // Animate the ScrollView smaller
             [UIView animateWithDuration:0.2 animations:^{
-                psApp.frame = appRect;
+                self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * self.runningApps.count, 0);
             } completion:^(BOOL finished){}];
+            [self checkPages];
 
-            i++;
-        }
+            // Animate the apps closer together
+            CGSize screenSize = self.scrollView.frame.size;
+            
+            static int i; // Work around for using "for (* in *)" rather then "for (int i = 0; i < array.count; i++)"
+            i = 0;
+            for (CSApplication *psApp in self.scrollView.subviews) {
+                psApp.tag = (1000+i);
 
-        if (self.runningApps.count == 0) {
-            self.pressedHome = YES;
-            [self setActive:NO];
-        }
+                CGRect appRect = psApp.frame;
+                appRect.origin.x = (i * screenSize.width) + ((screenSize.width-appRect.size.width)*0.5);
+                [UIView animateWithDuration:0.2 animations:^{
+                    psApp.frame = appRect;
+                } completion:^(BOOL finished){}];
+
+                i++;
+            }
+
+            if (self.runningApps.count == 0) {
+                self.pressedHome = YES;
+                [self setActive:NO];
+            }
+        
+            if (([self.runningApps count] == 1) && [self.runningApps containsObject:sb]) {
+                [UIView animateWithDuration:0.2 animations:^{
+                    exitButton.alpha = 0.0f;
+                    // When we have the toggles and iPod buttons built, animate them together here.
+                }];
+            }
+        }];
 
         return;
     }
@@ -520,9 +731,12 @@ static SBApplication *openedOverApp;
 }
 
 -(void)fadeInScrollView {
-    [UIView animateWithDuration:0.2 animations:^{
-        self.scrollView.alpha = 1.0;
-    }];
+    for (CSApplication *csApp in self.scrollView.subviews) {
+        // fade in animatons
+        [UIView animateWithDuration:0.2 animations:^{
+            csApp.alpha = 1.0f;
+        }];
+    }
 }
 
 -(void)deactivateAnimated:(BOOL)animate {
@@ -582,6 +796,7 @@ static SBApplication *openedOverApp;
             newFrame.origin.x = -SCREEN_WIDTH;
         
             [self removeStuffFromView];
+            [self removeOverview];
         
             [UIView animateWithDuration:0.3 animations:^{
                 self.isAnimating = YES;
@@ -611,13 +826,14 @@ static SBApplication *openedOverApp;
             rotationAndPerspectiveTransform = CATransform3DRotate(rotationAndPerspectiveTransform, M_PI/2, 0, 1, 0);
     
             [self removeStuffFromView];
+            [self removeOverview];
             
             [UIView animateWithDuration:(animate ? 0.3 : 0.0) animations:^{
                 self.isAnimating = YES;
                 //self.layer.transform = CATransform3DMakeScale(2.5f, 2.5f, 1.0f);
                 // http://stackoverflow.com/questions/13887016/catransform3d-animation-set-x-axis
                 winmoUi.layer.transform = rotationAndPerspectiveTransform;
-                //self.alpha = 0.0f;
+                //winmoUi.alpha = 0.0f;
             } completion:^(BOOL finished){
                 self.hidden = YES;
                 self.isAnimating = NO;
@@ -639,11 +855,19 @@ static SBApplication *openedOverApp;
         [CSResources reset];
             
         [self removeStuffFromView];
+        [self removeOverview];
     }
     
     // Logic to sort out exiting all apps (otherwise, dragons will fly out your arse!) Seriously though, we need this code to make sure that exitingAllApps is reset after, well, the exit all apps button is pressed.
     if (self.exitingAllApps) {
         self.exitingAllApps = NO;
+    }
+    
+    // Remove SpringBoard from array so that it's always added to the end of the scrollview
+    SBApplication *sb = [(SBApplicationController *)[objc_getClass("SBApplicationController") sharedInstance] applicationWithDisplayIdentifier:@"com.apple.springboard"];
+    
+    if ([self.runningApps containsObject:sb]) {
+        [self.runningApps removeObject:sb];
     }
 }
 -(void)removeStuffFromView {
@@ -665,8 +889,18 @@ static SBApplication *openedOverApp;
     
     [blur removeFromSuperview];
     blur = nil;
+}
+-(void)removeOverview {
+    for (UICollectionViewCell *cell in overview.collectionView.visibleCells) {
+        [cell removeFromSuperview];
+    }
+    
+    for (UIView *view in overview.view.subviews) {
+        [view removeFromSuperview];
+    }
     
     [overview.view removeFromSuperview];
+    overview.view = nil;
     overview = nil;
 }
 
@@ -752,6 +986,12 @@ static SBApplication *openedOverApp;
         CGImageRelease(screen);
     }
     
+    if ([CSResources alwaysShowHomeSnapshot]) {
+        if (![self.runningApps containsObject:sb]) {
+            [self.runningApps addObject:sb];
+        }
+    }
+    
     if (newActive) {
         openedOverApp = runningApp;
         
@@ -814,7 +1054,8 @@ static SBApplication *openedOverApp;
     
     // Need to get screenshot of app when home button is pressed -> this is run every time it's pressed, so take screenshot when not active, and in a running app.
     SBApplication *runningApp = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
-    if (!(self.isActive) && (runningApp != nil)) {
+    BOOL isLock = [[objc_getClass("SBAwayController") sharedAwayController] isLocked];
+    if (!(self.isActive) && (runningApp != nil) && !isLock) {
         CGImageRef screen = UIGetScreenImage();
         [CSResources setCurrentAppImage:[UIImage imageWithCGImage:screen]];
         
@@ -883,7 +1124,12 @@ static SBApplication *openedOverApp;
             blue  = [self colorComponentFrom: colorString start: 6 length: 2];
             break;
         default:
-            [NSException raise:@"Invalid color value" format: @"Color value %@ is invalid.  It should be a hex value of the form #RBG, #ARGB, #RRGGBB, or #AARRGGBB", hexString];
+            colorString = @"1BA1E2";
+            alpha = 1.0f;
+            red   = [self colorComponentFrom: colorString start: 0 length: 2];
+            green = [self colorComponentFrom: colorString start: 2 length: 2];
+            blue  = [self colorComponentFrom: colorString start: 4 length: 2];
+            [self showFrownyPants];
             break;
     }
     return [UIColor colorWithRed: red green: green blue: blue alpha: alpha];
@@ -896,5 +1142,83 @@ static SBApplication *openedOverApp;
     [[NSScanner scannerWithString: fullHex] scanHexInt: &hexComponent];
     return hexComponent / 255.0;
 }
+-(void)showFrownyPants {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Frowny pants"
+                                                    message:@"Your WinMoSwitcher background isn't set correctly, odd..."
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+}
 
+
+// custom alerts
+
+-(void)showAlertWithTitle:(NSString *)title body:(NSString *)body andCloseButton:(NSString *)closebutton {
+    [alertView removeFromSuperview];
+    alertView = nil;
+    
+    // Title
+    UILabel *titleLabel = [[[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH*0.05, SCREEN_HEIGHT*0.05, SCREEN_WIDTH*0.95, 50)] autorelease];
+    
+    titleLabel.text = title;
+    titleLabel.font = [UIFont systemFontOfSize:20];
+    titleLabel.textAlignment = NSTextAlignmentLeft;
+    titleLabel.textColor = [UIColor whiteColor];
+    
+    // Body
+    UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH*0.05, titleLabel.frame.origin.y+titleLabel.frame.size.height+20, SCREEN_WIDTH*0.95, 50)];
+    bodyLabel.numberOfLines = 0;
+    bodyLabel.text = body;
+    bodyLabel.textAlignment = NSTextAlignmentLeft;
+    bodyLabel.textColor = [UIColor whiteColor];
+    [bodyLabel sizeToFit];
+    
+    CGRect bodyFrame = bodyLabel.frame;
+    bodyFrame.origin.x = SCREEN_WIDTH*0.05;
+    bodyFrame.origin.y = titleLabel.frame.origin.x+titleLabel.frame.size.width+20;
+    bodyFrame.size.width = SCREEN_WIDTH*0.95;
+    
+    bodyLabel.frame = bodyFrame;
+    
+    // Close Button
+    NSBundle *bundle = [[NSBundle alloc] initWithPath:BUNDLE];
+    
+    // close button background
+    UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH*0.05, bodyFrame.origin.x+bodyFrame.size.height+20, SCREEN_WIDTH*0.95, 60)];
+    [closeButton setImage:[UIImage imageWithContentsOfFile:[bundle pathForResource:@"closeBG" ofType:@"png"]] forState:UIControlStateNormal];
+    [closeButton setImage:[UIImage imageWithContentsOfFile:[bundle pathForResource:@"closeBGPressed" ofType:@"png"]] forState:UIControlStateHighlighted];
+    [closeButton setImage:[UIImage imageWithContentsOfFile:[bundle pathForResource:@"closeBGPressed" ofType:@"png"]] forState:UIControlStateSelected];
+    [exitButton addTarget:self
+                   action:@selector(closeAlert)
+         forControlEvents:UIControlEventTouchUpInside]; // Action for button press
+    
+    // need to add label to it
+    
+    float height = titleLabel.frame.size.height+bodyLabel.frame.size.height+closeButton.frame.size.height+40;
+    
+    CGRect frame = CGRectMake(0, 0, SCREEN_WIDTH, height);
+    
+    alertView = [[UIImageView alloc] initWithFrame:frame];
+    alertView.backgroundColor = [UIColor colorWithRed:33.0 green:32.0 blue:33.0 alpha:1.0];
+    
+    [alertView addSubview:titleLabel];
+    [alertView addSubview:bodyLabel];
+    [alertView addSubview:closeButton];
+    
+    [self addSubview:alertView];
+}
+
+-(void)closeAlert {
+    CGRect frame = alertView.frame;
+    frame.origin.y = -alertView.frame.size.height;
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        alertView.frame = frame;
+    } completion:^(BOOL finished){
+        [alertView removeFromSuperview];
+        alertView = nil;
+    }];
+}
 @end

@@ -35,4 +35,6 @@
 -(void)closeUpGesture:(UIGestureRecognizer*)gesture;
 -(void)closeDownGesture:(UIGestureRecognizer*)gesture;
 
+-(void)animateScrollView:(int)lengthToMove;
+
 @end

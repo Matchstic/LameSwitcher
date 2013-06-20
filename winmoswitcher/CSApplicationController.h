@@ -41,7 +41,6 @@
 @interface CSApplicationController : UIWindow <LAListener, UIScrollViewDelegate> {
     int result;
     UILabel *noAppsLabel;
-    UILabel *timeLabel;
     UIPageControl *pageControl;
     UIButton *exitButton;
 
@@ -57,10 +56,13 @@
 @property (nonatomic, retain) NSString *ignoreRelaunchID;
 @property (nonatomic, readwrite) BOOL shouldAnimate;
 
+@property (nonatomic, readwrite) int oldOrigin;
+
 @property (nonatomic, readwrite) BOOL pressedHome;
 @property (nonatomic, readwrite) BOOL applaunching;
 @property (nonatomic,readwrite) BOOL exitingAllApps;
 @property (nonatomic, readwrite) BOOL isLocking;
+@property (nonatomic, readwrite) BOOL overviewAnim;
 
 @property (nonatomic, retain) NSMutableArray *displayStacks;
 @property (nonatomic, retain) NSMutableArray *ignoredApps;
@@ -68,6 +70,7 @@
 @property (nonatomic, retain) NSMutableArray *ignoredIDs;
 
 @property (nonatomic, retain) CSScrollView *scrollView;
+@property (nonatomic, retain) UILabel *timeLabel;
 
 @property (nonatomic, assign) SpringBoard *springBoard;
 @property (nonatomic, retain) UIImage *springBoardImage;
@@ -83,6 +86,8 @@
 
 +(CSApplicationController*)sharedController;
 
+-(void)showOverview;
+
 -(void)relayoutSubviews;
 -(void)setRotation:(UIInterfaceOrientation)orientation;
 
@@ -92,6 +97,9 @@
 -(void)appLaunched:(SBApplication*)app;
 -(void)appQuit:(SBApplication*)app;
 
+-(void)removeStuffFromView;
+-(void)removeOverview;
+
 -(void)deactivateGesture:(UIGestureRecognizer*)gesture;
 
 -(void)setActive:(BOOL)active;
@@ -100,5 +108,10 @@
 -(void)deactivateAnimated:(BOOL)animate;
 
 -(void)checkPages;
+
+-(UIColor *)colorWithHexString:(NSString *)hexString;
+-(UIImage *)tile;
+
+-(void)showAlertWithTitle:(NSString *)title body:(NSString *)body andCloseButton:(NSString *)closebutton;
 
 @end

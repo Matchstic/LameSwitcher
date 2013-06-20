@@ -23,7 +23,7 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>label</key>
-			<string>Activation Methods</string>
+			<string>AC_METHODS</string>
 			<key>isController</key>
 			<true/>
 			<key>bundle</key>
@@ -35,7 +35,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Interface</string>
+			<string>INTERFACE</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -47,7 +47,7 @@
 			<key>key</key>
 			<string>ShowAppTitle</string>
 			<key>label</key>
-			<string>Show App Title</string>
+			<string>APP_TITLE</string>
 			<key>PostNotification</key>
 			<string>com.matchstic.winmoswitcher/settingschanged</string>
 		</dict>
@@ -61,7 +61,7 @@
 			<key>key</key>
 			<string>showsAppIcon</string>
 			<key>label</key>
-			<string>Show App Icon</string>
+			<string>APP_ICON</string>
 			<key>PostNotification</key>
 			<string>com.matchstic.winmoswitcher/settingschanged</string>
 		</dict>
@@ -69,13 +69,13 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>com.matchstic.winmoswitcher</string>
 			<key>key</key>
 			<string>ShowPageDots</string>
 			<key>label</key>
-			<string>Page Dots</string>
+			<string>PD</string>
 			<key>PostNotification</key>
 			<string>com.matchstic.winmoswitcher/settingschanged</string>
 		</dict>
@@ -89,11 +89,11 @@
 			<key>key</key>
 			<string>TapsActivate</string>
 			<key>label</key>
-			<string>Taps to Activate</string>
+			<string>TAPS_AC</string>
 			<key>validTitles</key>
 			<array>
-				<string>One</string>
-				<string>Two</string>
+				<string>ONE</string>
+				<string>TWO</string>
 			</array>
 			<key>validValues</key>
 			<array>
@@ -111,7 +111,7 @@
 			<key>detail</key>
 			<string>backgroundController</string>
 			<key>label</key>
-			<string>Background</string>
+			<string>BG</string>
 			<key>isController</key>
 			<true/>
 			<key>get</key>
@@ -127,16 +127,16 @@
 			<key>key</key>
 			<string>deactivateAnimation</string>
 			<key>label</key>
-			<string>Close Animation</string>
+			<string>CLOSE_ANIM</string>
 			<key>validTitles</key>
 			<array>
-				<string>Rotate</string>
-				<string>Slide</string>
+				<string>SLIDE</string>
+				<string>ROTATE</string>
 			</array>
 			<key>validValues</key>
 			<array>
-				<integer>1</integer>
 				<integer>2</integer>
+				<integer>1</integer>
 			</array>
 			<key>defaults</key>
 			<string>com.matchstic.winmoswitcher</string>
@@ -151,7 +151,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>label</key>
-			<string>Only Run in Strife</string>
+			<string>RUN_STRIFE</string>
 			<key>key</key>
 			<string>noRunOutStrife</string>
 			<key>default</key>
@@ -165,13 +165,13 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Extra</string>
+			<string>EXTRA</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSTextViewCell</string>
 			<key>label</key>
-			<string>Home Button Behaviour:</string>
+			<string>HOME</string>
 		</dict>
 		<dict>
 			<key>key</key>
@@ -183,13 +183,13 @@
 			<key>defaults</key>
 			<string>com.matchstic.winmoswitcher</string>
 			<key>label</key>
-			<string>Exit Running App</string>
+			<string>EXIT_APP</string>
 			<key>PostNotification</key>
 			<string>com.matchstic.winmoswitcher/settingschanged</string>
 		</dict>
 		<dict>
 			<key>footerText</key>
-			<string>Based on LameSwitcher</string>
+			<string>BASED_ON</string>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 		</dict>
@@ -197,7 +197,7 @@
 			<key>cell</key>
 			<string>PSTextViewCell</string>
 			<key>label</key>
-			<string>Exit All Apps Button:</string>
+			<string>EXIT_APP_BUTTON</string>
 		</dict>
 		<dict>
 			<key>key</key>
@@ -209,7 +209,7 @@
 			<key>defaults</key>
 			<string>com.matchstic.winmoswitcher</string>
 			<key>label</key>
-			<string>Enabled</string>
+			<string>ON</string>
 			<key>PostNotification</key>
 			<string>com.matchstic.winmoswitcher/settingschanged</string>
 		</dict>
@@ -256,7 +256,37 @@
 			<key>isController</key>
 			<true/>
 			<key>label</key>
-			<string>Exclude Apps</string>
+			<string>EXCLUDE</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSTextViewCell</string>
+			<key>label</key>
+			<string>START_VIEW</string>
+		</dict>
+		<dict>
+			<key>key</key>
+			<string>alwaysShowHomeSnapshot</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.matchstic.winmoswitcher</string>
+			<key>label</key>
+			<string>SHOW_IN_APP</string>
+			<key>PostNotification</key>
+			<string>com.matchstic.winmoswitcher/settingschanged</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>TRANSLATED_BY</string>
 		</dict>
 	</array>
 </dict>

@@ -24,6 +24,7 @@
 
 /// SpringBoard headers
 #import <SpringBoard/SpringBoard.h>
+#import <SpringBoard/SBApplication.h>
 #import "CSApplicationController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CSApplication.h"
@@ -31,6 +32,8 @@
 #import <UIKit/UIKit.h>
 #import <substrate.h>
 #import <dispatch/dispatch.h>
+
+#define BUNDLE @"/Library/Application Support/WinMoSwitcher/WinMoSwitcher.bundle"
 
 /*@interface SBIconModel ()
 - (SBApplicationIcon *)applicationIconForDisplayIdentifier:(NSString *)displayIdentifier;
@@ -248,7 +251,7 @@ static CSApplication *_instance;
         
         // Application label
         CGRect labelRect;
-        if (showsAppIcon) {
+        if (showsAppIcon && ![[APP displayIdentifier] isEqual:@"com.apple.springboard"]) {
             labelRect.origin.x = (self.icon.frame.origin.x + self.icon.frame.size.width + 7);
             labelRect.origin.y = self.icon.frame.origin.y;
             labelRect.size.width = (self.snapshot.frame.origin.x + self.snapshot.frame.size.width)-(self.icon.frame.size.width + self.icon.frame.origin.x + 10);
@@ -256,7 +259,6 @@ static CSApplication *_instance;
         } else {
             labelRect.origin.x = (self.snapshot.frame.origin.x + 4);
             labelRect.origin.y = (self.snapshot.frame.size.height + self.snapshot.frame.origin.y + 5);
-            //labelRect.size.width = (self.snapshot.frame.origin.x + self.snapshot.frame.size.width)-(self.icon.frame.size.width + self.icon.frame.origin.x + 10);
             labelRect.size.width = self.snapshot.frame.size.width;
             labelRect.size.height = 20;
         }
@@ -271,7 +273,9 @@ static CSApplication *_instance;
         }
         self.label.numberOfLines = 0;
         if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
-            self.label.text = @"Start";
+            NSBundle *bundle = [[NSBundle alloc] initWithPath:BUNDLE];
+            self.label.text = [bundle localizedStringForKey:@"START" value:@"Start" table:nil];
+            [bundle release];
         } else {
         self.label.text = [APP displayName];
         }
@@ -280,7 +284,7 @@ static CSApplication *_instance;
 
         [[CSApplicationController sharedController].scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:@selector(updateAlpha:)];
         [self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:@selector(updateAlpha:)];
-
+        
         [pool release];
     }
 
@@ -309,6 +313,7 @@ static CSApplication *_instance;
     [UIView animateWithDuration:0.1 animations:^{
         //self.badge.alpha = 0;
         self.closeBox.alpha = 0;
+        self.label.alpha = 0.0f;
     }completion:^(BOOL finished){}];
 
     // But either way I want my custom animation.
@@ -328,8 +333,13 @@ static CSApplication *_instance;
     if (runningApp != nil) {
         // An app is already open, so use the switcher animation, but first check if this is the same app.
         if (![[runningApp bundleIdentifier] isEqualToString:[APP bundleIdentifier]]) {
-            [CSApplicationController sharedController].shouldAnimate = YES;
-            [(SBUIController*)[objc_getClass("SBUIController") sharedInstance] activateApplicationFromSwitcher:APP];
+            if ([[APP displayIdentifier] isEqualToString:@"com.apple.springboard"]) {
+                // Close the topmost app if we're opening SpringBoard
+                [(SpringBoard *)[UIApplication sharedApplication] quitTopApplication:nil];
+            } else {
+                [CSApplicationController sharedController].shouldAnimate = YES;
+                [(SBUIController*)[objc_getClass("SBUIController") sharedInstance] activateApplicationFromSwitcher:APP];
+            }
         }
     } else {
         // Else we are on SpringBoard
@@ -354,8 +364,6 @@ static CSApplication *_instance;
         scheduledTransaction$ = [transaction retain];
     }
     [transaction release];*/
-    
-    // All these animations must happen at the same time for a Windows Phone effect
     
     UIView *snapshotAnim = self.snapshot;
     [[CSApplicationController sharedController] addSubview:snapshotAnim];
@@ -382,10 +390,17 @@ static CSApplication *_instance;
     int numToRight = [[CSApplicationController sharedController].runningApps count]-appIndex;
     int lengthToMove = numToRight+1;
     
-    // 2. Animate the scrollview moving to the left
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.05 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [self animateScrollView:lengthToMove];
-    });
+    if ( !(appIndex == [[CSApplicationController sharedController].runningApps count]-1) ) {
+        // 2. Animate the scrollview moving to the left
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.05 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [self animateScrollView:lengthToMove];
+        });
+    }
+    
+    // 3. Fade out the snapshot's label and the time label
+    [UIView animateWithDuration:0.4 animations:^{
+        [CSApplicationController sharedController].timeLabel.alpha = 0.0f;
+    }];
 }
 
 -(void)animateScrollView:(int)lengthToMove {
@@ -463,13 +478,6 @@ static CSApplication *_instance;
             if ([[app displayIdentifier] isEqual:[runningApp displayIdentifier]]) {
                 [(SpringBoard *)[UIApplication sharedApplication] quitTopApplication:nil];
             }
-            
-            // Why doesn't this animation work correctly? 
-            CSApplication *appView = [[CSApplicationController sharedController] csAppforApplication:app];
-            
-            [UIView animateWithDuration:0.3 animations:^{
-                appView.snapshot.alpha = 0;
-            }];
         
             [self performSelector:@selector(killItWithFireMkTwo:) withObject:app afterDelay:2];
         }
@@ -478,6 +486,9 @@ static CSApplication *_instance;
     for (SBApplication *app in toRemove) {
         [[CSApplicationController sharedController] appQuit:app];
     }
+    
+    [[CSApplicationController sharedController] showAlertWithTitle:@"Test"
+                                                              body:@"TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TST TSTTSTTSTSTSTTSTS" andCloseButton:@"close"];
     
     [self release];
 }
@@ -539,16 +550,34 @@ static CSApplication *_instance;
         return;
     }
     
+    CGRect labelRect = self.label.frame;
+    CGRect iconRect;
+    CGRect snapshotRect = self.snapshot.frame;
+    
+    snapshotRect.origin.y = self.snapshot.frame.size.height*2;
+    
+    if ([CSResources showsAppIcon] && ![[APP displayIdentifier] isEqual:@"com.apple.springboard"]) {
+        iconRect = self.icon.frame;
+        iconRect.origin.y = snapshotRect.size.height + snapshotRect.origin.y + 5;
+        labelRect.origin.y = (iconRect.origin.y);
+    } else {
+        labelRect.origin.y = (snapshotRect.size.height + snapshotRect.origin.y + 5);
+    }
+    
     [UIView animateWithDuration:0.2 animations:^{
-        self.icon.alpha = 0;
-        self.label.alpha = 0;
         //self.badge.alpha = 0;
         self.closeBox.alpha = 0;
     } completion:^(BOOL finished){}];
     
     [UIView animateWithDuration:0.3 animations:^{
         self.snapshot.alpha = 0;
-        self.snapshot.frame = CGRectMake(0, self.snapshot.frame.size.height*2, self.snapshot.frame.size.width, self.snapshot.frame.size.height);
+        self.snapshot.frame = snapshotRect;
+        self.label.frame = labelRect;
+        self.label.alpha = 0;
+        if ([CSResources showsAppIcon] && ![[APP displayIdentifier] isEqual:@"com.apple.springboard"]) {
+            self.icon.alpha = 0;
+            self.icon.frame = iconRect;
+        }
     } completion:^(BOOL finished){
         [self exit];
     }];
@@ -577,17 +606,34 @@ static CSApplication *_instance;
         return;
     }
 
+    CGRect labelRect = self.label.frame;
+    CGRect iconRect;
+    CGRect snapshotRect = self.snapshot.frame;
+    
+    snapshotRect.origin.y = -self.snapshot.frame.size.height;
+    
+    if ([CSResources showsAppIcon] && ![[APP displayIdentifier] isEqual:@"com.apple.springboard"]) {
+        iconRect = self.icon.frame;
+        iconRect.origin.y = snapshotRect.size.height + snapshotRect.origin.y + 5;
+        labelRect.origin.y = (iconRect.origin.y);
+    } else {
+        labelRect.origin.y = (snapshotRect.size.height + snapshotRect.origin.y + 5);
+    }
     
     [UIView animateWithDuration:0.2 animations:^{
-        self.icon.alpha = 0;
-        self.label.alpha = 0;
         //self.badge.alpha = 0;
         self.closeBox.alpha = 0;
     } completion:^(BOOL finished){}];
 
     [UIView animateWithDuration:0.3 animations:^{
         self.snapshot.alpha = 0;
-        self.snapshot.frame = CGRectMake(0, -self.snapshot.frame.size.height, self.snapshot.frame.size.width, self.snapshot.frame.size.height);
+        self.snapshot.frame = snapshotRect;
+        self.label.frame = labelRect;
+        self.label.alpha = 0;
+        if ([CSResources showsAppIcon] && ![[APP displayIdentifier] isEqual:@"com.apple.springboard"]) {
+            self.icon.alpha = 0;
+            self.icon.frame = iconRect;
+        }
     } completion:^(BOOL finished){
         [self exit];
     }];

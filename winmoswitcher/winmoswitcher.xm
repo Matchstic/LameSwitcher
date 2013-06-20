@@ -12,6 +12,7 @@
 #import <SpringBoard/SBAppToAppTransitionController.h>
 #import <SpringBoard/SBAppToAppWorkspaceTransaction.h>
 #import <SpringBoard/SBUIAnimationController.h>
+#import <SpringBoard/SBUISlideAppTransitionView.h>
 
 //UIKIT_EXTERN CGImageRef UIGetScreenImage();
 
@@ -27,6 +28,7 @@ static NSString * const CARDSWITCHER_ID = @"com.matchstic.winmoswitcher";
 - (id)badgeNumberOrString;
 @end*/
 
+// Isn't present in 7.0...
 %hook SBAppSwitcherController
 
 -(void)applicationLaunched:(SBApplication*)app {
@@ -308,13 +310,32 @@ static NSString * const CARDSWITCHER_ID = @"com.matchstic.winmoswitcher";
 }
 %end*/
 
-static void CSSettingsChanged(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)
-{
+// Spped up app switching
+%hook SBUISlideAppTransitionView
+
+-(void)beginTransitionWithDuration:(double)arg1 delay:(double)arg2 {
+    if ([CSApplicationController sharedController].applaunching == YES) {
+        %orig(arg1*0.01, arg2*0.01);
+    } else {
+        %orig;
+    }
+}
+
+%end
+
+%hook SBUISlideAppTransitionController
+
+-(void)appTransitionView:(id)arg1 animationWillStartWithDuration:(double)arg2 afterDelay:(double)arg3 {
+    %orig(arg1, arg2*0.01, arg3*0.01);
+}
+
+%end
+
+static void CSSettingsChanged(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
 	[CSResources reloadSettings];
 }
 
-%ctor
-{
+%ctor {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	%init;
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, CSSettingsChanged, CFSTR("com.matchstic.winmoswitcher/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);

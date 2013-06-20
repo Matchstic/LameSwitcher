@@ -40,6 +40,7 @@
 		C928CF9217576E2D00ABF576 /* Overview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Overview.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C928CF951757BC6D00ABF576 /* stackBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stackBlur.h; sourceTree = "<group>"; };
 		C928CF961757BC6D00ABF576 /* stackBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = stackBlur.m; sourceTree = "<group>"; };
+		C996E936175E7DFA00A7A8A6 /* WinMoSwitcher.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WinMoSwitcher.bundle; sourceTree = "<group>"; };
 		C9ABB5741741591E004CB921 /* SpringBoardServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpringBoardServices.framework; path = System/Library/PrivateFrameworks/SpringBoardServices.framework; sourceTree = SDKROOT; };
 		C9ABB57717415BA0004CB921 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		C9CE6EDF1752B26C00FD82AC /* postinst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = postinst; path = Package/DEBIAN/postinst; sourceTree = "<group>"; };
@@ -78,8 +79,6 @@
 		C9FB097A17404C2000DD72A5 /* CardSwitcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CardSwitcher.png; sourceTree = "<group>"; };
 		C9FB097B17404C2000DD72A5 /* CardSwitcher@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CardSwitcher@2x.png"; sourceTree = "<group>"; };
 		C9FB097C17404C2000DD72A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		C9FB097F17404C2000DD72A5 /* closebox.png.bak */ = {isa = PBXFileReference; lastKnownFileType = file; path = closebox.png.bak; sourceTree = "<group>"; };
-		C9FB098017404C2000DD72A5 /* closebox@2x.png.bak */ = {isa = PBXFileReference; lastKnownFileType = file; path = "closebox@2x.png.bak"; sourceTree = "<group>"; };
 		C9FB098117404C2000DD72A5 /* UIStatusBarStyleBlackOpaque.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIStatusBarStyleBlackOpaque.png; sourceTree = "<group>"; };
 		C9FB098217404C2000DD72A5 /* UIStatusBarStyleDefault.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIStatusBarStyleDefault.png; sourceTree = "<group>"; };
 		C9FC84931754187700507163 /* DreamBoard.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = DreamBoard.dylib; path = /opt/iOSOpenDev/lib/DreamBoard.dylib; sourceTree = "<absolute>"; };
@@ -310,8 +309,7 @@
 		C9FB097E17404C2000DD72A5 /* WinMoSwitcher */ = {
 			isa = PBXGroup;
 			children = (
-				C9FB097F17404C2000DD72A5 /* closebox.png.bak */,
-				C9FB098017404C2000DD72A5 /* closebox@2x.png.bak */,
+				C996E936175E7DFA00A7A8A6 /* WinMoSwitcher.bundle */,
 				C9FB098117404C2000DD72A5 /* UIStatusBarStyleBlackOpaque.png */,
 				C9FB098217404C2000DD72A5 /* UIStatusBarStyleDefault.png */,
 			);
@@ -527,6 +525,7 @@
 					"$(inherited)",
 					/opt/iOSOpenDev/lib,
 				);
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-fobjc-arc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
@@ -561,6 +560,7 @@
 					"$(inherited)",
 					/opt/iOSOpenDev/lib,
 				);
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-fobjc-arc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				iOSOpenDevBuildPackageOnAnyBuild = NO;

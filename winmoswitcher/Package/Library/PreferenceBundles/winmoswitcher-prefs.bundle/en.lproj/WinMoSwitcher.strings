@@ -1,0 +1,34 @@
+// WinMoSwitcher.strings
+
+"AC_METHODS" = "Activation Methods";
+
+"INTERFACE" = "Interface";
+"APP_TITLE" = "Show App Title";
+"APP_ICON" = "Show App Icon";
+"PD" = "Page Dots"; // This may be removed in a later update
+"TAPS_AC" = "Taps to Activate";
+"ONE" = "One";
+"TWO" = "Two";
+"BG" = "Background";
+"CLOSE_ANIM" = "Close Animation";
+"SLIDE" = "Slide"; 
+"ROTATE" = "Rotate";
+
+"RUN_STRIFE" = "Only Run in Strife";
+
+"EXTRA" = "Extra";
+"HOME" = "Home Button Behaviour:";
+"EXIT_APP" = "Exit Running App";
+
+"BASED_ON" = "Based on LameSwitcher";
+"EXIT_APP_BUTTON" = "Exit All Apps Button:";
+"ON" = "Enabled";
+
+"SYSTEM_APP" = "System Applications";
+"USER_APP" = "User Applications";
+"EXCLUDE" = "Exclude Apps";
+
+"START_VIEW" = "Start View";
+"SHOW_IN_APP" = "Visible in Apps";
+
+"TRANSLATED_BY" = ""; // This last one is optional, but feel free to use it! If you don't want to, just leave it blank.

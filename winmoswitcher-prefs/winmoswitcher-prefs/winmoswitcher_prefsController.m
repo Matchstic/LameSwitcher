@@ -26,10 +26,29 @@ static NSString *settingsFile = @"/var/mobile/Library/Preferences/com.matchstic.
         }
         
         _specifiers = [testingSpecs retain];
+        _specifiers = [self localizedSpecifiersForSpecifiers:_specifiers];
     }
     
 	return _specifiers;
 }
+
+- (NSArray *)localizedSpecifiersForSpecifiers:(NSArray *)s {
+	int i;
+	for(i=0; i<[s count]; i++) {
+		if([[s objectAtIndex: i] name]) {
+			[[s objectAtIndex: i] setName:[[self bundle] localizedStringForKey:[[s objectAtIndex: i] name] value:[[s objectAtIndex: i] name] table:nil]];
+		}
+		if([[s objectAtIndex: i] titleDictionary]) {
+			NSMutableDictionary *newTitles = [[NSMutableDictionary alloc] init];
+			for(NSString *key in [[s objectAtIndex: i] titleDictionary]) {
+				[newTitles setObject: [[self bundle] localizedStringForKey:[[[s objectAtIndex: i] titleDictionary] objectForKey:key] value:[[[s objectAtIndex: i] titleDictionary] objectForKey:key] table:nil] forKey: key];
+			}
+			[[s objectAtIndex: i] setTitleDictionary: [newTitles autorelease]];
+		}
+	}
+	
+	return s;
+};
 
 -(id)init {
 	if ((self = [super init])) {
@@ -53,21 +72,21 @@ static NSString *settingsFile = @"/var/mobile/Library/Preferences/com.matchstic.
     if (style == 1) {
         NSFileManager *file = [NSFileManager defaultManager];
         if ([file fileExistsAtPath:@"/DreamBoard/Strife/Info.plist"]) {
-            stringStyle = @"Tile colour";
+            stringStyle = [self.bundle localizedStringForKey:@"TILE_COLOUR" value:@"Tile Colour" table:@"Background"];
         } else {
-            stringStyle = @"Custom colour";
+            stringStyle = [self.bundle localizedStringForKey:@"CUSTOM_COLOUR" value:@"Custom Colour" table:@"Background"];
         }
     } else if (style == 2) {
-        stringStyle = @"Dark";
+        stringStyle = [self.bundle localizedStringForKey:@"DARK" value:@"Dark" table:@"Background"];
     } else if (style == 3) {
-        stringStyle = @"Light";
+        stringStyle = [self.bundle localizedStringForKey:@"LIGHT" value:@"Light" table:@"Background"];;
     } else {
         // Need a fallback for when it's just been installed
         NSFileManager *file = [NSFileManager defaultManager];
         if ([file fileExistsAtPath:@"/DreamBoard/Strife/Info.plist"]) {
-            stringStyle = @"Tile colour";
+            stringStyle = [self.bundle localizedStringForKey:@"TILE_COLOUR" value:@"Tile Colour" table:@"Background"];
         } else {
-            stringStyle = @"Custom colour";
+            stringStyle = [self.bundle localizedStringForKey:@"CUSTOM_COLOUR" value:@"Custom Colour" table:@"Background"];
         }
     }
     [dict release];
@@ -102,10 +121,28 @@ static NSString *settingsFile = @"/var/mobile/Library/Preferences/com.matchstic.
         }
     
         _specifiers = [testingSpecs retain];
+        _specifiers = [self localizedSpecifiersForSpecifiers:_specifiers];
     }
     
 	return _specifiers;
 }
+- (NSArray *)localizedSpecifiersForSpecifiers:(NSArray *)s {
+	int i;
+	for(i=0; i<[s count]; i++) {
+		if([[s objectAtIndex: i] name]) {
+			[[s objectAtIndex: i] setName:[[self bundle] localizedStringForKey:[[s objectAtIndex: i] name] value:[[s objectAtIndex: i] name] table:nil]];
+		}
+		if([[s objectAtIndex: i] titleDictionary]) {
+			NSMutableDictionary *newTitles = [[NSMutableDictionary alloc] init];
+			for(NSString *key in [[s objectAtIndex: i] titleDictionary]) {
+				[newTitles setObject: [[self bundle] localizedStringForKey:[[[s objectAtIndex: i] titleDictionary] objectForKey:key] value:[[[s objectAtIndex: i] titleDictionary] objectForKey:key] table:nil] forKey: key];
+			}
+			[[s objectAtIndex: i] setTitleDictionary: [newTitles autorelease]];
+		}
+	}
+	
+	return s;
+};
 
 -(void)enableCustomColour:(id)value forSpecifier:(id)specifier {
     [self setPreferenceValue:value specifier:specifier];
